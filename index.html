@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Zeropoint Hosting | ARK & Hytale Clusters</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zeropoint Hosting | ARK & Hytale</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;700;900&display=swap" rel="stylesheet">
@@ -12,7 +12,7 @@
 :root{
   --bg:#050508;
   --bg2:#0b0b15;
-  --card:rgba(28,28,42,.6);
+  --card:rgba(28,28,42,.65);
   --pink:#ff4fd8;
   --muted:#cbd5e1;
   --green:#22c55e;
@@ -27,11 +27,9 @@ body{
   color:white;
 }
 
-/* BACKGROUND GRID */
+/* GRID */
 .grid{
-  position:fixed;
-  inset:0;
-  z-index:0;
+  position:fixed;inset:0;z-index:0;
   background-image:
     linear-gradient(rgba(255,79,216,.06) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255,79,216,.06) 1px, transparent 1px);
@@ -42,63 +40,35 @@ body{
 
 /* NAV */
 nav{
-  position:fixed;
-  top:0;
-  width:100%;
-  z-index:10;
+  position:fixed;top:0;width:100%;z-index:10;
   backdrop-filter:blur(12px);
   background:rgba(5,5,10,.92);
   border-bottom:1px solid var(--border);
 }
 .nav-inner{
-  max-width:1200px;
-  margin:auto;
+  max-width:1200px;margin:auto;
   padding:.8rem 1.5rem;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+  display:flex;align-items:center;justify-content:space-between;
   flex-wrap:wrap;
 }
-.brand{
-  display:flex;
-  align-items:center;
-  gap:.6rem;
-  text-decoration:none;
-}
+.brand{display:flex;align-items:center;gap:.6rem;text-decoration:none}
 .brand img{width:34px}
-.brand span{
-  font-weight:900;
-  letter-spacing:1px;
-  color:white;
-}
-.nav-links{
-  display:flex;
-  gap:1.5rem;
-  list-style:none;
-}
+.brand span{font-weight:900;color:white}
+.nav-links{display:flex;gap:1.4rem;list-style:none}
 .nav-links a{
-  text-decoration:none;
-  font-weight:700;
-  color:var(--muted);
-  text-transform:uppercase;
-  font-size:.85rem;
+  text-decoration:none;font-weight:700;
+  color:var(--muted);text-transform:uppercase;font-size:.85rem;
 }
 .nav-links a:hover{color:var(--pink)}
-.discord{
-  color:var(--pink);
-  font-size:1.3rem;
-}
+.discord{color:var(--pink);font-size:1.3rem}
 
 /* HERO */
 .hero{
   min-height:90vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  display:flex;align-items:center;justify-content:center;
   text-align:center;
   padding:7rem 2rem 3rem;
-  position:relative;
-  z-index:2;
+  position:relative;z-index:2;
 }
 .hero h1{
   font-size:clamp(3rem,7vw,6rem);
@@ -108,20 +78,13 @@ nav{
   -webkit-text-fill-color:transparent;
   margin-bottom:1rem;
 }
-.hero p{
-  max-width:700px;
-  margin:auto;
-  color:var(--muted);
-  font-size:1.25rem;
-}
+.hero p{max-width:700px;margin:auto;color:var(--muted);font-size:1.25rem}
 
 /* SECTIONS */
 .container{
-  max-width:1100px;
-  margin:auto;
+  max-width:1100px;margin:auto;
   padding:5rem 2rem;
-  position:relative;
-  z-index:2;
+  position:relative;z-index:2;
 }
 h2{
   text-transform:uppercase;
@@ -130,11 +93,11 @@ h2{
   margin-bottom:2rem;
 }
 
-/* SERVER LIST */
+/* SERVERS */
 .server-box{
   background:var(--card);
   border:1px solid var(--border);
-  border-radius:12px;
+  border-radius:14px;
   padding:1.8rem;
 }
 .server{
@@ -144,12 +107,7 @@ h2{
   border-bottom:1px solid rgba(255,255,255,.05);
 }
 .server:last-child{border-bottom:none}
-.status{
-  display:flex;
-  align-items:center;
-  gap:.5rem;
-  font-weight:700;
-}
+.status{display:flex;align-items:center;gap:.5rem;font-weight:700}
 .dot{
   width:8px;height:8px;border-radius:50%;
   background:var(--green);
@@ -157,7 +115,7 @@ h2{
 }
 .right{text-align:right;color:var(--green);font-weight:800}
 
-/* NETWORK */
+/* NETWORK + GLOBE */
 .network{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -166,15 +124,16 @@ h2{
 }
 .globe-wrap{
   width:100%;
-  max-width:520px;
+  max-width:420px;
   margin:0 auto;
 }
 canvas{
-  width:100%!important;
-  height:auto!important;
-  aspect-ratio:1/1;
+  width:100%;
+  height:auto;
   display:block;
 }
+
+/* PING */
 .ping{
   display:grid;
   grid-template-columns:repeat(2,1fr);
@@ -196,13 +155,11 @@ footer{
 /* MOBILE */
 @media(max-width:768px){
   .nav-inner{justify-content:center;gap:.75rem}
-  .nav-links{width:100%;justify-content:center;flex-wrap:wrap;gap:1rem}
-  .hero{padding-top:6rem}
-  .hero p{font-size:1.1rem}
+  .nav-links{width:100%;justify-content:center;flex-wrap:wrap}
+  .network{grid-template-columns:1fr;text-align:center}
   .server{grid-template-columns:1fr;text-align:center;gap:.5rem}
   .right{text-align:center}
   .status{justify-content:center}
-  .network{grid-template-columns:1fr;text-align:center}
   .ping{grid-template-columns:1fr}
 }
 </style>
@@ -215,7 +172,7 @@ footer{
 <nav>
   <div class="nav-inner">
     <a class="brand" href="#">
-      <img src="zeropoint.png" alt="Zeropoint">
+      <img src="zeropoint.png">
       <span>Zeropoint</span>
     </a>
     <ul class="nav-links">
@@ -232,7 +189,7 @@ footer{
 <section class="hero">
   <div>
     <h1>Zeropoint Hosting</h1>
-    <p>Private ARK and Hytale clusters focused on stability, progression, and long-term play.</p>
+    <p>Private ARK and Hytale clusters built for long-term progression and stability.</p>
   </div>
 </section>
 
@@ -260,13 +217,11 @@ footer{
 <section class="container">
   <div class="network">
     <div class="globe-wrap">
-      <canvas id="cobe"></canvas>
+      <canvas id="cobe" width="800" height="800"></canvas>
     </div>
     <div>
       <h2>Network</h2>
-      <p style="color:var(--muted)">
-        Optimized routing for low-latency gameplay across regions.
-      </p>
+      <p style="color:var(--muted)">Optimized routing for low-latency gameplay.</p>
       <div class="ping">
         <div>🇺🇸 New York <span>34ms</span></div>
         <div>🇺🇸 Miami <span>22ms</span></div>
@@ -285,46 +240,29 @@ footer{
 import createGlobe from 'https://cdn.skypack.dev/cobe'
 
 const canvas = document.getElementById("cobe")
-let globe, phi = 0
+let phi = 0
 
-function globeSize(){
-  const size = Math.min(window.innerWidth, 520)
-  return {
-    width: size * window.devicePixelRatio,
-    height: size * window.devicePixelRatio
+createGlobe(canvas,{
+  devicePixelRatio:2,
+  width:800,
+  height:800,
+  phi:0,
+  theta:.45,
+  dark:1,
+  diffuse:1.2,
+  mapSamples:12000,
+  mapBrightness:6,
+  baseColor:[.05,.05,.1],
+  glowColor:[1,.3,.85],
+  markerColor:[.13,.77,.36],
+  markers:[
+    {location:[40.7128,-74.006],size:.1},
+    {location:[25.7617,-80.1918],size:.1}
+  ],
+  onRender:(s)=>{
+    s.phi = phi
+    phi += .004
   }
-}
-
-function initGlobe(){
-  const { width, height } = globeSize()
-  globe = createGlobe(canvas,{
-    devicePixelRatio: window.devicePixelRatio,
-    width,
-    height,
-    phi: 0,
-    theta: .45,
-    dark: 1,
-    diffuse: 1.2,
-    mapSamples: 12000,
-    mapBrightness: 6,
-    baseColor: [.05,.05,.1],
-    glowColor: [1,.3,.85],
-    markerColor: [.13,.77,.36],
-    markers:[
-      {location:[40.7128,-74.006],size:.1},
-      {location:[25.7617,-80.1918],size:.1}
-    ],
-    onRender:(s)=>{
-      s.phi = phi
-      phi += .004
-    }
-  })
-}
-
-initGlobe()
-window.addEventListener("resize",()=>{
-  globe.destroy()
-  initGlobe()
 })
 
 document.getElementById("year").textContent = new Date().getFullYear()

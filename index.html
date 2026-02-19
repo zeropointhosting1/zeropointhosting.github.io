@@ -9,8 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;700;900&display=swap" rel="stylesheet">
 
 <style>
-/* ================= VARIABLES ================= */
-:root {
+:root{
   --bg:#050508;
   --bg2:#0b0b15;
   --card:rgba(28,28,42,.6);
@@ -28,7 +27,7 @@ body{
   color:white;
 }
 
-/* ================= BACKGROUND GRID ================= */
+/* BACKGROUND GRID */
 .grid{
   position:fixed;
   inset:0;
@@ -39,11 +38,9 @@ body{
   background-size:50px 50px;
   animation:move 30s linear infinite;
 }
-@keyframes move{
-  to{transform:translate(50px,50px)}
-}
+@keyframes move{to{transform:translate(50px,50px)}}
 
-/* ================= NAV ================= */
+/* NAV */
 nav{
   position:fixed;
   top:0;
@@ -92,7 +89,7 @@ nav{
   font-size:1.3rem;
 }
 
-/* ================= HERO ================= */
+/* HERO */
 .hero{
   min-height:90vh;
   display:flex;
@@ -118,7 +115,7 @@ nav{
   font-size:1.25rem;
 }
 
-/* ================= CONTAINERS ================= */
+/* SECTIONS */
 .container{
   max-width:1100px;
   margin:auto;
@@ -133,7 +130,7 @@ h2{
   margin-bottom:2rem;
 }
 
-/* ================= SERVER LIST ================= */
+/* SERVER LIST */
 .server-box{
   background:var(--card);
   border:1px solid var(--border);
@@ -154,29 +151,29 @@ h2{
   font-weight:700;
 }
 .dot{
-  width:8px;
-  height:8px;
-  border-radius:50%;
+  width:8px;height:8px;border-radius:50%;
   background:var(--green);
   box-shadow:0 0 8px var(--green);
 }
-.right{
-  text-align:right;
-  color:var(--green);
-  font-weight:800;
-}
+.right{text-align:right;color:var(--green);font-weight:800}
 
-/* ================= NETWORK ================= */
+/* NETWORK */
 .network{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:3rem;
   align-items:center;
 }
+.globe-wrap{
+  width:100%;
+  max-width:520px;
+  margin:0 auto;
+}
 canvas{
   width:100%!important;
-  max-width:100%;
-  height:500px!important;
+  height:auto!important;
+  aspect-ratio:1/1;
+  display:block;
 }
 .ping{
   display:grid;
@@ -184,16 +181,10 @@ canvas{
   gap:1.2rem;
   margin-top:1.5rem;
 }
-.ping div{
-  font-weight:700;
-  color:var(--muted);
-}
-.ping span{
-  color:var(--green);
-  font-weight:900;
-}
+.ping div{font-weight:700;color:var(--muted)}
+.ping span{color:var(--green);font-weight:900}
 
-/* ================= FOOTER ================= */
+/* FOOTER */
 footer{
   text-align:center;
   padding:3rem 2rem;
@@ -202,55 +193,17 @@ footer{
   background:var(--bg2);
 }
 
-/* ================= MOBILE FIXES ================= */
+/* MOBILE */
 @media(max-width:768px){
-
-  .nav-inner{
-    justify-content:center;
-    gap:.75rem;
-  }
-
-  .nav-links{
-    width:100%;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:1rem;
-  }
-
-  .hero{
-    padding-top:6rem;
-  }
-
-  .hero p{
-    font-size:1.1rem;
-  }
-
-  .server{
-    grid-template-columns:1fr;
-    text-align:center;
-    gap:.5rem;
-  }
-
-  .right{
-    text-align:center;
-  }
-
-  .status{
-    justify-content:center;
-  }
-
-  .network{
-    grid-template-columns:1fr;
-    text-align:center;
-  }
-
-  canvas{
-    height:320px!important;
-  }
-
-  .ping{
-    grid-template-columns:1fr;
-  }
+  .nav-inner{justify-content:center;gap:.75rem}
+  .nav-links{width:100%;justify-content:center;flex-wrap:wrap;gap:1rem}
+  .hero{padding-top:6rem}
+  .hero p{font-size:1.1rem}
+  .server{grid-template-columns:1fr;text-align:center;gap:.5rem}
+  .right{text-align:center}
+  .status{justify-content:center}
+  .network{grid-template-columns:1fr;text-align:center}
+  .ping{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -262,16 +215,14 @@ footer{
 <nav>
   <div class="nav-inner">
     <a class="brand" href="#">
-      <img src="zeropoint.png" alt="Zeropoint Logo">
+      <img src="zeropoint.png" alt="Zeropoint">
       <span>Zeropoint</span>
     </a>
-
     <ul class="nav-links">
       <li><a href="#ark">ARK Donation</a></li>
       <li><a href="#hytale">Hytale Packages</a></li>
       <li><a href="#servers">Live Nodes</a></li>
     </ul>
-
     <a class="discord" href="YOUR_DISCORD_INVITE" target="_blank">
       <i class="fab fa-discord"></i>
     </a>
@@ -287,20 +238,17 @@ footer{
 
 <section id="servers" class="container">
   <h2>Command Center</h2>
-
   <div class="server-box">
     <div class="server">
       <div><strong>ARK</strong> Crystal Isles (PvE)</div>
       <div class="status"><span class="dot"></span>ONLINE</div>
       <div class="right">0 / 16</div>
     </div>
-
     <div class="server">
       <div><strong>ARK</strong> Fjordur (PvE)</div>
       <div class="status"><span class="dot"></span>ONLINE</div>
       <div class="right">1 / 16</div>
     </div>
-
     <div class="server">
       <div><strong>ARK</strong> Ragnarok (PvE)</div>
       <div class="status"><span class="dot"></span>ONLINE</div>
@@ -311,14 +259,14 @@ footer{
 
 <section class="container">
   <div class="network">
-    <canvas id="cobe"></canvas>
-
+    <div class="globe-wrap">
+      <canvas id="cobe"></canvas>
+    </div>
     <div>
       <h2>Network</h2>
       <p style="color:var(--muted)">
         Optimized routing for low-latency gameplay across regions.
       </p>
-
       <div class="ping">
         <div>🇺🇸 New York <span>34ms</span></div>
         <div>🇺🇸 Miami <span>22ms</span></div>
@@ -336,28 +284,50 @@ footer{
 <script type="module">
 import createGlobe from 'https://cdn.skypack.dev/cobe'
 
-let phi=0
-createGlobe(document.getElementById("cobe"),{
-  devicePixelRatio:2,
-  width:1000,
-  height:1000,
-  phi:0,
-  theta:.45,
-  dark:1,
-  diffuse:1.2,
-  mapSamples:16000,
-  mapBrightness:6,
-  baseColor:[.05,.05,.1],
-  glowColor:[1,.3,.85],
-  markerColor:[.13,.77,.36],
-  markers:[
-    {location:[40.7,-74],size:.1},
-    {location:[25.7,-80],size:.1}
-  ],
-  onRender:(s)=>{s.phi=phi+=.004}
+const canvas = document.getElementById("cobe")
+let globe, phi = 0
+
+function globeSize(){
+  const size = Math.min(window.innerWidth, 520)
+  return {
+    width: size * window.devicePixelRatio,
+    height: size * window.devicePixelRatio
+  }
+}
+
+function initGlobe(){
+  const { width, height } = globeSize()
+  globe = createGlobe(canvas,{
+    devicePixelRatio: window.devicePixelRatio,
+    width,
+    height,
+    phi: 0,
+    theta: .45,
+    dark: 1,
+    diffuse: 1.2,
+    mapSamples: 12000,
+    mapBrightness: 6,
+    baseColor: [.05,.05,.1],
+    glowColor: [1,.3,.85],
+    markerColor: [.13,.77,.36],
+    markers:[
+      {location:[40.7128,-74.006],size:.1},
+      {location:[25.7617,-80.1918],size:.1}
+    ],
+    onRender:(s)=>{
+      s.phi = phi
+      phi += .004
+    }
+  })
+}
+
+initGlobe()
+window.addEventListener("resize",()=>{
+  globe.destroy()
+  initGlobe()
 })
 
-document.getElementById("year").textContent=new Date().getFullYear()
+document.getElementById("year").textContent = new Date().getFullYear()
 </script>
 
 </body>

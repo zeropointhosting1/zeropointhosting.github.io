@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zeropoint Hosting | ARK & Hytale</title>
+<title>Zeropoint Hosting | ARK & Hytale Hosting</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;700;900&display=swap" rel="stylesheet">
@@ -16,7 +16,6 @@
   --pink:#ff4fd8;
   --muted:#cbd5e1;
   --green:#22c55e;
-  --yellow:#facc15;
   --red:#f87171;
   --border:rgba(255,79,216,.25);
 }
@@ -40,20 +39,20 @@ body{
 }
 @keyframes move{to{transform:translate(50px,50px)}}
 
-/* NAV (FIXED DESKTOP ALIGNMENT) */
+/* NAV — CLEAN & PREMIUM */
 nav{
   position:fixed;
   top:0;
   width:100%;
   z-index:10;
-  backdrop-filter:blur(12px);
+  backdrop-filter:blur(14px);
   background:rgba(5,5,10,.92);
   border-bottom:1px solid var(--border);
 }
 .nav-inner{
   max-width:1200px;
   margin:auto;
-  padding:.85rem 2rem;
+  padding:1rem 2rem;
   display:grid;
   grid-template-columns:auto 1fr auto;
   align-items:center;
@@ -61,10 +60,10 @@ nav{
 .brand{
   display:flex;
   align-items:center;
-  gap:.6rem;
+  gap:.65rem;
   text-decoration:none;
 }
-.brand img{width:34px}
+.brand img{width:36px}
 .brand span{
   font-weight:900;
   letter-spacing:1px;
@@ -73,7 +72,7 @@ nav{
 .nav-links{
   display:flex;
   justify-content:center;
-  gap:2.2rem;
+  gap:2.5rem;
   list-style:none;
 }
 .nav-links a{
@@ -81,12 +80,13 @@ nav{
   font-weight:800;
   color:var(--muted);
   text-transform:uppercase;
-  font-size:.85rem;
+  font-size:.8rem;
+  letter-spacing:1px;
 }
 .nav-links a:hover{color:var(--pink)}
 .discord{
   color:var(--pink);
-  font-size:1.35rem;
+  font-size:1.4rem;
 }
 
 /* HERO */
@@ -186,13 +186,9 @@ canvas{
   gap:1.2rem;
   margin-top:1.5rem;
 }
-.ping div{
-  font-weight:700;
-  color:var(--muted);
-}
-.ping span.green{color:var(--green)}
-.ping span.yellow{color:var(--yellow)}
-.ping span.red{color:var(--red)}
+.ping div{font-weight:700;color:var(--muted)}
+.ping .green{color:var(--green);font-weight:900}
+.ping .red{color:var(--red);font-weight:900}
 
 /* FOOTER */
 footer{
@@ -203,7 +199,7 @@ footer{
   background:var(--bg2);
 }
 
-/* MOBILE (unchanged) */
+/* MOBILE (unchanged behavior) */
 @media(max-width:768px){
   .nav-inner{
     grid-template-columns:1fr;
@@ -235,8 +231,8 @@ footer{
     </a>
 
     <ul class="nav-links">
-      <li><a href="#ark">ARK Donation</a></li>
-      <li><a href="#hytale">Hytale Packages</a></li>
+      <li><a href="#ark">ARK Hosting</a></li>
+      <li><a href="#hytale">Hytale Hosting</a></li>
       <li><a href="#servers">Live Nodes</a></li>
     </ul>
 
@@ -249,7 +245,7 @@ footer{
 <section class="hero">
   <div>
     <h1>Zeropoint Hosting</h1>
-    <p>Private ARK and Hytale clusters built for long-term progression and stability.</p>
+    <p>High-performance ARK and Hytale hosting built for stability, progression, and community.</p>
   </div>
 </section>
 
@@ -280,7 +276,7 @@ footer{
       <canvas id="cobe" width="800" height="800"></canvas>
     </div>
     <div>
-      <h2>Network</h2>
+      <h2>Network Latency</h2>
       <div class="ping">
         <div>🇺🇸 New York <span class="green">34ms</span></div>
         <div>🇺🇸 Miami <span class="green">22ms</span></div>
@@ -313,11 +309,13 @@ createGlobe(canvas,{
   mapBrightness:6,
   baseColor:[.05,.05,.1],
   glowColor:[1,.3,.85],
-  markerColor:[.13,.77,.36],
   markers:[
-    { location:[40.73,-73.93], size:.07 },
-    { location:[25.78,-80.22], size:.07 }
+    { location:[40.73,-73.93], size:.07, color:'#22c55e' }, // NY
+    { location:[25.78,-80.22], size:.07, color:'#22c55e' }, // Miami
+    { location:[51.50,-0.12], size:.055, color:'#f87171' }, // London
+    { location:[-33.86,151.21], size:.055, color:'#f87171' } // Sydney
   ],
+  markerColor:[.13,.77,.36],
   onRender:(s)=>{
     s.phi = phi
     phi += .004
@@ -328,4 +326,4 @@ document.getElementById("year").textContent = new Date().getFullYear()
 </script>
 
 </body>
-</html
+</html>

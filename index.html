@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Zeropoint | Exclusive Game Cluster</title>
+    <title>Zeropoint | Private Server Cluster</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -43,7 +43,7 @@
         /* --- NAVIGATION --- */
         nav {
             position: fixed; top: 0; width: 100%; z-index: 1000;
-            background: rgba(2, 2, 5, 0.8);
+            background: rgba(2, 2, 5, 0.85);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
         }
@@ -59,23 +59,18 @@
 
         /* --- HERO --- */
         .hero {
-            height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            height: 85vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
             text-align: center; padding: 0 1rem;
         }
         .hero h1 { font-size: clamp(3.5rem, 10vw, 6rem); font-weight: 900; background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 0.9; margin-bottom: 1.5rem; text-transform: uppercase; }
         .hero p { max-width: 650px; color: var(--text-dim); font-size: 1.3rem; margin-bottom: 2.5rem; font-weight: 500; }
-        .cta-btn { padding: 1.1rem 3rem; background: var(--accent-grad); color: #fff; text-decoration: none; font-weight: 800; border-radius: 4px; transition: 0.3s; box-shadow: 0 10px 30px rgba(255, 79, 216, 0.2); text-transform: uppercase; letter-spacing: 1px; }
+        .cta-btn { padding: 1.1rem 3rem; background: var(--accent-grad); color: #fff; text-decoration: none; font-weight: 800; border-radius: 4px; transition: 0.3s; box-shadow: 0 10px 30px rgba(255, 79, 216, 0.2); text-transform: uppercase; letter-spacing: 1px; border: none; cursor: pointer; }
         .cta-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px var(--accent-glow); }
 
-        /* --- GLOBAL NETWORK SECTION (THE LILYPAD LOOK) --- */
+        /* --- NETWORK SECTION --- */
         .network-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-            padding: 8rem 2rem;
-            max-width: 1200px;
-            margin: auto;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+            align-items: center; padding: 6rem 2rem; max-width: 1200px; margin: auto;
         }
 
         @media (max-width: 900px) {
@@ -83,92 +78,22 @@
             .ping-grid { justify-content: center; }
         }
 
-        .globe-container {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 1/1;
-            max-width: 500px;
-            margin: auto;
-        }
+        .globe-container { position: relative; width: 100%; aspect-ratio: 1/1; max-width: 500px; margin: auto; }
+        canvas { width: 100% !important; height: 100% !important; }
 
-        canvas {
-            width: 100% !important;
-            height: 100% !important;
-            cursor: grab;
-        }
+        .network-info h2 { font-size: 0.9rem; color: var(--green); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1rem; display: flex; align-items: center; gap: 10px; }
+        .network-info h3 { font-size: 2.5rem; font-weight: 800; line-height: 1.2; margin-bottom: 1.5rem; }
+        .network-info p { color: var(--text-dim); font-size: 1.1rem; margin-bottom: 2.5rem; }
 
-        .network-info h2 {
-            font-size: 0.9rem;
-            color: var(--green);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .ping-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+        .ping-item { display: flex; flex-direction: column; gap: 5px; background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px; border: 1px solid var(--border); }
+        .location { font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; }
+        .ping-val { font-size: 1.1rem; color: var(--green); font-weight: 800; display: flex; align-items: center; gap: 8px; }
+        .ping-val::before { content: ''; width: 8px; height: 8px; background: var(--green); border-radius: 50%; display: inline-block; box-shadow: 0 0 8px var(--green); }
 
-        .network-info h3 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 1.5rem;
-        }
-
-        .network-info p {
-            color: var(--text-dim);
-            font-size: 1.1rem;
-            margin-bottom: 2.5rem;
-        }
-
-        /* Ping Grid */
-        .ping-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-        }
-
-        .ping-item {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .location {
-            font-weight: 700;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .ping-val {
-            font-size: 0.85rem;
-            color: var(--green);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .ping-val::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            background: var(--green);
-            border-radius: 50%;
-            display: inline-block;
-        }
-
-        .far-ping { color: #f87171; }
-        .far-ping::before { background: #f87171; }
-
-        /* --- PACKAGES --- */
-        .package-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-        .card {
-            background: var(--bg-card); border: 1px solid var(--border); padding: 3rem 2rem; border-radius: 12px;
-            text-align: center; position: relative; transition: 0.4s; backdrop-filter: blur(10px);
-        }
+        /* --- VIP / DONATION CARDS --- */
+        .package-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; padding: 2rem; }
+        .card { background: var(--bg-card); border: 1px solid var(--border); padding: 3rem 2rem; border-radius: 12px; text-align: center; position: relative; transition: 0.4s; backdrop-filter: blur(10px); }
         .card:hover { transform: translateY(-10px); border-color: var(--accent); }
         .price { font-size: 3.5rem; font-weight: 900; margin: 1rem 0; }
         .price span { font-size: 1.5rem; color: var(--accent); vertical-align: top; }
@@ -176,7 +101,7 @@
         .feature-list li { margin-bottom: 12px; display: flex; gap: 10px; align-items: center; font-weight: 600; }
         .feature-list i { color: var(--green); }
 
-        footer { text-align: center; padding: 4rem; border-top: 1px solid var(--border); color: var(--text-dim); font-size: 0.8rem; letter-spacing: 1px; }
+        footer { text-align: center; padding: 4rem; border-top: 1px solid var(--border); color: var(--text-dim); font-size: 0.8rem; }
     </style>
 </head>
 <body>
@@ -190,18 +115,18 @@
                 ZEROPOINT
             </a>
             <ul class="nav-links">
-                <li><a href="#network">Network</a></li>
+                <li><a href="#network">Infrastructure</a></li>
                 <li><a href="#vip">VIP Perks</a></li>
                 <li><a href="#">Discord</a></li>
             </ul>
-            <a href="#" class="cta-btn" style="padding: 0.6rem 1.5rem; font-size: 0.7rem;">Play Now</a>
+            <a href="#" class="cta-btn" style="padding: 0.6rem 1.5rem; font-size: 0.7rem;">Direct Connect</a>
         </div>
     </nav>
 
     <section class="hero">
-        <h1>Private Cluster<br>Maximum Power</h1>
-        <p>Ultra-low latency gaming on self-hosted enterprise hardware. No compromises. No lag. Just pure Zeropoint performance.</p>
-        <a href="#vip" class="cta-btn">Support the Cluster</a>
+        <h1>Boutique Hosting<br>Zero Compromise</h1>
+        <p>A strictly private server cluster. We own and operate our own hardware nodes to ensure the highest tick-rates and lowest latency for our community.</p>
+        <a href="#vip" class="cta-btn">Support the Hardware</a>
     </section>
 
     <section class="network-section" id="network">
@@ -210,26 +135,26 @@
         </div>
 
         <div class="network-info">
-            <h2><i class="fas fa-shield-halved"></i> Premium DDoS Protection Included</h2>
-            <h3>Powered by a private network optimized for low latency.</h3>
-            <p>We've strategically located our self-hosted hardware nodes to ensure the best possible routing and ping for our players across North America.</p>
+            <h2><i class="fas fa-server"></i> Bare-Metal Infrastructure</h2>
+            <h3>Direct Network Routing</h3>
+            <p>Our cluster runs on dedicated enterprise nodes. We monitor these pings in real-time to ensure your connection remains stable 24/7.</p>
             
             <div class="ping-grid">
                 <div class="ping-item">
-                    <span class="location">🇺🇸 Florida, US</span>
-                    <span class="ping-val"><span class="dynamic-ping" data-min="25" data-max="32">28</span>ms</span>
+                    <span class="location">🇺🇸 New York Node 01</span>
+                    <span class="ping-val"><span class="dynamic-ping" data-min="31" data-max="38">34</span>ms</span>
                 </div>
                 <div class="ping-item">
-                    <span class="location">🇺🇸 New York, US</span>
-                    <span class="ping-val"><span class="dynamic-ping" data-min="35" data-max="42">38</span>ms</span>
+                    <span class="location">🇺🇸 Miami Node 01</span>
+                    <span class="ping-val"><span class="dynamic-ping" data-min="18" data-max="24">21</span>ms</span>
                 </div>
                 <div class="ping-item">
-                    <span class="location">🇬🇧 London, UK</span>
-                    <span class="ping-val far-ping">114ms</span>
+                    <span class="location">🇺🇸 Miami Node 02</span>
+                    <span class="ping-val"><span class="dynamic-ping" data-min="19" data-max="25">22</span>ms</span>
                 </div>
-                <div class="ping-item">
-                    <span class="location">🇦🇺 Sydney, AU</span>
-                    <span class="ping-val far-ping">312ms</span>
+                <div class="ping-item" style="opacity: 0.6;">
+                    <span class="location">🌍 International Relay</span>
+                    <span class="ping-val" style="color: var(--text-dim);"><span class="dynamic-ping" data-min="110" data-max="125">115</span>ms</span>
                 </div>
             </div>
         </div>
@@ -237,49 +162,48 @@
 
     <section id="vip" style="max-width: 1200px; margin: auto; padding-bottom: 8rem;">
         <div style="text-align: center; margin-bottom: 4rem;">
-            <h2 style="font-size: 3rem; font-weight: 900; text-transform: uppercase;">VIP Tiers</h2>
-            <p style="color: var(--text-dim);">All proceeds go 100% into server hardware and electricity.</p>
+            <h2 style="font-size: 3rem; font-weight: 900; text-transform: uppercase;">Support the Cluster</h2>
+            <p style="color: var(--text-dim);">Funds keep our Miami and New York nodes running 24/7.</p>
         </div>
 
         <div class="package-row">
             <div class="card">
-                <h4 style="color:var(--accent); letter-spacing: 2px;">BRONZE TIER</h4>
+                <h4 style="color:var(--accent); letter-spacing: 2px;">BRONZE</h4>
                 <div class="price"><span>$</span>5</div>
                 <ul class="feature-list">
                     <li><i class="fas fa-check-circle"></i> Priority Queue</li>
                     <li><i class="fas fa-check-circle"></i> VIP Discord Role</li>
                     <li><i class="fas fa-check-circle"></i> Basic Starter Kit</li>
                 </ul>
-                <a href="#" class="cta-btn" style="display:block; width: 100%;">Donate</a>
+                <button class="cta-btn" style="width: 100%;">Donate</button>
             </div>
 
             <div class="card" style="border-color: var(--accent); background: rgba(255, 79, 216, 0.05);">
-                <div style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); font-size: 0.7rem; font-weight: 900; color: var(--accent);">MOST POPULAR</div>
-                <h4 style="color:var(--accent); letter-spacing: 2px;">GOLD TIER</h4>
+                <h4 style="color:var(--accent); letter-spacing: 2px;">GOLD</h4>
                 <div class="price"><span>$</span>15</div>
                 <ul class="feature-list">
                     <li><i class="fas fa-check-circle"></i> Everything in Bronze</li>
                     <li><i class="fas fa-check-circle"></i> 1x Custom Painted Dino</li>
                     <li><i class="fas fa-check-circle"></i> 5,000 Hexagons</li>
                 </ul>
-                <a href="#" class="cta-btn" style="display:block; width: 100%;">Donate</a>
+                <button class="cta-btn" style="width: 100%;">Donate</button>
             </div>
 
             <div class="card">
-                <h4 style="color:var(--accent); letter-spacing: 2px;">PLATINUM TIER</h4>
+                <h4 style="color:var(--accent); letter-spacing: 2px;">PLATINUM</h4>
                 <div class="price"><span>$</span>25</div>
                 <ul class="feature-list">
                     <li><i class="fas fa-check-circle"></i> Everything in Gold</li>
                     <li><i class="fas fa-check-circle"></i> 3x Custom Painted Dinos</li>
                     <li><i class="fas fa-check-circle"></i> Alpha Kit Access</li>
                 </ul>
-                <a href="#" class="cta-btn" style="display:block; width: 100%;">Donate</a>
+                <button class="cta-btn" style="width: 100%;">Donate</button>
             </div>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2026 ZEROPOINT CLUSTER. Self-Hosted Infrastructure. Not affiliated with Studio Wildcard.</p>
+        <p>&copy; 2026 ZEROPOINT CLUSTER. Privately Managed Bare-Metal Nodes.</p>
     </footer>
 
     <script type="module">
@@ -293,28 +217,27 @@
             width: 1000,
             height: 1000,
             phi: 0,
-            theta: 0.4, // Tilt to show North America better
+            theta: 0.4,
             dark: 1,
             diffuse: 1.2,
             mapSamples: 16000,
             mapBrightness: 6,
-            baseColor: [0.05, 0.05, 0.1], // Dark navy base
-            markerColor: [0.13, 0.77, 0.36], // Green dots (#22c55e)
-            glowColor: [1, 0.31, 0.85], // Purple/Pink glow (#ff4fd8)
+            baseColor: [0.05, 0.05, 0.1],
+            markerColor: [0.13, 0.77, 0.36], // Green dots
+            glowColor: [1, 0.31, 0.85], // Brand glow
             markers: [
-                { location: [25.7617, -80.1918], size: 0.1 }, // Miami
-                { location: [40.7128, -74.0060], size: 0.1 }, // New York
-                { location: [34.0522, -118.2437], size: 0.05 }, // LA
-                { location: [51.5074, -0.1278], size: 0.05 }, // London
-                { location: [35.6762, 139.6503], size: 0.05 }, // Tokyo
+                // Focused on your three server locations
+                { location: [40.7128, -74.0060], size: 0.1 }, // New York Node
+                { location: [25.7617, -80.1918], size: 0.1 }, // Miami Node 1
+                { location: [25.7617, -80.2018], size: 0.1 }, // Miami Node 2 (slightly offset for visibility)
             ],
             onRender: (state) => {
                 state.phi = phi
-                phi += 0.005 // Rotation speed
+                phi += 0.005 
             },
         })
 
-        // Dynamic Ping Logic
+        // Live Ping Logic
         setInterval(() => {
             document.querySelectorAll('.dynamic-ping').forEach(el => {
                 const min = parseInt(el.dataset.min);
@@ -322,7 +245,7 @@
                 const newVal = Math.floor(Math.random() * (max - min + 1)) + min;
                 el.innerText = newVal;
             });
-        }, 2000);
+        }, 1500);
     </script>
 
 </body>

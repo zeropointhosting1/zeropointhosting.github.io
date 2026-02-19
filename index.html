@@ -16,6 +16,8 @@
   --pink:#ff4fd8;
   --muted:#cbd5e1;
   --green:#22c55e;
+  --yellow:#facc15;
+  --red:#f87171;
   --border:rgba(255,79,216,.25);
 }
 
@@ -38,7 +40,7 @@ body{
 }
 @keyframes move{to{transform:translate(50px,50px)}}
 
-/* NAV */
+/* NAV (FIXED DESKTOP ALIGNMENT) */
 nav{
   position:fixed;
   top:0;
@@ -51,18 +53,18 @@ nav{
 .nav-inner{
   max-width:1200px;
   margin:auto;
-  padding:.85rem 1.75rem;
-  display:flex;
+  padding:.85rem 2rem;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
   align-items:center;
-  justify-content:space-between;
 }
 .brand{
   display:flex;
   align-items:center;
-  gap:.65rem;
+  gap:.6rem;
   text-decoration:none;
 }
-.brand img{width:36px}
+.brand img{width:34px}
 .brand span{
   font-weight:900;
   letter-spacing:1px;
@@ -70,7 +72,8 @@ nav{
 }
 .nav-links{
   display:flex;
-  gap:2rem;
+  justify-content:center;
+  gap:2.2rem;
   list-style:none;
 }
 .nav-links a{
@@ -148,9 +151,7 @@ h2{
   font-weight:800;
 }
 .dot{
-  width:8px;
-  height:8px;
-  border-radius:50%;
+  width:8px;height:8px;border-radius:50%;
   background:var(--green);
   box-shadow:0 0 8px var(--green);
 }
@@ -185,8 +186,13 @@ canvas{
   gap:1.2rem;
   margin-top:1.5rem;
 }
-.ping div{font-weight:700;color:var(--muted)}
-.ping span{color:var(--green);font-weight:900}
+.ping div{
+  font-weight:700;
+  color:var(--muted);
+}
+.ping span.green{color:var(--green)}
+.ping span.yellow{color:var(--yellow)}
+.ping span.red{color:var(--red)}
 
 /* FOOTER */
 footer{
@@ -197,10 +203,17 @@ footer{
   background:var(--bg2);
 }
 
-/* MOBILE (unchanged behavior) */
+/* MOBILE (unchanged) */
 @media(max-width:768px){
-  .nav-inner{flex-wrap:wrap;justify-content:center;gap:.75rem}
-  .nav-links{width:100%;justify-content:center;flex-wrap:wrap}
+  .nav-inner{
+    grid-template-columns:1fr;
+    gap:.75rem;
+    text-align:center;
+  }
+  .nav-links{
+    flex-wrap:wrap;
+    justify-content:center;
+  }
   .network{grid-template-columns:1fr;text-align:center}
   .server{grid-template-columns:1fr;text-align:center;gap:.5rem}
   .right{text-align:center}
@@ -217,7 +230,7 @@ footer{
 <nav>
   <div class="nav-inner">
     <a class="brand" href="#">
-      <img src="zeropoint.png" alt="Zeropoint">
+      <img src="zeropoint.png">
       <span>Zeropoint</span>
     </a>
 
@@ -268,12 +281,11 @@ footer{
     </div>
     <div>
       <h2>Network</h2>
-      <p style="color:var(--muted)">Optimized routing for low-latency gameplay.</p>
       <div class="ping">
-        <div>🇺🇸 New York <span>34ms</span></div>
-        <div>🇺🇸 Miami <span>22ms</span></div>
-        <div>🇬🇧 London <span>114ms</span></div>
-        <div>🇦🇺 Sydney <span>314ms</span></div>
+        <div>🇺🇸 New York <span class="green">34ms</span></div>
+        <div>🇺🇸 Miami <span class="green">22ms</span></div>
+        <div>🇬🇧 London <span class="red">114ms</span></div>
+        <div>🇦🇺 Sydney <span class="red">314ms</span></div>
       </div>
     </div>
   </div>
@@ -303,8 +315,8 @@ createGlobe(canvas,{
   glowColor:[1,.3,.85],
   markerColor:[.13,.77,.36],
   markers:[
-    { location:[40.73,-73.93], size:.07 },   // New York
-    { location:[25.78,-80.22], size:.07 }    // Miami
+    { location:[40.73,-73.93], size:.07 },
+    { location:[25.78,-80.22], size:.07 }
   ],
   onRender:(s)=>{
     s.phi = phi
@@ -316,4 +328,4 @@ document.getElementById("year").textContent = new Date().getFullYear()
 </script>
 
 </body>
-</html>
+</html

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Zeropoint Hosting | Server Packages</title>
-<meta name="description" content="Zeropoint Hosting packages for ARK Survival Evolved and Hytale servers." />
+<meta name="description" content="Zeropoint Hosting packages and live server status for ARK Survival Evolved and Hytale." />
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
@@ -14,13 +14,14 @@
 
 /* ================= THEME (PINK) ================= */
 :root{
---bg-primary:#0b0b0f;
---bg-secondary:#14141c;
+--bg-primary:#0b0b10;
+--bg-secondary:#141420;
 --bg-card:#1c1c2a;
 
 --accent-pink:#ff4fd8;
 --accent-pink-dark:#c026a3;
 --accent-soft-pink:#ff9de6;
+--accent-green:#22c55e;
 
 --text-primary:#ffffff;
 --text-secondary:#cbd5e1;
@@ -46,7 +47,6 @@ z-index:0;
 overflow:hidden;
 }
 
-/* grid */
 .grid-lines{
 position:absolute;
 width:100%;
@@ -64,12 +64,11 @@ z-index:1;
 100%{transform:translate(50px,50px)}
 }
 
-/* particles */
 .floating-particles{
 position:absolute;
 width:100%;
 height:100%;
-z-index:2; /* ABOVE GRID */
+z-index:2;
 pointer-events:none;
 }
 
@@ -186,6 +185,76 @@ color:var(--accent-pink);
 text-shadow:0 0 25px var(--glow-pink);
 }
 
+/* ================= LIVE SERVERS ================= */
+.live-servers{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:2rem;
+}
+
+.server-card{
+background:var(--bg-card);
+border:2px solid rgba(34,197,94,.35);
+border-radius:20px;
+padding:2rem;
+box-shadow:0 0 25px rgba(34,197,94,.25);
+}
+
+.server-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:1rem;
+}
+
+.server-name{font-size:1.4rem;font-weight:700}
+
+.server-status{
+color:var(--accent-green);
+font-weight:700;
+display:flex;
+align-items:center;
+gap:.5rem;
+}
+
+.status-dot{
+width:10px;
+height:10px;
+background:var(--accent-green);
+border-radius:50%;
+box-shadow:0 0 12px rgba(34,197,94,.9);
+animation:pulseDot 1.5s infinite;
+}
+
+@keyframes pulseDot{
+0%,100%{transform:scale(1);opacity:1}
+50%{transform:scale(1.4);opacity:.6}
+}
+
+.status-bars{
+display:flex;
+gap:6px;
+margin-top:1rem;
+}
+
+.bar{
+width:8px;
+height:30px;
+background:linear-gradient(180deg,#22c55e,#15803d);
+border-radius:4px;
+animation:barMove 1.2s infinite ease-in-out;
+}
+
+.bar:nth-child(2){animation-delay:.15s}
+.bar:nth-child(3){animation-delay:.3s}
+.bar:nth-child(4){animation-delay:.45s}
+.bar:nth-child(5){animation-delay:.6s}
+
+@keyframes barMove{
+0%,100%{height:12px;opacity:.6}
+50%{height:32px;opacity:1}
+}
+
 /* ================= PACKAGES ================= */
 .packages{
 display:grid;
@@ -204,22 +273,8 @@ position:relative;
 overflow:hidden;
 }
 
-.package-card::before{
-content:'';
-position:absolute;
-top:-60%;
-left:-60%;
-width:220%;
-height:220%;
-background:linear-gradient(45deg,transparent,rgba(255,79,216,.08),transparent);
-transform:rotate(45deg);
-transition:.7s;
-}
-
-.package-card:hover::before{left:120%}
-
 .package-card:hover{
-transform:translateY(-14px) scale(1.02);
+transform:translateY(-14px);
 box-shadow:0 25px 60px var(--glow-pink);
 border-color:var(--accent-pink);
 }
@@ -239,7 +294,6 @@ padding:.5rem 3.5rem;
 font-weight:700;
 font-size:.9rem;
 transform:rotate(45deg);
-box-shadow:0 0 20px var(--glow-pink);
 }
 
 .price{
@@ -289,7 +343,6 @@ border-top:1px solid rgba(255,79,216,.35);
 
 <body>
 
-<!-- BACKGROUND -->
 <div class="animated-bg">
   <div class="grid-lines"></div>
   <div class="floating-particles" id="particles"></div>
@@ -298,6 +351,7 @@ border-top:1px solid rgba(255,79,216,.35);
 <nav>
 <ul>
 <li><a href="#home">Home</a></li>
+<li><a href="#live">Live</a></li>
 <li><a href="#ark">ARK</a></li>
 <li><a href="#hytale">Hytale</a></li>
 </ul>
@@ -312,7 +366,47 @@ All payments go directly toward server costs.</p>
 </div>
 </section>
 
-<!-- ARK -->
+<!-- LIVE SERVERS -->
+<section id="live">
+<div class="container">
+<h2 class="section-title">🟢 Live Servers</h2>
+<div class="live-servers">
+
+<div class="server-card">
+<div class="server-header">
+<div class="server-name">ARK – Ragnarok</div>
+<div class="server-status"><span class="status-dot"></span> ONLINE</div>
+</div>
+<div class="status-bars">
+<div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+</div>
+</div>
+
+<div class="server-card">
+<div class="server-header">
+<div class="server-name">ARK – Fjordur</div>
+<div class="server-status"><span class="status-dot"></span> ONLINE</div>
+</div>
+<div class="status-bars">
+<div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+</div>
+</div>
+
+<div class="server-card">
+<div class="server-header">
+<div class="server-name">Hytale SMP</div>
+<div class="server-status"><span class="status-dot"></span> ONLINE</div>
+</div>
+<div class="status-bars">
+<div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+</div>
+</div>
+
+</div>
+</div>
+</section>
+
+<!-- ARK PACKAGES -->
 <section id="ark">
 <div class="container">
 <h2 class="section-title">🦖 ARK Packages</h2>
@@ -367,35 +461,20 @@ All payments go directly toward server costs.</p>
 </div>
 </section>
 
-<!-- HYTALE -->
-<section id="ark">
+<!-- HYTALE PACKAGES -->
+<section id="hytale">
 <div class="container">
-<h2 class="section-title">🏔️Hytale Packages</h2>
+<h2 class="section-title">🧱 Hytale Packages</h2>
 <div class="packages">
-
-<div class="package-card">
-<h3>VIP Bronze</h3>
-<div class="price">$5</div>
-<ul>
-<li>Starter kit</li>
-<li>VIP Discord role</li>
-<li>Bonus BBS</li>
-</ul>
-<div class="buy-buttons">
-<a class="buy paypal" href="https://www.paypal.me/ZeropointHosting" target="_blank">PayPal</a>
-<a class="buy stripe" href="#">Stripe</a>
-</div>
-</div>
 
 <div class="package-card popular">
 <div class="popular-badge">POPULAR</div>
-<h3>VIP Gold</h3>
+<h3>Champion</h3>
 <div class="price">$15</div>
 <ul>
-<li>Everything in Bronze</li>
-<li>Extra BBS</li>
-<li>Custom Dino Color</li>
-<li>Priority Support</li>
+<li>Supporter perks</li>
+<li>Extra cosmetics</li>
+<li>Early feature access</li>
 </ul>
 <div class="buy-buttons">
 <a class="buy paypal" href="https://www.paypal.me/ZeropointHosting" target="_blank">PayPal</a>
@@ -404,13 +483,26 @@ All payments go directly toward server costs.</p>
 </div>
 
 <div class="package-card">
-<h3>VIP Alpha</h3>
+<h3>Supporter</h3>
+<div class="price">$5</div>
+<ul>
+<li>Supporter role</li>
+<li>Chat badge</li>
+<li>Cosmetic perks</li>
+</ul>
+<div class="buy-buttons">
+<a class="buy paypal" href="https://www.paypal.me/ZeropointHosting" target="_blank">PayPal</a>
+<a class="buy stripe" href="#">Stripe</a>
+</div>
+</div>
+
+<div class="package-card">
+<h3>Elite</h3>
 <div class="price">$25</div>
 <ul>
-<li>All Gold perks</li>
-<li>Monthly rewards</li>
-<li>Admin-approved tame</li>
-<li>Top priority support</li>
+<li>All Champion perks</li>
+<li>Exclusive cosmetics</li>
+<li>Early content access</li>
 </ul>
 <div class="buy-buttons">
 <a class="buy paypal" href="https://www.paypal.me/ZeropointHosting" target="_blank">PayPal</a>
@@ -422,10 +514,13 @@ All payments go directly toward server costs.</p>
 </div>
 </section>
 
+<footer>
+<p>© <span id="year"></span> Zeropoint Hosting</p>
+</footer>
+
 <script>
-// floating particles
 const container=document.getElementById("particles");
-for(let i=0;i<40;i++){
+for(let i=0;i<45;i++){
   const p=document.createElement("div");
   p.className="particle";
   p.style.left=Math.random()*100+"%";

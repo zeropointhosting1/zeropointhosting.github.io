@@ -2,297 +2,372 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Zeropoint — Community ARK Servers</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zer0Point Gaming</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --bg:#0b0a12;
-  --panel:#141320;
-  --border:rgba(255,255,255,.08);
-  --text:#f4f4f8;
-  --muted:#a9a9b8;
-  --pink:#ff46be;
-  --green:#6effa0;
-  --red:#ff4f4f;
-  --radius:18px;
+  --bg:#0b0b16;
+  --bg2:#141428;
+  --card:#1c1c38;
+
+  --pink:#ff4fd8;
+  --pink-soft:#ff7de9;
+  --purple:#9b5cff;
+
+  --text:#f5f5ff;
+  --muted:#b9b9d6;
+
+  --glow:rgba(255,79,216,.45);
 }
 
-*{box-sizing:border-box}
+*{margin:0;padding:0;box-sizing:border-box}
+
 body{
-  margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-  background:linear-gradient(180deg,#0b0a12,#0f0d18);
+  font-family:'Rajdhani',sans-serif;
+  background:var(--bg);
   color:var(--text);
+  overflow-x:hidden;
 }
 
-a{text-decoration:none;color:inherit}
-.container{max-width:1100px;margin:auto;padding:0 20px}
+/* ===== BACKGROUND ===== */
+.bg{
+  position:fixed;inset:0;z-index:0;
+  background:
+    linear-gradient(rgba(255,79,216,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,79,216,.05) 1px,transparent 1px);
+  background-size:50px 50px;
+  animation:move 30s linear infinite;
+}
+@keyframes move{to{transform:translate(50px,50px)}}
 
-/* NAV */
-header{
-  position:sticky;
-  top:0;
-  background:rgba(11,10,18,.85);
+.content{position:relative;z-index:1}
+
+/* ===== NAV ===== */
+nav{
+  position:fixed;top:0;width:100%;
+  background:rgba(11,11,22,.95);
   backdrop-filter:blur(10px);
-  border-bottom:1px solid var(--border);
+  border-bottom:1px solid rgba(255,79,216,.25);
   z-index:10;
 }
-nav{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:14px 0;
+nav ul{
+  display:flex;justify-content:center;
+  gap:2rem;list-style:none;
+  padding:1rem 0;
 }
-.logo{height:32px}
-.nav-links{display:flex;gap:16px}
-.nav-links a{color:var(--muted)}
-.nav-links a:hover{color:white}
-
-/* HERO */
-.hero{
-  padding:70px 0 40px;
-}
-.hero h1{
-  font-size:48px;
-  margin:0 0 10px;
-}
-.hero span{color:var(--pink)}
-.hero p{
+nav a{
   color:var(--muted);
-  max-width:620px;
-}
-
-/* LAYOUT SECTIONS */
-section{padding:50px 0}
-.grid{
-  display:grid;
-  grid-template-columns:2fr 1fr;
-  gap:24px;
-}
-
-/* PANELS */
-.panel{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  overflow:hidden;
-}
-
-/* SERVER LIST */
-.server-row{
-  display:grid;
-  grid-template-columns:2fr 1fr 1fr 1fr;
-  padding:18px;
-  border-bottom:1px solid var(--border);
-  align-items:center;
-}
-.server-row:last-child{border-bottom:none}
-.server-name{font-weight:600}
-
-.status{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-.dot{
-  width:8px;
-  height:8px;
-  border-radius:50%;
-}
-.online{background:var(--green)}
-.standby{background:var(--red)}
-.ping-good{color:var(--green)}
-.ping-bad{color:var(--red)}
-
-/* DISCORD CARD */
-.discord-card{
-  display:flex;
-  flex-direction:column;
-  gap:16px;
-  padding:20px;
-}
-.discord-card h3{
-  margin:0;
-  font-size:20px;
-}
-.discord-stats{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-.stat-box{
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:14px;
-  background:rgba(0,0,0,.25);
-}
-.stat-box strong{
-  font-size:22px;
-}
-.join-btn{
-  text-align:center;
-  padding:14px;
-  border-radius:14px;
-  background:rgba(255,70,190,.22);
-  border:1px solid rgba(255,70,190,.5);
+  text-decoration:none;
   font-weight:600;
 }
-.join-btn:hover{
-  background:rgba(255,70,190,.32);
-}
+nav a:hover{color:var(--pink)}
 
-/* FOOTER */
-footer{
-  padding:30px 0;
-  border-top:1px solid var(--border);
-  color:var(--muted);
+/* ===== HERO ===== */
+.hero{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   text-align:center;
+  padding-top:5rem;
+}
+.hero h1{
+  font-size:clamp(3rem,6vw,5rem);
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.hero p{
+  max-width:650px;
+  margin:1.5rem auto;
+  color:var(--muted);
+  font-size:1.3rem;
+}
+.hero a{
+  display:inline-block;
+  padding:1rem 2.8rem;
+  border-radius:50px;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  color:#fff;
+  text-decoration:none;
+  font-weight:700;
+  box-shadow:0 0 35px var(--glow);
 }
 
-/* MOBILE */
-@media(max-width:900px){
-  .grid{grid-template-columns:1fr}
-  .server-row{
-    grid-template-columns:1fr;
-    gap:8px;
-  }
+/* ===== GLOBAL ===== */
+section{padding:6rem 0}
+.container{max-width:1200px;margin:auto;padding:0 2rem}
+.section-title{
+  text-align:center;
+  font-size:2.6rem;
+  margin-bottom:3rem;
+}
+.section-title span{
+  color:var(--pink);
+}
+
+/* ===== GRID ===== */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:2.5rem;
+}
+
+/* ===== PACKAGE CARDS ===== */
+.package{
+  background:var(--card);
+  border-radius:22px;
+  border:2px solid rgba(255,79,216,.25);
+  transition:.4s;
+}
+.package:hover{
+  transform:translateY(-14px);
+  box-shadow:0 25px 60px var(--glow);
+  border-color:var(--pink);
+}
+
+.package-top{
+  padding:2.5rem;
+  text-align:center;
+  background:linear-gradient(135deg,var(--bg2),var(--card));
+}
+.package-top i{
+  font-size:3.2rem;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.package-top h3{
+  margin-top:1rem;
+  font-size:1.8rem;
+}
+.price{
+  margin-top:.8rem;
+  font-size:2.1rem;
+  color:var(--pink-soft);
+}
+
+.package-body{
+  padding:2rem;
+}
+.package-body p{
+  color:var(--muted);
+  margin-bottom:1.2rem;
+}
+.tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.6rem;
+}
+.tag{
+  padding:.4rem 1.1rem;
+  border-radius:20px;
+  border:1px solid rgba(255,79,216,.4);
+  color:var(--pink-soft);
+  font-size:.9rem;
+}
+.buy{
+  display:block;
+  margin-top:1.8rem;
+  padding:.95rem;
+  text-align:center;
+  border-radius:14px;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  color:#fff;
+  text-decoration:none;
+  font-weight:700;
+}
+
+/* ===== ADMINS ===== */
+.admin{
+  background:var(--card);
+  padding:2.2rem;
+  border-radius:22px;
+  text-align:center;
+  border:2px solid rgba(255,79,216,.25);
+  transition:.3s;
+}
+.admin:hover{
+  transform:translateY(-10px);
+  box-shadow:0 20px 45px var(--glow);
+}
+.admin i{
+  font-size:3rem;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* ===== FOOTER ===== */
+footer{
+  text-align:center;
+  padding:2rem;
+  background:var(--bg2);
+  border-top:1px solid rgba(255,79,216,.25);
+  color:var(--muted);
 }
 </style>
 </head>
 
 <body>
+<div class="bg"></div>
 
-<header>
-  <div class="container">
-    <nav>
-      <img src="logo.png" class="logo" alt="Zeropoint">
-      <div class="nav-links">
-        <a href="https://discord.gg/YOURINVITE">Join Discord</a>
-      </div>
-    </nav>
-  </div>
-</header>
+<nav>
+  <ul>
+    <li><a href="#home">Home</a></li>
+    <li><a href="#ark">ARK</a></li>
+    <li><a href="#hytale">Hytale</a></li>
+    <li><a href="#admins">Admins</a></li>
+    <li><a href="#discord">Discord</a></li>
+  </ul>
+</nav>
 
-<main>
+<div class="content">
 
-<section class="hero">
-  <div class="container">
-    <h1>Welcome to <span>Zeropoint</span></h1>
-    <p>
-      Community-run ARK servers with balanced gameplay and active admins.
-      Join our servers and connect with the community through Discord.
-    </p>
+<section id="home" class="hero">
+  <div>
+    <h1>Zer0Point Gaming</h1>
+    <p>Community-driven ARK & Hytale servers with active admins, stable performance, and a clean experience.</p>
+    <a href="#ark">View Packages</a>
   </div>
 </section>
 
-<section>
-  <div class="container grid">
+<!-- ARK PACKAGES -->
+<section id="ark">
+  <div class="container">
+    <h2 class="section-title"><span>ARK</span> Packages</h2>
+    <div class="grid">
 
-    <!-- SERVERS -->
-    <div>
-      <h2>Current Running Servers</h2>
-      <div class="panel" id="serverPanel"></div>
-    </div>
-
-    <!-- DISCORD CARD -->
-    <div>
-      <h2>Community</h2>
-      <div class="panel discord-card">
-        <h3>Discord Server</h3>
-        <p class="muted">
-          All communication, updates, and support happen in Discord.
-        </p>
-
-        <div class="discord-stats">
-          <div class="stat-box">
-            <div class="muted">Members</div>
-            <strong id="discordMembers">—</strong>
-          </div>
-          <div class="stat-box">
-            <div class="muted">Online</div>
-            <strong id="discordOnline">—</strong>
-          </div>
+      <div class="package">
+        <div class="package-top">
+          <i class="fas fa-dragon"></i>
+          <h3>Survivor</h3>
+          <div class="price">$10 / mo</div>
         </div>
-
-        <a class="join-btn" href="https://discord.gg/YOURINVITE">
-          Join Discord
-        </a>
+        <div class="package-body">
+          <p>Perfect for regular ARK players who want boosted gameplay and perks.</p>
+          <div class="tags">
+            <span class="tag">Boosted Rates</span>
+            <span class="tag">Priority Queue</span>
+            <span class="tag">Custom Colors</span>
+          </div>
+          <a href="#discord" class="buy">Join Discord</a>
+        </div>
       </div>
-    </div>
 
+      <div class="package">
+        <div class="package-top">
+          <i class="fas fa-skull"></i>
+          <h3>Alpha</h3>
+          <div class="price">$20 / mo</div>
+        </div>
+        <div class="package-body">
+          <p>Top-tier perks for serious ARK players who want everything.</p>
+          <div class="tags">
+            <span class="tag">Highest Rates</span>
+            <span class="tag">Admin Priority</span>
+            <span class="tag">Exclusive Events</span>
+          </div>
+          <a href="#discord" class="buy">Join Discord</a>
+        </div>
+      </div>
+
+    </div>
   </div>
 </section>
 
-</main>
+<!-- HYTALE PACKAGES -->
+<section id="hytale">
+  <div class="container">
+    <h2 class="section-title"><span>Hytale</span> Packages</h2>
+    <div class="grid">
+
+      <div class="package">
+        <div class="package-top">
+          <i class="fas fa-cube"></i>
+          <h3>Explorer</h3>
+          <div class="price">$6 / mo</div>
+        </div>
+        <div class="package-body">
+          <p>Entry-level perks and cosmetics for Hytale SMP supporters.</p>
+          <div class="tags">
+            <span class="tag">Cosmetics</span>
+            <span class="tag">Discord Role</span>
+          </div>
+          <a href="#discord" class="buy">Join Discord</a>
+        </div>
+      </div>
+
+      <div class="package">
+        <div class="package-top">
+          <i class="fas fa-gem"></i>
+          <h3>Adventurer</h3>
+          <div class="price">$12 / mo</div>
+        </div>
+        <div class="package-body">
+          <p>Premium Hytale perks with early access and exclusive rewards.</p>
+          <div class="tags">
+            <span class="tag">Early Access</span>
+            <span class="tag">Exclusive Items</span>
+            <span class="tag">Event Access</span>
+          </div>
+          <a href="#discord" class="buy">Join Discord</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ADMINS -->
+<section id="admins">
+  <div class="container">
+    <h2 class="section-title">Active <span>Admins</span></h2>
+    <div class="grid">
+
+      <div class="admin">
+        <i class="fas fa-user-shield"></i>
+        <h3>Harrison</h3>
+        <p>Owner / Lead Admin</p>
+      </div>
+
+      <div class="admin">
+        <i class="fas fa-headset"></i>
+        <h3>Admin Name</h3>
+        <p>Support Admin</p>
+      </div>
+
+      <div class="admin">
+        <i class="fas fa-tools"></i>
+        <h3>Admin Name</h3>
+        <p>Server Admin</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- DISCORD -->
+<section id="discord">
+  <div class="container">
+    <h2 class="section-title">Join the <span>Community</span></h2>
+    <div class="admin">
+      <i class="fab fa-discord"></i>
+      <p>Announcements, support, events, and direct admin interaction.</p>
+      <a class="buy" href="https://discord.gg/YOURINVITE" target="_blank">Join Discord</a>
+    </div>
+  </div>
+</section>
+
+</div>
 
 <footer>
-  © <span id="year"></span> Zeropoint — community-run ARK servers
+  © 2026 Zer0Point Gaming
 </footer>
-
-<script>
-document.getElementById("year").textContent = new Date().getFullYear();
-
-/* SERVER DATA */
-const servers = [
-  { name:"ARK — Ragnarok", max:32, basePlayers:18, status:"Online", basePing:28 },
-  { name:"ARK — Fjordur", max:16, basePlayers:6, status:"Online", basePing:42 },
-  { name:"ARK — Crystal Isles", max:16, basePlayers:0, status:"Standby", basePing:75 }
-];
-
-/* DISCORD DATA */
-let discordMembers = 412;
-let discordOnline = 96;
-
-function renderServers(){
-  const panel=document.getElementById("serverPanel");
-  panel.innerHTML="";
-
-  servers.forEach(s=>{
-    let players = s.basePlayers + Math.floor(Math.random()*5 - 2);
-    players = Math.max(0, Math.min(players, s.max));
-
-    let ping = s.basePing + Math.floor(Math.random()*10 - 5);
-    let pingClass = ping < 80 ? "ping-good" : "ping-bad";
-
-    panel.innerHTML += `
-      <div class="server-row">
-        <div class="server-name">${s.name}</div>
-        <div class="status">
-          <span class="dot ${s.status==="Online"?"online":"standby"}"></span>
-          ${s.status}
-        </div>
-        <div>${players} / ${s.max}</div>
-        <div class="${pingClass}">${ping} ms</div>
-      </div>
-    `;
-  });
-}
-
-function updateDiscord(){
-  discordMembers += Math.floor(Math.random()*3);
-  discordOnline += Math.floor(Math.random()*7 - 3);
-
-  if(discordOnline < 40) discordOnline = 40;
-  if(discordOnline > discordMembers) discordOnline = discordMembers;
-
-  document.getElementById("discordMembers").textContent = discordMembers;
-  document.getElementById("discordOnline").textContent = discordOnline;
-}
-
-/* UPDATE LOOPS */
-renderServers();
-updateDiscord();
-
-setInterval(renderServers, 5000);        // ping updates
-setInterval(updateDiscord, 30000);       // discord activity
-setInterval(() => {
-  servers.forEach(s=>{
-    s.basePlayers += Math.floor(Math.random()*3 - 1);
-    s.basePlayers = Math.max(0, Math.min(s.basePlayers, s.max));
-  });
-}, 300000); // players every 5 min
-</script>
 
 </body>
 </html>

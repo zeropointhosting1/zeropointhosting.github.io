@@ -1,317 +1,358 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#0b0a12" />
-  <meta name="description" content="Zeropoint is a community-run ARK & Hytale server network. Join our servers, meet the community, and learn about donation perks." />
-  <title>Zeropoint — Community ARK & Hytale Servers</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0a12">
+<title>Zeropoint — Community ARK & Hytale Servers</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Optional: clean modern font. Safe on iOS Safari. -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* =====================
+   CORE THEME
+===================== */
+:root{
+  --bg:#0b0a12;
+  --panel:rgba(255,255,255,.05);
+  --border:rgba(255,255,255,.12);
+  --text:#f4f4f8;
+  --muted:#b9b9c7;
+  --pink:#ff46be;
+  --green:#6effa0;
+  --red:#ff4f4f;
+  --radius:18px;
+}
 
-  <link rel="stylesheet" href="./styles.css" />
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Arial,sans-serif;
+  background:linear-gradient(180deg,#0b0a12,#0e0d18);
+  color:var(--text);
+  line-height:1.6;
+}
+
+a{color:inherit;text-decoration:none}
+.container{max-width:1100px;margin:auto;padding:0 20px}
+
+/* =====================
+   NAVIGATION
+===================== */
+header{
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:rgba(11,10,18,.85);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+}
+
+nav{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 0;
+}
+
+.logo{
+  height:34px;
+}
+
+.nav-links{
+  display:flex;
+  gap:14px;
+  align-items:center;
+}
+
+.nav-links a{
+  padding:10px 12px;
+  border-radius:12px;
+}
+
+.nav-links a:hover{
+  background:rgba(255,255,255,.06);
+}
+
+.discord-btn{
+  background:linear-gradient(135deg,rgba(255,70,190,.3),rgba(255,70,190,.12));
+  border:1px solid rgba(255,70,190,.5);
+}
+
+/* =====================
+   HERO
+===================== */
+.hero{
+  padding:70px 0 40px;
+}
+
+.hero-grid{
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:24px;
+}
+
+.hero h1{
+  font-size:clamp(36px,4vw,52px);
+  line-height:1.05;
+  margin:0 0 10px;
+}
+
+.hero h1 span{
+  color:var(--pink);
+}
+
+.hero p{
+  max-width:60ch;
+  color:var(--muted);
+}
+
+.hero-actions{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:18px;
+}
+
+.btn{
+  padding:12px 16px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.04);
+}
+
+.btn.primary{
+  border-color:rgba(255,70,190,.6);
+  background:rgba(255,70,190,.18);
+}
+
+/* =====================
+   PANELS
+===================== */
+.panel{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:16px;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-top:12px;
+}
+
+.stat strong{
+  font-size:20px;
+}
+
+/* =====================
+   SERVERS
+===================== */
+section{
+  padding:40px 0;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:600px;
+}
+
+th,td{
+  padding:14px;
+  border-bottom:1px solid var(--border);
+}
+
+.status{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:13px;
+}
+
+.online{color:var(--green)}
+.offline{color:var(--red)}
+
+/* =====================
+   NETWORK
+===================== */
+.network{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
+
+.ping{
+  display:flex;
+  justify-content:space-between;
+  padding:12px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  margin-bottom:10px;
+}
+
+/* =====================
+   CTA
+===================== */
+.cta{
+  background:rgba(255,70,190,.15);
+  border:1px solid rgba(255,70,190,.4);
+  border-radius:24px;
+  padding:24px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:18px;
+}
+
+/* =====================
+   FOOTER
+===================== */
+footer{
+  border-top:1px solid var(--border);
+  padding:24px 0;
+  color:var(--muted);
+}
+
+/* =====================
+   MOBILE
+===================== */
+@media(max-width:900px){
+  .hero-grid,.network{grid-template-columns:1fr}
+  .nav-links{display:none}
+}
+</style>
 </head>
 
 <body>
-  <!-- Subtle background (static). No fixed animated overlays. -->
-  <div class="bg" aria-hidden="true"></div>
 
-  <!-- 1) NAVIGATION -->
-  <header class="site-header">
-    <div class="container">
-      <nav class="nav" aria-label="Primary">
-        <a class="brand" href="#top" aria-label="Zeropoint home">
-          <!-- Image-only logo (required). Put your logo file at /assets/logo.png -->
-          <img src="./assets/logo.png" alt="Zeropoint" class="logo" />
-        </a>
-
-        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">
-          <span class="sr-only">Open menu</span>
-          <span class="hamburger" aria-hidden="true"></span>
-        </button>
-
-        <div class="nav-links" id="navLinks">
-          <a href="#ark-perks">ARK Donation Perks</a>
-          <a href="#hytale-perks">Hytale Donation Perks</a>
-          <a href="#servers">Servers</a>
-
-          <a class="btn btn-primary btn-discord"
-             href="https://discord.gg/YOUR_INVITE"
-             target="_blank"
-             rel="noreferrer">
-            <span class="discord-icon" aria-hidden="true"></span>
-            Join Discord
-          </a>
-        </div>
-      </nav>
-    </div>
-  </header>
-
-  <main id="top">
-    <!-- 2) HERO -->
-    <section class="hero">
-      <!-- Desktop-only particles canvas (progressive enhancement; pointer-events:none) -->
-      <canvas id="particles" class="particles" aria-hidden="true"></canvas>
-
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <p class="eyebrow">Community-run • Active admins • Long-term servers</p>
-          <h1>Welcome to <span class="accent">Zeropoint</span></h1>
-
-          <p class="lead">
-            Zeropoint is a <strong>community-run ARK & Hytale server network</strong>.
-            Players join our existing servers, hang out in Discord, and enjoy balanced gameplay.
-            Donations unlock <strong>optional perks</strong> that our admins deliver in-game.
-          </p>
-
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="#ark-perks">View ARK Donation Perks</a>
-            <a class="btn btn-ghost" href="https://discord.gg/YOUR_INVITE" target="_blank" rel="noreferrer">
-              Join Discord
-            </a>
-          </div>
-
-          <div class="hero-badges" aria-label="Highlights">
-            <div class="badge">
-              <span class="dot dot-green" aria-hidden="true"></span>
-              <span>Fair perks (no pay-to-win vibes)</span>
-            </div>
-            <div class="badge">
-              <span class="dot dot-pink" aria-hidden="true"></span>
-              <span>Discord-first community</span>
-            </div>
-            <div class="badge">
-              <span class="dot dot-blue" aria-hidden="true"></span>
-              <span>Mobile-safe site + clean UX</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="hero-card">
-          <div class="panel">
-            <div class="panel-head">
-              <h2 class="panel-title">Live Snapshot</h2>
-              <p class="panel-sub">Server status + community pulse</p>
-            </div>
-
-            <div class="mini-stats" role="list">
-              <div class="stat" role="listitem">
-                <div class="stat-k">Servers</div>
-                <div class="stat-v" id="statServers">—</div>
-              </div>
-              <div class="stat" role="listitem">
-                <div class="stat-k">Online</div>
-                <div class="stat-v" id="statOnline">—</div>
-              </div>
-              <div class="stat" role="listitem">
-                <div class="stat-k">Players</div>
-                <div class="stat-v" id="statPlayers">—</div>
-              </div>
-            </div>
-
-            <div class="panel-foot">
-              <a class="link" href="#servers">See current servers →</a>
-            </div>
-          </div>
-
-          <div class="panel subtle">
-            <h3 class="panel-title-sm">New here?</h3>
-            <ol class="steps">
-              <li>Join the Discord</li>
-              <li>Pick a server</li>
-              <li>Ask questions + meet the community</li>
-            </ol>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 3) CURRENT SERVERS -->
-    <section class="section" id="servers">
-      <div class="container">
-        <div class="section-head">
-          <h2>Current Servers</h2>
-          <p>Live status updates so you always know what’s up.</p>
-        </div>
-
-        <div class="table-wrap" role="region" aria-label="Server list" tabindex="0">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Server</th>
-                <th>Status</th>
-                <th class="right">Players</th>
-                <th class="right">Mode</th>
-              </tr>
-            </thead>
-            <tbody id="serverRows">
-              <!-- Filled by script.js -->
-            </tbody>
-          </table>
-        </div>
-
-        <p class="muted small">
-          Tip: If a server is on <span class="pill pill-standby">Standby</span>, it’s still part of the community —
-          check Discord for announcements.
-        </p>
-      </div>
-    </section>
-
-    <!-- 4) NETWORK / PING SECTION -->
-    <section class="section" id="network">
-      <div class="container">
-        <div class="section-head">
-          <h2>Network & Ping</h2>
-          <p>See connection estimates at a glance. (Visual stays isolated and never overlaps content.)</p>
-        </div>
-
-        <div class="network-grid">
-          <div class="network-visual panel">
-            <div class="map-wrap" aria-hidden="true">
-              <!-- Lightweight SVG globe — responsive and iOS-safe -->
-              <svg class="globe" viewBox="0 0 600 380" role="img" aria-label="Stylized globe">
-                <defs>
-                  <radialGradient id="g" cx="40%" cy="35%">
-                    <stop offset="0%" stop-color="rgba(255,255,255,0.12)"/>
-                    <stop offset="70%" stop-color="rgba(255,255,255,0.03)"/>
-                    <stop offset="100%" stop-color="rgba(255,255,255,0.01)"/>
-                  </radialGradient>
-                </defs>
-
-                <rect x="0" y="0" width="600" height="380" rx="22" fill="rgba(255,255,255,0.02)"/>
-                <circle cx="300" cy="190" r="130" fill="url(#g)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
-
-                <!-- Grid lines -->
-                <g opacity="0.35" stroke="rgba(255,255,255,0.18)" stroke-width="1" fill="none">
-                  <ellipse cx="300" cy="190" rx="130" ry="42"/>
-                  <ellipse cx="300" cy="190" rx="130" ry="80"/>
-                  <ellipse cx="300" cy="190" rx="80" ry="130"/>
-                  <ellipse cx="300" cy="190" rx="42" ry="130"/>
-                  <path d="M170 190H430"/>
-                  <path d="M300 60V320"/>
-                </g>
-
-                <!-- “Ping nodes” (decorative) -->
-                <g>
-                  <circle cx="230" cy="150" r="5" fill="rgba(255,70,190,0.9)"/>
-                  <circle cx="365" cy="230" r="5" fill="rgba(110,255,160,0.9)"/>
-                  <circle cx="330" cy="140" r="4" fill="rgba(110,255,160,0.9)"/>
-                  <circle cx="255" cy="240" r="4" fill="rgba(255,90,210,0.85)"/>
-                </g>
-
-                <text x="22" y="40" fill="rgba(255,255,255,0.72)" font-size="14" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto">
-                  Connection estimates
-                </text>
-              </svg>
-            </div>
-          </div>
-
-          <div class="network-list panel">
-            <div class="panel-head">
-              <h3 class="panel-title">Ping Estimates</h3>
-              <p class="panel-sub">Green = low ping • Red = high ping</p>
-            </div>
-
-            <ul class="ping-list" id="pingList" aria-label="Ping list">
-              <!-- Filled by script.js -->
-            </ul>
-
-            <p class="muted small">
-              Ping can vary by ISP and routing. For the most accurate info, ask in Discord.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Donation Perks anchors (so your nav links land somewhere clean) -->
-    <section class="section" id="ark-perks">
-      <div class="container">
-        <div class="section-head">
-          <h2>ARK Donation Perks</h2>
-          <p>Optional perks — delivered by admins in-game. No “plans.” Just community support.</p>
-        </div>
-
-        <div class="cards">
-          <article class="card">
-            <h3>Cosmetic & Community</h3>
-            <p>Colors, skins, fun extras, and community-first perks that keep gameplay balanced.</p>
-          </article>
-          <article class="card">
-            <h3>Quality-of-life</h3>
-            <p>Convenience perks that don’t break progression — always fair, always explained clearly.</p>
-          </article>
-          <article class="card">
-            <h3>Admin-delivered</h3>
-            <p>Perks are handled by real people, not automated systems. Ask questions anytime.</p>
-          </article>
-        </div>
-
-        <a class="btn btn-primary" href="https://discord.gg/YOUR_INVITE" target="_blank" rel="noreferrer">
-          Ask about perks in Discord
-        </a>
-      </div>
-    </section>
-
-    <section class="section" id="hytale-perks">
-      <div class="container">
-        <div class="section-head">
-          <h2>Hytale Donation Perks</h2>
-          <p>We’ll keep it fair and community-driven — details will be posted as Hytale gets closer.</p>
-        </div>
-
-        <div class="cards">
-          <article class="card">
-            <h3>Future-ready</h3>
-            <p>Perks will focus on fun and community support — not pay-to-win pressure.</p>
-          </article>
-          <article class="card">
-            <h3>Transparent</h3>
-            <p>Everything will be clearly written out and discussed openly in Discord.</p>
-          </article>
-          <article class="card">
-            <h3>Built with feedback</h3>
-            <p>The community helps shape what’s added — your input matters.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- 5) CALL TO ACTION -->
-    <section class="cta">
-      <div class="container cta-inner">
-        <div>
-          <h2>Ready to join the community?</h2>
-          <p>
-            Jump into Discord to meet players, get server info, and see how donation perks work.
-            No pressure — just a solid community and long-term servers.
-          </p>
-        </div>
-
-        <div class="cta-actions">
-          <a class="btn btn-primary" href="https://discord.gg/YOUR_INVITE" target="_blank" rel="noreferrer">
-            Join Discord
-          </a>
-          <a class="btn btn-ghost" href="#servers">View Servers</a>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="container footer-inner">
-      <p class="muted">© <span id="year"></span> Zeropoint — community-run ARK & Hytale servers.</p>
-      <div class="footer-links">
-        <a href="#ark-perks">ARK Perks</a>
-        <a href="#hytale-perks">Hytale Perks</a>
+<header>
+  <div class="container">
+    <nav>
+      <img src="logo.png" class="logo" alt="Zeropoint Logo">
+      <div class="nav-links">
+        <a href="#ark">ARK Donation Perks</a>
+        <a href="#hytale">Hytale Donation Perks</a>
         <a href="#servers">Servers</a>
+        <a href="https://discord.gg/YOURINVITE" class="discord-btn">Join Discord</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <h1>Welcome to <span>Zeropoint</span></h1>
+      <p>
+        Zeropoint is a <strong>community-run ARK & Hytale server network</strong>.
+        Join our long-term servers, hang out in Discord, and enjoy balanced gameplay.
+        Donations unlock optional perks delivered directly by our admins.
+      </p>
+
+      <div class="hero-actions">
+        <a class="btn primary" href="#ark">View ARK Donation Perks</a>
+        <a class="btn" href="https://discord.gg/YOURINVITE">Join Discord</a>
       </div>
     </div>
-  </footer>
 
-  <script src="./script.js" defer></script>
+    <div class="panel">
+      <h3>Live Snapshot</h3>
+      <div class="stats">
+        <div class="stat"><div>Servers</div><strong>3</strong></div>
+        <div class="stat"><div>Online</div><strong>2</strong></div>
+        <div class="stat"><div>Players</div><strong>18</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVERS -->
+<section id="servers">
+  <div class="container">
+    <h2>Current Servers</h2>
+    <div style="overflow:auto">
+      <table>
+        <tr><th>Server</th><th>Status</th><th>Players</th></tr>
+        <tr>
+          <td>ARK — Ragnarok</td>
+          <td><span class="status online">● Online</span></td>
+          <td>12 / 40</td>
+        </tr>
+        <tr>
+          <td>ARK — Crystal Isles</td>
+          <td><span class="status online">● Online</span></td>
+          <td>6 / 40</td>
+        </tr>
+        <tr>
+          <td>Hytale — Community</td>
+          <td><span class="status offline">● Standby</span></td>
+          <td>0 / 50</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- NETWORK -->
+<section>
+  <div class="container network">
+    <div class="panel">
+      <h3>Network Coverage</h3>
+      <p>Connection estimates by region.</p>
+    </div>
+    <div class="panel">
+      <h3>Ping Estimates</h3>
+      <div class="ping"><span>US East</span><span class="online">28 ms</span></div>
+      <div class="ping"><span>US Central</span><span class="online">44 ms</span></div>
+      <div class="ping"><span>US West</span><span class="online">72 ms</span></div>
+      <div class="ping"><span>EU West</span><span class="offline">120 ms</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- DONATION PERKS -->
+<section id="ark">
+  <div class="container">
+    <h2>ARK Donation Perks</h2>
+    <p>Optional perks. Fair gameplay. Admin-delivered.</p>
+  </div>
+</section>
+
+<section id="hytale">
+  <div class="container">
+    <h2>Hytale Donation Perks</h2>
+    <p>Details will be shared as Hytale gets closer.</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section>
+  <div class="container cta">
+    <div>
+      <h2>Join the Zeropoint Community</h2>
+      <p>Hop into Discord, meet players, and get started.</p>
+    </div>
+    <a class="btn primary" href="https://discord.gg/YOURINVITE">Join Discord</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="container">
+    © <span id="year"></span> Zeropoint — community-run ARK & Hytale servers
+  </div>
+</footer>
+
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+</script>
+
 </body>
 </html>

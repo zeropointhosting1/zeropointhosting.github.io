@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Zeropoint Hosting | ARK PvE Donations</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#0b0b16;
+  --card:#1c1c38;
+  --pink:#ff4fd8;
+  --pink-soft:#ff7de9;
+  --purple:#9b5cff;
+  --text:#f5f5ff;
+  --muted:#b9b9d6;
+  --glow:rgba(255,79,216,.55);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:'Rajdhani',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+/* NAV */
+nav{
+  position:fixed;
+  top:0;
+  width:100%;
+  background:rgba(11,11,22,.95);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(255,79,216,.25);
+  z-index:1000;
+}
+.nav-inner{
+  max-width:1300px;
+  margin:auto;
+  padding:1.2rem 2rem;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.logo{
+  font-weight:900;
+  letter-spacing:2px;
+  font-size:1.4rem;
+}
+.logo span{color:var(--pink)}
+.nav-links{
+  list-style:none;
+  display:flex;
+  gap:2rem;
+}
+.nav-links a{
+  text-decoration:none;
+  color:var(--muted);
+  font-weight:700;
+  font-size:.85rem;
+  text-transform:uppercase;
+}
+.nav-links a:hover{color:var(--pink)}
+.discord-btn{
+  padding:.6rem 1.4rem;
+  border-radius:30px;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  color:#fff;
+  font-weight:800;
+  text-decoration:none;
+}
+
+/* PAGE HEADER */
+.header{
+  padding:9rem 2rem 4rem;
+  text-align:center;
+}
+.header h1{
+  font-size:clamp(3rem,6vw,4.5rem);
+}
+.header span{
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.header p{
+  max-width:700px;
+  margin:1.2rem auto 0;
+  color:var(--muted);
+  font-size:1.2rem;
+}
+
+/* GRID */
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:0 2rem 6rem;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:2rem;
+}
+
+/* PACKAGE CARDS */
+.package-wrap{
+  padding:2px;
+  border-radius:26px;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  box-shadow:0 0 35px var(--glow);
+  transition:.35s;
+}
+.package-wrap:hover{
+  transform:translateY(-10px);
+  box-shadow:0 0 55px var(--glow);
+}
+.package{
+  background:var(--card);
+  border-radius:24px;
+  padding:2rem;
+  display:flex;
+  flex-direction:column;
+  height:100%;
+  text-align:center;
+}
+.package i{
+  font-size:3rem;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.package h3{
+  margin-top:.8rem;
+  font-size:1.6rem;
+}
+.price{
+  margin-top:.3rem;
+  font-size:1.9rem;
+  color:var(--pink-soft);
+}
+.package p{
+  margin:1rem 0;
+  color:var(--muted);
+}
+.tags{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:.5rem;
+  margin-bottom:auto;
+}
+.tag{
+  padding:.35rem 1rem;
+  border-radius:20px;
+  border:1px solid rgba(255,79,216,.45);
+  color:var(--pink-soft);
+  font-size:.85rem;
+}
+
+/* PAYMENTS */
+.payments{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:.6rem;
+  margin-top:1.6rem;
+}
+.payments a{
+  padding:.75rem;
+  border-radius:14px;
+  font-weight:800;
+  text-decoration:none;
+  color:#fff;
+  font-size:.85rem;
+}
+.paypal{background:#0070ba}
+.cashapp{background:#00d632}
+.venmo{background:#3d95ce}
+
+@media(max-width:520px){
+  .payments{grid-template-columns:1fr}
+}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  padding:2.5rem;
+  border-top:1px solid rgba(255,79,216,.25);
+  color:var(--muted);
+  font-size:.85rem;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">Zeropoint <span>Hosting</span></div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="ark.html">ARK</a></li>
+      <li><a href="hytale.html">Hytale</a></li>
+      <li><a href="servers.html">Servers</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <a class="discord-btn" href="https://discord.gg/">Discord</a>
+  </div>
+</nav>
+
+<section class="header">
+  <h1><span>ARK</span> PvE Donations</h1>
+  <p>
+    Thank you for supporting our ARK PvE community 🦖💖  
+    Every donation goes directly into keeping the servers running and improving.
+  </p>
+</section>
+
+<section class="container">
+  <div class="grid">
+
+    <!-- SINGLE -->
+    <div class="package-wrap"><div class="package">
+      <i class="fas fa-dragon"></i>
+      <h3>Single Dino</h3>
+      <div class="price">$1</div>
+      <p>Any PvE dino, tamed & server-balanced.</p>
+      <div class="tags">
+        <span class="tag">Any Dino</span>
+        <span class="tag">PvE Only</span>
+        <span class="tag">Custom Paint</span>
+      </div>
+      <div class="payments">
+        <a class="paypal" href="https://paypal.me/ZeropointHosting" target="_blank">PayPal</a>
+        <a class="cashapp" href="https://cash.app/$ZeroPointArk" target="_blank">CashApp</a>
+        <a class="venmo" href="https://venmo.com/u/ZeroPointArk" target="_blank">Venmo</a>
+      </div>
+    </div></div>
+
+    <!-- $5 -->
+    <div class="package-wrap"><div class="package">
+      <i class="fas fa-box"></i>
+      <h3>$5 Dino Pack</h3>
+      <div class="price">7 Dinos</div>
+      <p>Great starter value for new players.</p>
+      <div class="tags">
+        <span class="tag">PvE Safe</span>
+        <span class="tag">Any Mix</span>
+      </div>
+      <div class="payments">
+        <a class="paypal" href="https://paypal.me/ZeropointHosting" target="_blank">PayPal</a>
+        <a class="cashapp" href="https://cash.app/$ZeroPointArk" target="_blank">CashApp</a>
+        <a class="venmo" href="https://venmo.com/u/ZeroPointArk" target="_blank">Venmo</a>
+      </div>
+    </div></div>
+
+    <!-- $10 -->
+    <div class="package-wrap"><div class="package">
+      <i class="fas fa-boxes"></i>
+      <h3>$10 Dino Pack</h3>
+      <div class="price">15 Dinos</div>
+      <p>Best balance of value and variety.</p>
+      <div class="tags">
+        <span class="tag">PvE Safe</span>
+        <span class="tag">Custom Paint</span>
+      </div>
+      <div class="payments">
+        <a class="paypal" href="https://paypal.me/ZeropointHosting" target="_blank">PayPal</a>
+        <a class="cashapp" href="https://cash.app/$ZeroPointArk" target="_blank">CashApp</a>
+        <a class="venmo" href="https://venmo.com/u/ZeroPointArk" target="_blank">Venmo</a>
+      </div>
+    </div></div>
+
+    <!-- $20 -->
+    <div class="package-wrap"><div class="package">
+      <i class="fas fa-gem"></i>
+      <h3>$20 Dino Pack</h3>
+      <div class="price">35 Dinos</div>
+      <p>Best value for established players.</p>
+      <div class="tags">
+        <span class="tag">Admin Delivered</span>
+        <span class="tag">PvE Safe</span>
+      </div>
+      <div class="payments">
+        <a class="paypal" href="https://paypal.me/ZeropointHosting" target="_blank">PayPal</a>
+        <a class="cashapp" href="https://cash.app/$ZeroPointArk" target="_blank">CashApp</a>
+        <a class="venmo" href="https://venmo.com/u/ZeroPointArk" target="_blank">Venmo</a>
+      </div>
+    </div></div>
+
+    <!-- $30 -->
+    <div class="package-wrap"><div class="package">
+      <i class="fas fa-crown"></i>
+      <h3>$30 Dino Pack</h3>
+      <div class="price">60 Dinos</div>
+      <p>High-tier pack for large PvE builds.</p>
+      <div class="tags">
+        <span class="tag">Admin Coordinated</span>
+        <span class="tag">PvE Safe</span>
+      </div>
+      <div class="payments">
+        <a class="paypal" href="https://paypal.me/ZeropointHosting" target="_blank">PayPal</a>
+        <a class="cashapp" href="https://cash.app/$ZeroPointArk" target="_blank">CashApp</a>
+        <a class="venmo" href="https://venmo.com/u/ZeroPointArk" target="_blank">Venmo</a>
+      </div>
+    </div></div>
+
+    <!-- $50 -->
+    <div class="package-wrap"><div class="package">
+      <i class="fas fa-fire"></i>
+      <h3>$50 Dino Pack</h3>
+      <div class="price">120 Dinos</div>
+      <p>Maximum value for tribes & long-term players.</p>
+      <div class="tags">
+        <span class="tag">Admin Supervised</span>
+        <span class="tag">PvE Safe</span>
+      </div>
+      <div class="payments">
+        <a class="paypal" href="https://paypal.me/ZeropointHosting" target="_blank">PayPal</a>
+        <a class="cashapp" href="https://cash.app/$ZeroPointArk" target="_blank">CashApp</a>
+        <a class="venmo" href="https://venmo.com/u/ZeroPointArk" target="_blank">Venmo</a>
+      </div>
+    </div></div>
+
+  </div>
+</section>
+
+<footer>
+  © 2026 Zeropoint Hosting · ARK PvE Community
+</footer>
+
+</body>
+</html>

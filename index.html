@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zer0Point PvE</title>
+<title>ZeroPoint PvE</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
@@ -33,31 +33,32 @@ body{
   overflow-x:hidden;
 }
 
-/* Background grid */
+/* Background grid (iOS safe) */
 .bg{
   position:fixed;inset:0;z-index:0;
   background:
-    linear-gradient(rgba(255,79,216,.05) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,79,216,.05) 1px,transparent 1px);
+    linear-gradient(rgba(255,79,216,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,79,216,.04) 1px,transparent 1px);
   background-size:50px 50px;
-  animation:move 30s linear infinite;
 }
-@keyframes move{to{transform:translate(50px,50px)}}
 
 .content{position:relative;z-index:1}
 
 /* Nav */
 nav{
   position:fixed;top:0;width:100%;
-  background:rgba(11,11,22,.95);
-  backdrop-filter:blur(10px);
+  background:rgba(11,11,22,.96);
+  backdrop-filter:blur(8px);
   border-bottom:1px solid rgba(255,79,216,.25);
   z-index:10;
 }
 nav ul{
-  display:flex;justify-content:center;
-  gap:2rem;list-style:none;
-  padding:1rem 0;
+  display:flex;
+  justify-content:center;
+  gap:1.5rem;
+  list-style:none;
+  padding:1rem;
+  flex-wrap:wrap;
 }
 nav a{
   color:var(--muted);
@@ -73,110 +74,94 @@ nav a:hover{color:var(--pink)}
   align-items:center;
   justify-content:center;
   text-align:center;
-  padding-top:5rem;
+  padding:6rem 1.5rem 2rem;
 }
 .hero h1{
-  font-size:clamp(3rem,6vw,5rem);
+  font-size:clamp(2.8rem,6vw,4.8rem);
   background:linear-gradient(135deg,var(--pink),var(--purple));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
 .hero p{
-  max-width:700px;
+  max-width:720px;
   margin:1.5rem auto;
   color:var(--muted);
-  font-size:1.3rem;
+  font-size:1.2rem;
 }
 .hero a{
   display:inline-block;
-  padding:1rem 2.8rem;
+  padding:1rem 2.5rem;
   border-radius:50px;
   background:linear-gradient(135deg,var(--pink),var(--purple));
   color:#fff;
   text-decoration:none;
   font-weight:700;
-  box-shadow:0 0 35px var(--glow);
+  box-shadow:0 0 30px var(--glow);
 }
 
 /* Global */
-section{padding:6rem 0}
-.container{max-width:1200px;margin:auto;padding:0 2rem}
+section{padding:5rem 0}
+.container{max-width:1200px;margin:auto;padding:0 1.5rem}
 .section-title{
   text-align:center;
-  font-size:2.6rem;
+  font-size:2.4rem;
   margin-bottom:3rem;
 }
 .section-title span{color:var(--pink)}
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-  gap:2.5rem;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:2rem;
 }
 
-/* ===== PACKAGE FIX (NO CLIPPED CORNERS) ===== */
+/* Package cards (fixed glow + corners) */
 .package-wrap{
-  border-radius:28px;
+  border-radius:26px;
   padding:2px;
   background:linear-gradient(135deg,var(--pink),var(--purple));
-  box-shadow:0 0 40px var(--glow);
+  box-shadow:0 0 35px var(--glow);
 }
 
 .package{
   background:var(--card);
-  border-radius:26px;
+  border-radius:24px;
   overflow:hidden;
-  transition:.4s;
-}
-.package:hover{
-  transform:translateY(-10px);
 }
 
 .package-top{
-  padding:2.5rem;
+  padding:2.2rem;
   text-align:center;
   background:linear-gradient(135deg,var(--bg2),var(--card));
 }
 .package-top i{
-  font-size:3.2rem;
+  font-size:3rem;
   background:linear-gradient(135deg,var(--pink),var(--purple));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
-.package-top h3{
-  margin-top:1rem;
-  font-size:1.8rem;
-}
-.price{
-  margin-top:.8rem;
-  font-size:2.1rem;
-  color:var(--pink-soft);
-}
+.package-top h3{margin-top:.8rem;font-size:1.6rem}
+.price{margin-top:.6rem;font-size:1.9rem;color:var(--pink-soft)}
 
-.package-body{
-  padding:2rem;
-}
-.package-body p{
-  color:var(--muted);
-  margin-bottom:1.2rem;
-}
+.package-body{padding:2rem}
+.package-body p{color:var(--muted);margin-bottom:1rem}
 
 .tags{
   display:flex;
   flex-wrap:wrap;
-  gap:.6rem;
+  gap:.5rem;
 }
 .tag{
-  padding:.4rem 1.1rem;
+  padding:.35rem 1rem;
   border-radius:20px;
   border:1px solid rgba(255,79,216,.45);
   color:var(--pink-soft);
-  font-size:.9rem;
+  font-size:.85rem;
 }
 
 .buy{
   display:block;
-  margin-top:1.8rem;
+  margin-top:1.6rem;
   padding:1rem;
   text-align:center;
   border-radius:14px;
@@ -186,29 +171,21 @@ section{padding:6rem 0}
   font-weight:700;
 }
 
-/* Admins */
+/* Admin cards */
 .admin{
   background:var(--card);
-  padding:2.2rem;
+  padding:2rem;
   border-radius:22px;
   text-align:center;
   border:2px solid rgba(255,79,216,.25);
-  transition:.3s;
-}
-.admin:hover{
-  transform:translateY(-8px);
-  box-shadow:0 20px 45px var(--glow);
 }
 .admin i{
-  font-size:3rem;
+  font-size:2.8rem;
   background:linear-gradient(135deg,var(--pink),var(--purple));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
-.admin p{
-  color:var(--muted);
-  margin-top:.4rem;
-}
+.admin p{color:var(--muted);margin-top:.4rem}
 
 /* Footer */
 footer{
@@ -238,117 +215,106 @@ footer{
 <section id="home" class="hero">
   <div>
     <h1>Zer0Point PvE</h1>
-    <p>Thank you for supporting our PvE community 🦖💖  
-    Every donation helps keep the server running and improving.</p>
-    <a href="#ark">View Packages</a>
+    <p>
+      Thank you for supporting our PvE community 🦖💖<br>
+      Every donation helps keep the server running and improving.
+    </p>
+    <a href="#ark">View ARK Packages</a>
   </div>
 </section>
 
-<!-- ARK PACKAGES -->
 <section id="ark">
-  <div class="container">
-    <h2 class="section-title"><span>ARK</span> PvE Dino Packages</h2>
+<div class="container">
+<h2 class="section-title"><span>ARK</span> PvE Dino Packages</h2>
 
-    <div class="grid">
+<div class="grid">
 
-      <!-- $5 PACK -->
-      <div class="package-wrap">
-        <div class="package">
-          <div class="package-top">
-            <i class="fas fa-box"></i>
-            <h3>$5 Dino Pack</h3>
-            <div class="price">7 Dinos</div>
-          </div>
-          <div class="package-body">
-            <p>Great starter value for new players.</p>
-            <div class="tags">
-              <span class="tag">PvE Safe</span>
-              <span class="tag">Any Dino Mix</span>
-              <span class="tag">Custom Paint</span>
-            </div>
-            <a href="#discord" class="buy">Get Pack</a>
-          </div>
-        </div>
-      </div>
+<!-- SINGLE -->
+<div class="package-wrap"><div class="package">
+<div class="package-top"><i class="fas fa-dragon"></i><h3>Single Dino</h3><div class="price">$1</div></div>
+<div class="package-body">
+<p>Any PvE dino, tamed and server-balanced.</p>
+<div class="tags"><span class="tag">Any Dino</span><span class="tag">PvE Only</span><span class="tag">Custom Paint</span></div>
+<a class="buy" href="#discord">Request Dino</a>
+</div></div></div>
 
-      <!-- $10 PACK -->
-      <div class="package-wrap">
-        <div class="package">
-          <div class="package-top">
-            <i class="fas fa-boxes"></i>
-            <h3>$10 Dino Pack</h3>
-            <div class="price">15 Dinos</div>
-          </div>
-          <div class="package-body">
-            <p>Best balance of value and variety.</p>
-            <div class="tags">
-              <span class="tag">PvE Safe</span>
-              <span class="tag">Any Dino Mix</span>
-              <span class="tag">Custom Paint</span>
-            </div>
-            <a href="#discord" class="buy">Get Pack</a>
-          </div>
-        </div>
-      </div>
+<!-- $5 -->
+<div class="package-wrap"><div class="package">
+<div class="package-top"><i class="fas fa-box"></i><h3>$5 Dino Pack</h3><div class="price">7 Dinos</div></div>
+<div class="package-body">
+<p>Great starter value for new players.</p>
+<div class="tags"><span class="tag">PvE Safe</span><span class="tag">Any Mix</span><span class="tag">Custom Paint</span></div>
+<a class="buy" href="#discord">Get Pack</a>
+</div></div></div>
 
-      <!-- $20 PACK -->
-      <div class="package-wrap">
-        <div class="package">
-          <div class="package-top">
-            <i class="fas fa-gem"></i>
-            <h3>$20 Dino Pack</h3>
-            <div class="price">35 Dinos</div>
-          </div>
-          <div class="package-body">
-            <p>Best value for established players.</p>
-            <div class="tags">
-              <span class="tag">PvE Safe</span>
-              <span class="tag">Any Dino Mix</span>
-              <span class="tag">Custom Paint</span>
-            </div>
-            <a href="#discord" class="buy">Get Pack</a>
-          </div>
-        </div>
-      </div>
+<!-- $10 -->
+<div class="package-wrap"><div class="package">
+<div class="package-top"><i class="fas fa-boxes"></i><h3>$10 Dino Pack</h3><div class="price">15 Dinos</div></div>
+<div class="package-body">
+<p>Best balance of value and variety.</p>
+<div class="tags"><span class="tag">PvE Safe</span><span class="tag">Any Mix</span><span class="tag">Custom Paint</span></div>
+<a class="buy" href="#discord">Get Pack</a>
+</div></div></div>
 
-    </div>
-  </div>
+<!-- $20 -->
+<div class="package-wrap"><div class="package">
+<div class="package-top"><i class="fas fa-gem"></i><h3>$20 Dino Pack</h3><div class="price">35 Dinos</div></div>
+<div class="package-body">
+<p>Best value for established players.</p>
+<div class="tags"><span class="tag">PvE Safe</span><span class="tag">Any Mix</span><span class="tag">Custom Paint</span></div>
+<a class="buy" href="#discord">Get Pack</a>
+</div></div></div>
+
+<!-- $30 -->
+<div class="package-wrap"><div class="package">
+<div class="package-top"><i class="fas fa-crown"></i><h3>$30 Dino Pack</h3><div class="price">60 Dinos</div></div>
+<div class="package-body">
+<p>High-tier pack for large PvE builds.</p>
+<div class="tags"><span class="tag">PvE Safe</span><span class="tag">Any Mix</span><span class="tag">Admin Coordinated</span></div>
+<a class="buy" href="#discord">Get Pack</a>
+</div></div></div>
+
+<!-- $50 -->
+<div class="package-wrap"><div class="package">
+<div class="package-top"><i class="fas fa-fire"></i><h3>$50 Dino Pack</h3><div class="price">120 Dinos</div></div>
+<div class="package-body">
+<p>Maximum value for tribes & long-term players.</p>
+<div class="tags"><span class="tag">PvE Safe</span><span class="tag">Any Mix</span><span class="tag">Admin Supervised</span></div>
+<a class="buy" href="#discord">Get Pack</a>
+</div></div></div>
+
+</div>
+</div>
 </section>
 
-<!-- ADMINS -->
 <section id="admins">
-  <div class="container">
-    <h2 class="section-title">PvE <span>Active Admins</span></h2>
-    <div class="grid">
-
-      <div class="admin"><i class="fas fa-user-shield"></i><h3>Harrison</h3><p>PvE Active Admin</p></div>
-      <div class="admin"><i class="fas fa-headset"></i><h3>Admin</h3><p>PvE Active Admin</p></div>
-      <div class="admin"><i class="fas fa-tools"></i><h3>Admin</h3><p>PvE Active Admin</p></div>
-      <div class="admin"><i class="fas fa-dna"></i><h3>Admin</h3><p>PvE Active Admin</p></div>
-      <div class="admin"><i class="fas fa-shield-alt"></i><h3>Admin</h3><p>PvE Active Admin</p></div>
-      <div class="admin"><i class="fas fa-dragon"></i><h3>Admin</h3><p>PvE Active Admin</p></div>
-
-    </div>
-  </div>
+<div class="container">
+<h2 class="section-title">PvE <span>Active Admins</span></h2>
+<div class="grid">
+<div class="admin"><i class="fas fa-user-shield"></i><h3>Hlurgio</h3><p>Founder Of ZeroPoint</p></div>
+<div class="admin"><i class="fas fa-headset"></i><h3>DUKE</h3><p>Co-Founder</p></div>
+<div class="admin"><i class="fas fa-tools"></i><h3>Chaoticc</h3><p>PvE Active Admin</p></div>
+<div class="admin"><i class="fas fa-dna"></i><h3>FR4STY</h3><p>PvE Active Admin</p></div>
+<div class="admin"><i class="fas fa-shield-alt"></i><h3>OPEN</h3><p>PvE Active Admin</p></div>
+<div class="admin"><i class="fas fa-dragon"></i><h3>OPEN</h3><p>PvE Active Admin</p></div>
+</div>
+</div>
 </section>
 
-<!-- DISCORD -->
 <section id="discord">
-  <div class="container">
-    <h2 class="section-title">Join the <span>Discord</span></h2>
-    <div class="admin">
-      <i class="fab fa-discord"></i>
-      <p>Support, deliveries, events, and admin coordination.</p>
-      <a class="buy" href="https://discord.gg/YOURINVITE" target="_blank">Join Discord</a>
-    </div>
-  </div>
+<div class="container">
+<h2 class="section-title">Join the <span>Discord</span></h2>
+<div class="admin">
+<i class="fab fa-discord"></i>
+<p>Support, deliveries, events, and admin coordination.</p>
+<a class="buy" href="https://discord.gg/F5vv6twUKS" target="_blank">Join Discord</a>
+</div>
+</div>
 </section>
 
 </div>
 
-<footer>
-  © 2026 Zer0Point PvE
-</footer>
+<footer>© 2026 ZeroPoint PvE</footer>
 
 </body>
 </html>

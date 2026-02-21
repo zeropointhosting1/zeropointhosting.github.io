@@ -262,6 +262,56 @@
     .submit-btn:hover:not(:disabled) { opacity: 0.88; transform: translateY(-1px); }
     .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
+    /* ── STEP 1: PAYMENT ── */
+    .step-panel[hidden] { display: none; }
+    .payment-amount-box {
+      background: rgba(0,230,118,0.06); border: 1px solid rgba(0,230,118,0.18);
+      border-radius: 10px; padding: 1.25rem 1.5rem; text-align: center; margin-bottom: 1.5rem;
+    }
+    .payment-amount-label { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 0.25rem; }
+    .payment-amount-value { font-size: 3.2rem; font-weight: 900; letter-spacing: -0.04em; color: var(--text); line-height: 1; }
+    .payment-to-label { font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.45rem; }
+    .payment-handle-box {
+      display: flex; align-items: stretch; background: var(--surface2);
+      border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 0.75rem;
+    }
+    .payment-handle-text {
+      flex: 1; padding: 0.7rem 0.9rem; font-size: 0.92rem; font-weight: 700;
+      font-family: ui-monospace, monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .copy-btn {
+      padding: 0 1rem; background: var(--surface2); border: none; border-left: 1px solid var(--border);
+      color: var(--accent); font-size: 0.72rem; font-weight: 700; cursor: pointer;
+      transition: background 0.15s, color 0.15s; white-space: nowrap; letter-spacing: 0.04em;
+    }
+    .copy-btn:hover { background: #2a2a38; }
+    .copy-btn.copied { color: #00e676; }
+    .payment-open-link {
+      display: block; text-align: center; padding: 0.6rem 1rem;
+      border: 1px solid var(--border); border-radius: 8px; color: var(--muted);
+      text-decoration: none; font-size: 0.8rem; transition: border-color 0.15s, color 0.15s;
+      margin-bottom: 1.75rem;
+    }
+    .payment-open-link:hover { border-color: rgba(0,230,118,0.4); color: var(--text); }
+    .payment-open-link span { font-size: 0.7rem; opacity: 0.7; margin-left: 0.25rem; }
+    .payment-divider {
+      display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;
+      color: var(--muted); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .payment-divider::before, .payment-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .paid-btn {
+      width: 100%; background: var(--accent); color: #000; border: none; border-radius: 8px;
+      padding: 0.9rem; font-size: 0.95rem; font-weight: 800; cursor: pointer;
+      transition: opacity 0.15s, transform 0.15s; letter-spacing: 0.01em;
+    }
+    .paid-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+    .back-btn {
+      background: none; border: none; color: var(--muted); font-size: 0.8rem;
+      cursor: pointer; padding: 0.4rem 0; margin-top: 0.75rem; display: flex;
+      align-items: center; gap: 0.3rem; transition: color 0.15s;
+    }
+    .back-btn:hover { color: var(--text); }
+
     /* Success */
     .form-success { text-align: center; padding: 3rem 1rem; }
     .form-success[hidden] { display: none; }
@@ -320,9 +370,9 @@
           <span class="pkg-tag">Custom Paint</span>
         </div>
         <div class="pkg-payments">
-          <button class="pay-btn paypal"  data-payment="PayPal"   data-url="https://paypal.me/ZeropointHosting">PayPal</button>
-          <button class="pay-btn cashapp" data-payment="Cash App" data-url="https://cash.app/$ZeroPointArk">Cash App</button>
-          <button class="pay-btn venmo"   data-payment="Venmo"    data-url="https://venmo.com/u/ZeroPointArk">Venmo</button>
+          <button class="pay-btn paypal"  data-payment="PayPal">PayPal</button>
+          <button class="pay-btn cashapp" data-payment="Cash App">Cash App</button>
+          <button class="pay-btn venmo"   data-payment="Venmo">Venmo</button>
         </div>
       </div>
 
@@ -342,9 +392,9 @@
           <span class="pkg-tag">Any Mix</span>
         </div>
         <div class="pkg-payments">
-          <button class="pay-btn paypal"  data-payment="PayPal"   data-url="https://paypal.me/ZeropointHosting">PayPal</button>
-          <button class="pay-btn cashapp" data-payment="Cash App" data-url="https://cash.app/$ZeroPointArk">Cash App</button>
-          <button class="pay-btn venmo"   data-payment="Venmo"    data-url="https://venmo.com/u/ZeroPointArk">Venmo</button>
+          <button class="pay-btn paypal"  data-payment="PayPal">PayPal</button>
+          <button class="pay-btn cashapp" data-payment="Cash App">Cash App</button>
+          <button class="pay-btn venmo"   data-payment="Venmo">Venmo</button>
         </div>
       </div>
 
@@ -364,9 +414,9 @@
           <span class="pkg-tag">Custom Paint</span>
         </div>
         <div class="pkg-payments">
-          <button class="pay-btn paypal"  data-payment="PayPal"   data-url="https://paypal.me/ZeropointHosting">PayPal</button>
-          <button class="pay-btn cashapp" data-payment="Cash App" data-url="https://cash.app/$ZeroPointArk">Cash App</button>
-          <button class="pay-btn venmo"   data-payment="Venmo"    data-url="https://venmo.com/u/ZeroPointArk">Venmo</button>
+          <button class="pay-btn paypal"  data-payment="PayPal">PayPal</button>
+          <button class="pay-btn cashapp" data-payment="Cash App">Cash App</button>
+          <button class="pay-btn venmo"   data-payment="Venmo">Venmo</button>
         </div>
       </div>
 
@@ -386,9 +436,9 @@
           <span class="pkg-tag">Admin Coordinated</span>
         </div>
         <div class="pkg-payments">
-          <button class="pay-btn paypal"  data-payment="PayPal"   data-url="https://paypal.me/ZeropointHosting">PayPal</button>
-          <button class="pay-btn cashapp" data-payment="Cash App" data-url="https://cash.app/$ZeroPointArk">Cash App</button>
-          <button class="pay-btn venmo"   data-payment="Venmo"    data-url="https://venmo.com/u/ZeroPointArk">Venmo</button>
+          <button class="pay-btn paypal"  data-payment="PayPal">PayPal</button>
+          <button class="pay-btn cashapp" data-payment="Cash App">Cash App</button>
+          <button class="pay-btn venmo"   data-payment="Venmo">Venmo</button>
         </div>
       </div>
 
@@ -408,9 +458,9 @@
           <span class="pkg-tag">Admin Supervised</span>
         </div>
         <div class="pkg-payments">
-          <button class="pay-btn paypal"  data-payment="PayPal"   data-url="https://paypal.me/ZeropointHosting">PayPal</button>
-          <button class="pay-btn cashapp" data-payment="Cash App" data-url="https://cash.app/$ZeroPointArk">Cash App</button>
-          <button class="pay-btn venmo"   data-payment="Venmo"    data-url="https://venmo.com/u/ZeroPointArk">Venmo</button>
+          <button class="pay-btn paypal"  data-payment="PayPal">PayPal</button>
+          <button class="pay-btn cashapp" data-payment="Cash App">Cash App</button>
+          <button class="pay-btn venmo"   data-payment="Venmo">Venmo</button>
         </div>
       </div>
 
@@ -430,9 +480,9 @@
           <span class="pkg-tag">Admin Delivered</span>
         </div>
         <div class="pkg-payments">
-          <button class="pay-btn paypal"  data-payment="PayPal"   data-url="https://paypal.me/ZeropointHosting">PayPal</button>
-          <button class="pay-btn cashapp" data-payment="Cash App" data-url="https://cash.app/$ZeroPointArk">Cash App</button>
-          <button class="pay-btn venmo"   data-payment="Venmo"    data-url="https://venmo.com/u/ZeroPointArk">Venmo</button>
+          <button class="pay-btn paypal"  data-payment="PayPal">PayPal</button>
+          <button class="pay-btn cashapp" data-payment="Cash App">Cash App</button>
+          <button class="pay-btn venmo"   data-payment="Venmo">Venmo</button>
         </div>
       </div>
 
@@ -462,6 +512,31 @@
         <span class="order-badge"           id="order-package-badge"></span>
         <span class="order-badge secondary" id="order-payment-badge"></span>
       </div>
+
+      <!-- ── STEP 1: PAYMENT INFO ── -->
+      <div class="step-panel" id="step-payment">
+        <div class="payment-amount-box">
+          <span class="payment-amount-label">Amount to Send</span>
+          <span class="payment-amount-value" id="step-amount">$0</span>
+        </div>
+
+        <p class="payment-to-label">Send to</p>
+        <div class="payment-handle-box">
+          <span class="payment-handle-text" id="step-handle"></span>
+          <button class="copy-btn" id="copy-btn" type="button">⎘ Copy</button>
+        </div>
+
+        <a class="payment-open-link" id="step-open-link" href="#" target="_blank" rel="noopener">
+          Open app to pay <span>(opens new tab)</span>
+        </a>
+
+        <div class="payment-divider">after sending payment</div>
+
+        <button class="paid-btn" id="paid-btn" type="button">I've Sent Payment — Place My Order →</button>
+      </div>
+
+      <!-- ── STEP 2: ORDER FORM ── -->
+      <div class="step-panel" id="step-order" hidden>
 
       <form action="https://formspree.io/f/xnjbgdzq" method="POST" id="order-form">
         <input type="hidden" name="_subject"       id="form-subject"    value="New ARK Order">
@@ -544,6 +619,8 @@
         <p>We'll process your dinos once your payment clears. Watch Discord for updates.</p>
         <button class="submit-btn" id="success-close">Close</button>
       </div>
+
+      </div><!-- /step-order -->
     </div>
   </div>
 
@@ -711,10 +788,54 @@
   const formSuccess   = document.getElementById('form-success');
   const submitBtn     = document.getElementById('submit-btn');
 
+  // ── Payment config ──
+  const PAYMENT_CONFIG = {
+    'PayPal':   { handle: 'paypal.me/ZeropointHosting', baseUrl: 'https://paypal.me/ZeropointHosting' },
+    'Cash App': { handle: '$ZeroPointArk',              baseUrl: 'https://cash.app/$ZeroPointArk' },
+    'Venmo':    { handle: '@ZeroPointArk',              baseUrl: 'https://venmo.com/u/ZeroPointArk' },
+  };
+
+  // ── Step navigation ──
+  function showStep(n) {
+    document.getElementById('step-payment').hidden = (n !== 1);
+    document.getElementById('step-order').hidden   = (n !== 2);
+    const eyebrow  = document.querySelector('.modal-eyebrow');
+    const title    = document.querySelector('.modal-title');
+    const subtitle = document.querySelector('.modal-subtitle');
+    if (n === 1) {
+      eyebrow.textContent  = 'Step 1 of 2 — Send Payment';
+      title.textContent    = 'Ready to Pay';
+      subtitle.textContent = 'Send your payment, then click the button below to place your order.';
+    } else {
+      eyebrow.textContent  = 'Step 2 of 2 — Place Your Order';
+      title.textContent    = 'Complete Your Order';
+      subtitle.textContent = 'Fill this out — we\'ll deliver once your payment clears.';
+    }
+    modal.scrollTop = 0;
+  }
+
+  document.getElementById('paid-btn').addEventListener('click', () => {
+    showStep(2);
+    renderDinoList();
+    renderSelectedDinos();
+  });
+
+  // ── Copy handle ──
+  document.getElementById('copy-btn').addEventListener('click', () => {
+    const handle = document.getElementById('step-handle').textContent;
+    navigator.clipboard.writeText(handle).then(() => {
+      const btn = document.getElementById('copy-btn');
+      btn.textContent = '✓ Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = '⎘ Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+  });
+
   // ── Open / Close ──
-  function openModal(packageName, paymentMethod, url) {
+  function openModal(packageName, paymentMethod) {
+    // Reset form state
     selectedDinos = {};
-    orderForm.hidden  = false;
+    orderForm.hidden   = false;
     formSuccess.hidden = true;
     submitBtn.disabled = false;
     submitBtn.textContent = 'Submit Order →';
@@ -722,20 +843,26 @@
     catFilter.value  = '';
     orderForm.reset();
 
+    // Badges + hidden fields
     pkgBadge.textContent = packageName;
     payBadge.textContent = paymentMethod;
     formPkg.value        = packageName;
     formPay.value        = paymentMethod;
     formSubject.value    = 'New ARK Order — ' + packageName + ' — ' + paymentMethod;
 
-    renderDinoList();
-    renderSelectedDinos();
+    // Step 1 content
+    const cfg    = PAYMENT_CONFIG[paymentMethod] || {};
+    const amount = (packageName.match(/\$(\d+)/) || [])[1] || '';
+    document.getElementById('step-amount').textContent = amount ? '$' + amount : '—';
+    document.getElementById('step-handle').textContent = cfg.handle || '';
+    const openLink = document.getElementById('step-open-link');
+    openLink.href        = (paymentMethod === 'PayPal' && amount) ? cfg.baseUrl + '/' + amount : (cfg.baseUrl || '#');
+    openLink.textContent = '';
+    openLink.innerHTML   = 'Open ' + paymentMethod + ' to pay <span>(opens new tab)</span>';
 
+    showStep(1);
     modal.hidden = false;
-    modal.scrollTop = 0;
     document.body.style.overflow = 'hidden';
-
-    window.open(url, '_blank', 'noopener,noreferrer');
   }
 
   function closeModal() {
@@ -898,8 +1025,7 @@
       const card = btn.closest('[data-package]');
       openModal(
         card ? card.dataset.package : 'Unknown Package',
-        btn.dataset.payment,
-        btn.dataset.url
+        btn.dataset.payment
       );
     });
   });

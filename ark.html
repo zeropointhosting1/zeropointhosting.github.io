@@ -204,6 +204,11 @@
     .dino-add-btn:hover:not(:disabled) { background: rgba(0,230,118,0.18); }
     .dino-add-btn:disabled { background: rgba(255,255,255,0.04); border-color: var(--border); color: var(--muted); cursor: default; }
     .no-results { padding: 2rem; text-align: center; color: var(--muted); font-size: 0.85rem; }
+    .dino-limit-banner {
+      background: rgba(0,230,118,0.07); border: 1px solid rgba(0,230,118,0.22);
+      border-radius: 7px; padding: 0.55rem 0.9rem; font-size: 0.8rem; color: var(--accent);
+      margin-bottom: 0.5rem; text-align: center; font-weight: 600;
+    }
 
     /* Selected dinos */
     .selected-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.75rem; }
@@ -334,6 +339,7 @@
       <li><a href="index.html">Home</a></li>
       <li><a href="servers.html">Servers</a></li>
       <li><a href="ark.html">ARK</a></li>
+      <li><a href="bbs.html">BBS Shop</a></li>
       <li><a href="discord.html">Discord</a></li>
       <li><a href="admin.html">Admin</a></li>
     </ul>
@@ -570,7 +576,7 @@
         <!-- ── DINO PICKER ── -->
         <div class="form-section">
           <h3 class="section-title">Dino Selection</h3>
-          <p class="section-desc">Search for dinos below, hit <strong>+ Add</strong>, then choose Single or Breeding Pair and optionally pick colors for each of the 6 color regions.</p>
+          <p class="section-desc" id="dino-section-desc">Search for dinos below, hit <strong>+ Add</strong>, then choose Single or Breeding Pair and optionally pick colors for each of the 6 color regions.</p>
 
           <!-- Selected dinos summary -->
           <div id="selected-dinos-wrap" style="display:none; margin-bottom:1rem;">
@@ -595,6 +601,7 @@
             </select>
           </div>
 
+          <div id="dino-limit-banner" class="dino-limit-banner" style="display:none;"></div>
           <div class="dino-list" id="dino-list"></div>
         </div>
 
@@ -769,6 +776,7 @@
 
   // State: { [dinoName]: { type: 'single'|'pair', colors: ['','','','','',''] } }
   let selectedDinos = {};
+  let currentDinoLimit = 1;
 
   // DOM refs
   const modal         = document.getElementById('order-modal');
@@ -850,6 +858,12 @@
     formPay.value        = paymentMethod;
     formSubject.value    = 'New ARK Order — ' + packageName + ' — ' + paymentMethod;
 
+    // Extract dino limit from package name  e.g. "(7 Dinos)" → 7, "Single Dino" → 1
+    const limitMatch = packageName.match(/\((\d+)\s*Dino/i);
+    currentDinoLimit = limitMatch ? parseInt(limitMatch[1]) : 1;
+    const desc = document.getElementById('dino-section-desc');
+    if (desc) desc.innerHTML = 'You can select up to <strong>' + currentDinoLimit + ' dino' + (currentDinoLimit > 1 ? 's' : '') + '</strong> for this package. Hit <strong>+ Add</strong>, choose Single or Breeding Pair, and optionally pick colors for each region.';
+
     // Step 1 content
     const cfg    = PAYMENT_CONFIG[paymentMethod] || {};
     const amount = (packageName.match(/\$(\d+)/) || [])[1] || '';
@@ -877,8 +891,16 @@
 
   // ── Dino List ──
   function renderDinoList() {
-    const q   = dinoSearch.value.trim().toLowerCase();
-    const cat = catFilter.value;
+    const q        = dinoSearch.value.trim().toLowerCase();
+    const cat      = catFilter.value;
+    const atLimit  = Object.keys(selectedDinos).length >= currentDinoLimit;
+    const banner   = document.getElementById('dino-limit-banner');
+
+    if (banner) {
+      banner.style.display = atLimit ? 'block' : 'none';
+      banner.textContent   = atLimit ? '✓ Dino limit reached (' + currentDinoLimit + '/' + currentDinoLimit + ') — remove a dino to swap it out.' : '';
+    }
+
     const filtered = DINOS.filter(d =>
       (!q   || d.name.toLowerCase().includes(q)) &&
       (!cat || d.cat === cat)
@@ -890,13 +912,14 @@
     }
 
     dinoListEl.innerHTML = filtered.map(d => {
-      const added = !!selectedDinos[d.name];
+      const added    = !!selectedDinos[d.name];
+      const disabled = added || atLimit;
       return '<div class="dino-row' + (added ? ' is-added' : '') + '">' +
         '<div class="dino-info">' +
           '<span class="dino-name-text">' + esc(d.name) + '</span>' +
           '<span class="dino-cat-label">' + d.cat + '</span>' +
         '</div>' +
-        '<button class="dino-add-btn"' + (added ? ' disabled' : '') + ' data-dino="' + esc(d.name) + '">' +
+        '<button class="dino-add-btn"' + (disabled ? ' disabled' : '') + ' data-dino="' + esc(d.name) + '">' +
           (added ? '✓ Added' : '+ Add') +
         '</button>' +
       '</div>';
@@ -909,6 +932,7 @@
 
   function addDino(name) {
     if (selectedDinos[name]) return;
+    if (Object.keys(selectedDinos).length >= currentDinoLimit) return;
     selectedDinos[name] = { type: 'single', colors: ['','','','','',''] };
     renderSelectedDinos();
     renderDinoList();
@@ -944,7 +968,7 @@
   // ── Render Selected Dinos ──
   function renderSelectedDinos() {
     const names = Object.keys(selectedDinos);
-    selectedCount.textContent = names.length;
+    selectedCount.textContent = names.length + ' / ' + currentDinoLimit;
     selectedWrap.style.display = names.length ? 'block' : 'none';
 
     selectedList.innerHTML = names.map(name => {

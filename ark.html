@@ -1,341 +1,310 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Zeropoint Hosting | ARK PvE Donations</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zeropoint | ARK Donations</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0f; --surface: #111118; --surface2: #1a1a24;
+      --border: #22222e; --accent: #00e676;
+      --text: #e8e8f0; --muted: #7a7a90; --radius: 10px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      line-height: 1.6; min-height: 100vh; overflow-x: hidden;
+    }
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700;800&display=swap" rel="stylesheet">
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: center; padding: 0 1.5rem;
+      background: rgba(10,10,15,0.88);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    nav ul { display: flex; align-items: center; gap: 0.25rem; list-style: none; height: 60px; flex-wrap: wrap; }
+    nav a { display: block; padding: 0.45rem 0.9rem; color: var(--muted); text-decoration: none; font-size: 0.875rem; font-weight: 500; letter-spacing: 0.02em; border-radius: 6px; transition: color 0.2s, background 0.2s; }
+    nav a:hover { color: var(--text); background: var(--surface2); }
+    nav a.active { color: var(--accent); background: var(--surface2); }
 
-<style>
-:root{
-  --bg:#0b0b16;
-  --card:#1c1c38;
-  --pink:#ff4fd8;
-  --pink-soft:#ff7de9;
-  --purple:#9b5cff;
-  --text:#f5f5ff;
-  --muted:#b9b9d6;
-  --glow:rgba(255,79,216,.55);
-}
+    /* ── PAGE HEADER ── */
+    .page-header {
+      padding: 120px 1.5rem 4rem;
+      text-align: center;
+      position: relative;
+    }
+    .page-header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(0,230,118,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .page-eyebrow { font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; opacity: 0.85; }
+    .page-header h1 { font-size: clamp(2rem, 6vw, 3.5rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1; background: linear-gradient(160deg, #ffffff 0%, #a0a0b8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.75rem; }
+    .page-header p { font-size: 1rem; color: var(--muted); max-width: 520px; margin: 0 auto; }
 
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
+    /* ── PACKAGE GRID ── */
+    .packages {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 1.5rem 6rem;
+    }
+    .package-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+    @media (max-width: 860px) { .package-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .package-grid { grid-template-columns: 1fr; } }
 
-body{
-  font-family:'Rajdhani',sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  overflow-x:hidden;
-}
+    /* ── PACKAGE CARD ── */
+    .pkg-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 2px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 1.75rem 1.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.22s;
+    }
+    .pkg-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 28px rgba(0,230,118,0.09), 0 6px 28px rgba(0,0,0,0.45);
+      transform: translateY(-4px);
+    }
 
-/* ===== BACKGROUND GRID (MATCHES HOMEPAGE LOOK) ===== */
-.bg{
-  position:fixed;inset:0;z-index:0;
-  background:
-    linear-gradient(rgba(255,79,216,.04) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,79,216,.04) 1px,transparent 1px);
-  background-size:50px 50px;
-}
-.content{position:relative;z-index:1}
+    /* icon */
+    .pkg-icon { font-size: 1.6rem; color: var(--accent); opacity: 0.85; }
 
-/* ===== NAV (MATCHES YOUR INDEX: CENTERED LINKS) ===== */
-nav{
-  position:fixed;
-  top:0;
-  width:100%;
-  background:rgba(11,11,22,.96);
-  backdrop-filter:blur(8px);
-  border-bottom:1px solid rgba(255,79,216,.25);
-  z-index:1000;
-}
-nav ul{
-  display:flex;
-  justify-content:center;
-  gap:1.6rem;
-  list-style:none;
-  padding:1rem 1.2rem;
-  flex-wrap:wrap;
-}
-nav a{
-  color:var(--muted);
-  text-decoration:none;
-  font-weight:700;
-  font-size:.95rem;
-}
-nav a:hover{color:var(--pink)}
+    /* name + pricing */
+    .pkg-header { display: flex; flex-direction: column; gap: 0.35rem; }
+    .pkg-name { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+    .pkg-pricing { display: flex; align-items: baseline; gap: 0.5rem; }
+    .pkg-price { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.04em; color: var(--text); line-height: 1; }
+    .pkg-quantity { font-size: 0.82rem; font-weight: 600; color: var(--accent); }
 
-/* ===== HEADER ===== */
-.header{
-  padding:8rem 1.5rem 3.5rem;
-  text-align:center;
-}
-.header h1{
-  font-size:clamp(2.6rem,6vw,4.2rem);
-  line-height:1.05;
-}
-.header h1 span{
-  background:linear-gradient(135deg,var(--pink),var(--purple));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-.header p{
-  max-width:720px;
-  margin:1rem auto 0;
-  color:var(--muted);
-  font-size:1.15rem;
-}
+    /* description */
+    .pkg-desc { font-size: 0.84rem; color: var(--muted); flex: 1; }
 
-/* ===== GRID ===== */
-.container{
-  max-width:1200px;
-  margin:auto;
-  padding:0 1.5rem 5rem;
-}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-  gap:2rem;
-}
+    /* tags */
+    .pkg-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .pkg-tag {
+      font-size: 0.65rem; letter-spacing: 0.09em; text-transform: uppercase;
+      padding: 0.2rem 0.55rem; border-radius: 4px;
+      background: rgba(0,230,118,0.08); color: var(--accent);
+      border: 1px solid rgba(0,230,118,0.2); font-weight: 600;
+    }
 
-/* ===== PACKAGE CARDS ===== */
-.package-wrap{
-  padding:2px;
-  border-radius:26px;
-  background:linear-gradient(135deg,var(--pink),var(--purple));
-  box-shadow:0 0 35px var(--glow);
-  transition:.35s ease;
-  transform: translateZ(0);
-}
-.package-wrap:hover{
-  transform:translateY(-10px) scale(1.01);
-  box-shadow:0 0 55px var(--glow);
-}
-.package{
-  background:var(--card);
-  border-radius:24px;
-  padding:2rem;
-  display:flex;
-  flex-direction:column;
-  height:100%;
-  text-align:center;
-}
-.package i{
-  font-size:3rem;
-  background:linear-gradient(135deg,var(--pink),var(--purple));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-.package h3{margin-top:.8rem;font-size:1.6rem}
-.price{margin-top:.3rem;font-size:1.9rem;color:var(--pink-soft)}
-.package p{margin:1rem 0;color:var(--muted)}
+    /* payment buttons */
+    .pkg-payments {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.45rem;
+      margin-top: 0.25rem;
+    }
+    .pay-btn {
+      padding: 0.55rem 0.3rem;
+      border-radius: 6px;
+      font-size: 0.73rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: #fff;
+      text-align: center;
+      letter-spacing: 0.03em;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .pay-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+    .paypal  { background: #0070ba; }
+    .cashapp { background: #00c244; }
+    .venmo   { background: #3d95ce; }
 
-.tags{
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:.5rem;
-  margin-bottom:auto;
-}
-.tag{
-  padding:.35rem 1rem;
-  border-radius:20px;
-  border:1px solid rgba(255,79,216,.45);
-  color:var(--pink-soft);
-  font-size:.85rem;
-}
-
-/* ===== PAYMENTS ===== */
-.payments{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:.6rem;
-  margin-top:1.6rem;
-}
-.payments a{
-  padding:.75rem;
-  border-radius:14px;
-  font-weight:800;
-  text-decoration:none;
-  color:#fff;
-  font-size:.85rem;
-}
-.paypal{background:#0070ba}
-.cashapp{background:#00d632}
-.venmo{background:#3d95ce}
-@media(max-width:520px){ .payments{grid-template-columns:1fr} }
-
-/* ===== TILE ANIMATION (subtle float like your “tile/cube” ask) ===== */
-@keyframes tileFloat{
-  0%,100%{ transform: translateY(0); }
-  50%{ transform: translateY(-6px); }
-}
-.tile-anim{
-  animation: tileFloat 5.5s ease-in-out infinite;
-}
-.tile-anim.delay1{ animation-delay:.15s; }
-.tile-anim.delay2{ animation-delay:.3s; }
-.tile-anim.delay3{ animation-delay:.45s; }
-.tile-anim.delay4{ animation-delay:.6s; }
-.tile-anim.delay5{ animation-delay:.75s; }
-
-/* ===== FOOTER ===== */
-footer{
-  text-align:center;
-  padding:2.5rem 1.5rem;
-  border-top:1px solid rgba(255,79,216,.25);
-  color:var(--muted);
-  font-size:.85rem;
-}
-</style>
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--border); padding: 2.5rem 1.5rem; text-align: center; }
+    footer p { color: var(--muted); font-size: 0.82rem; }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
 </head>
-
 <body>
-<div class="bg"></div>
 
-<nav>
-  <ul>
-    <li><a href="index.html">Home</a></li>
-    <li><a href="ark.html">ARK Donations</a></li>
-    <li><a href="hytale.html">Hytale Donations</a></li>
-    <li><a href="servers.html">Servers</a></li>
-    <li><a href="about.html">About</a></li>
-    <li><a href="https://discord.gg/" target="_blank" rel="noopener">Discord</a></li>
-  </ul>
-</nav>
+  <!-- NAV -->
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="servers.html">Servers</a></li>
+      <li><a href="ark.html">ARK</a></li>
+      <li><a href="discord.html">Discord</a></li>
+      <li><a href="admin.html">Admin</a></li>
+    </ul>
+  </nav>
 
-<div class="content">
-  <section class="header">
-    <h1><span>ARK</span> PvE Donations</h1>
-    <p>Thank you for supporting our PvE community 🦖💖</p>
-  </section>
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <p class="page-eyebrow">Support the Community</p>
+    <h1>ARK Donations</h1>
+    <p>Every donation goes directly toward server hosting and community events. Thank you for keeping Zeropoint alive.</p>
+  </div>
 
-  <section class="container">
-    <div class="grid">
+  <!-- PACKAGES -->
+  <div class="packages">
+    <div class="package-grid">
 
-      <!-- SINGLE -->
-      <div class="package-wrap tile-anim">
-        <div class="package">
-          <i class="fas fa-dragon"></i>
-          <h3>Single Dino</h3>
-          <div class="price">$1</div>
-          <p>Any PvE dino, tamed and server-balanced.</p>
-          <div class="tags">
-            <span class="tag">Any Dino</span>
-            <span class="tag">PvE Only</span>
-            <span class="tag">Custom Paint</span>
+      <!-- SINGLE DINO -->
+      <div class="pkg-card">
+        <i class="pkg-icon fas fa-dragon"></i>
+        <div class="pkg-header">
+          <span class="pkg-name">Single Dino</span>
+          <div class="pkg-pricing">
+            <span class="pkg-price">$1</span>
+            <span class="pkg-quantity">1 Dino</span>
           </div>
-          <div class="payments">
-            <a class="paypal" href="https://paypal.me/ZeropointHosting" target="_blank" rel="noopener">PayPal</a>
-            <a class="cashapp" href="https://cash.app/$ZeroPointArk" target="_blank" rel="noopener">Cash App</a>
-            <a class="venmo" href="https://venmo.com/u/ZeroPointArk" target="_blank" rel="noopener">Venmo</a>
-          </div>
+        </div>
+        <p class="pkg-desc">Any PvE dino, tamed and server-balanced to your request.</p>
+        <div class="pkg-tags">
+          <span class="pkg-tag">Any Dino</span>
+          <span class="pkg-tag">PvE Only</span>
+          <span class="pkg-tag">Custom Paint</span>
+        </div>
+        <div class="pkg-payments">
+          <a class="pay-btn paypal"  href="https://paypal.me/ZeropointHosting" target="_blank" rel="noopener">PayPal</a>
+          <a class="pay-btn cashapp" href="https://cash.app/$ZeroPointArk"     target="_blank" rel="noopener">Cash App</a>
+          <a class="pay-btn venmo"   href="https://venmo.com/u/ZeroPointArk"   target="_blank" rel="noopener">Venmo</a>
         </div>
       </div>
 
-      <!-- $5 -->
-      <div class="package-wrap tile-anim delay1">
-        <div class="package">
-          <i class="fas fa-box"></i>
-          <h3>$5 Dino Pack</h3>
-          <div class="price">7 Dinos</div>
-          <p>Perfect starter pack.</p>
-          <div class="tags">
-            <span class="tag">PvE Safe</span>
-            <span class="tag">Any Mix</span>
+      <!-- $5 PACK -->
+      <div class="pkg-card">
+        <i class="pkg-icon fas fa-box"></i>
+        <div class="pkg-header">
+          <span class="pkg-name">Starter Pack</span>
+          <div class="pkg-pricing">
+            <span class="pkg-price">$5</span>
+            <span class="pkg-quantity">7 Dinos</span>
           </div>
-          <div class="payments">
-            <a class="paypal" href="https://paypal.me/ZeropointHosting" target="_blank" rel="noopener">PayPal</a>
-            <a class="cashapp" href="https://cash.app/$ZeroPointArk" target="_blank" rel="noopener">Cash App</a>
-            <a class="venmo" href="https://venmo.com/u/ZeroPointArk" target="_blank" rel="noopener">Venmo</a>
-          </div>
+        </div>
+        <p class="pkg-desc">Perfect starter pack for new survivors getting on their feet.</p>
+        <div class="pkg-tags">
+          <span class="pkg-tag">PvE Safe</span>
+          <span class="pkg-tag">Any Mix</span>
+        </div>
+        <div class="pkg-payments">
+          <a class="pay-btn paypal"  href="https://paypal.me/ZeropointHosting" target="_blank" rel="noopener">PayPal</a>
+          <a class="pay-btn cashapp" href="https://cash.app/$ZeroPointArk"     target="_blank" rel="noopener">Cash App</a>
+          <a class="pay-btn venmo"   href="https://venmo.com/u/ZeroPointArk"   target="_blank" rel="noopener">Venmo</a>
         </div>
       </div>
 
-      <!-- $10 -->
-      <div class="package-wrap tile-anim delay2">
-        <div class="package">
-          <i class="fas fa-boxes"></i>
-          <h3>$10 Dino Pack</h3>
-          <div class="price">15 Dinos</div>
-          <p>Best balance of value and variety.</p>
-          <div class="tags">
-            <span class="tag">PvE Safe</span>
-            <span class="tag">Custom Paint</span>
+      <!-- $10 PACK -->
+      <div class="pkg-card">
+        <i class="pkg-icon fas fa-boxes-stacked"></i>
+        <div class="pkg-header">
+          <span class="pkg-name">Value Pack</span>
+          <div class="pkg-pricing">
+            <span class="pkg-price">$10</span>
+            <span class="pkg-quantity">15 Dinos</span>
           </div>
-          <div class="payments">
-            <a class="paypal" href="https://paypal.me/ZeropointHosting" target="_blank" rel="noopener">PayPal</a>
-            <a class="cashapp" href="https://cash.app/$ZeroPointArk" target="_blank" rel="noopener">Cash App</a>
-            <a class="venmo" href="https://venmo.com/u/ZeroPointArk" target="_blank" rel="noopener">Venmo</a>
-          </div>
+        </div>
+        <p class="pkg-desc">Best balance of value and variety for growing tribes.</p>
+        <div class="pkg-tags">
+          <span class="pkg-tag">PvE Safe</span>
+          <span class="pkg-tag">Custom Paint</span>
+        </div>
+        <div class="pkg-payments">
+          <a class="pay-btn paypal"  href="https://paypal.me/ZeropointHosting" target="_blank" rel="noopener">PayPal</a>
+          <a class="pay-btn cashapp" href="https://cash.app/$ZeroPointArk"     target="_blank" rel="noopener">Cash App</a>
+          <a class="pay-btn venmo"   href="https://venmo.com/u/ZeroPointArk"   target="_blank" rel="noopener">Venmo</a>
         </div>
       </div>
 
-      <!-- $20 -->
-      <div class="package-wrap tile-anim delay3">
-        <div class="package">
-          <i class="fas fa-gem"></i>
-          <h3>$20 Dino Pack</h3>
-          <div class="price">35 Dinos</div>
-          <p>Best value for established players.</p>
-          <div class="tags">
-            <span class="tag">PvE Safe</span>
-            <span class="tag">Admin Coordinated</span>
+      <!-- $20 PACK -->
+      <div class="pkg-card">
+        <i class="pkg-icon fas fa-gem"></i>
+        <div class="pkg-header">
+          <span class="pkg-name">Pro Pack</span>
+          <div class="pkg-pricing">
+            <span class="pkg-price">$20</span>
+            <span class="pkg-quantity">35 Dinos</span>
           </div>
-          <div class="payments">
-            <a class="paypal" href="https://paypal.me/ZeropointHosting" target="_blank" rel="noopener">PayPal</a>
-            <a class="cashapp" href="https://cash.app/$ZeroPointArk" target="_blank" rel="noopener">Cash App</a>
-            <a class="venmo" href="https://venmo.com/u/ZeroPointArk" target="_blank" rel="noopener">Venmo</a>
-          </div>
+        </div>
+        <p class="pkg-desc">Best value for established players with large operations.</p>
+        <div class="pkg-tags">
+          <span class="pkg-tag">PvE Safe</span>
+          <span class="pkg-tag">Admin Coordinated</span>
+        </div>
+        <div class="pkg-payments">
+          <a class="pay-btn paypal"  href="https://paypal.me/ZeropointHosting" target="_blank" rel="noopener">PayPal</a>
+          <a class="pay-btn cashapp" href="https://cash.app/$ZeroPointArk"     target="_blank" rel="noopener">Cash App</a>
+          <a class="pay-btn venmo"   href="https://venmo.com/u/ZeroPointArk"   target="_blank" rel="noopener">Venmo</a>
         </div>
       </div>
 
-      <!-- $30 -->
-      <div class="package-wrap tile-anim delay4">
-        <div class="package">
-          <i class="fas fa-crown"></i>
-          <h3>$30 Dino Pack</h3>
-          <div class="price">60 Dinos</div>
-          <p>High-tier pack for large builds.</p>
-          <div class="tags">
-            <span class="tag">PvE Safe</span>
-            <span class="tag">Admin Supervised</span>
+      <!-- $30 PACK -->
+      <div class="pkg-card">
+        <i class="pkg-icon fas fa-crown"></i>
+        <div class="pkg-header">
+          <span class="pkg-name">Tribe Pack</span>
+          <div class="pkg-pricing">
+            <span class="pkg-price">$30</span>
+            <span class="pkg-quantity">60 Dinos</span>
           </div>
-          <div class="payments">
-            <a class="paypal" href="https://paypal.me/ZeropointHosting" target="_blank" rel="noopener">PayPal</a>
-            <a class="cashapp" href="https://cash.app/$ZeroPointArk" target="_blank" rel="noopener">Cash App</a>
-            <a class="venmo" href="https://venmo.com/u/ZeroPointArk" target="_blank" rel="noopener">Venmo</a>
-          </div>
+        </div>
+        <p class="pkg-desc">High-tier pack for large builds and active tribe rosters.</p>
+        <div class="pkg-tags">
+          <span class="pkg-tag">PvE Safe</span>
+          <span class="pkg-tag">Admin Supervised</span>
+        </div>
+        <div class="pkg-payments">
+          <a class="pay-btn paypal"  href="https://paypal.me/ZeropointHosting" target="_blank" rel="noopener">PayPal</a>
+          <a class="pay-btn cashapp" href="https://cash.app/$ZeroPointArk"     target="_blank" rel="noopener">Cash App</a>
+          <a class="pay-btn venmo"   href="https://venmo.com/u/ZeroPointArk"   target="_blank" rel="noopener">Venmo</a>
         </div>
       </div>
 
-      <!-- $50 -->
-      <div class="package-wrap tile-anim delay5">
-        <div class="package">
-          <i class="fas fa-fire"></i>
-          <h3>$50 Dino Pack</h3>
-          <div class="price">120 Dinos</div>
-          <p>Maximum value for tribes.</p>
-          <div class="tags">
-            <span class="tag">PvE Safe</span>
-            <span class="tag">Admin Delivered</span>
+      <!-- $50 PACK -->
+      <div class="pkg-card">
+        <i class="pkg-icon fas fa-fire"></i>
+        <div class="pkg-header">
+          <span class="pkg-name">Max Pack</span>
+          <div class="pkg-pricing">
+            <span class="pkg-price">$50</span>
+            <span class="pkg-quantity">120 Dinos</span>
           </div>
-          <div class="payments">
-            <a class="paypal" href="https://paypal.me/ZeropointHosting" target="_blank" rel="noopener">PayPal</a>
-            <a class="cashapp" href="https://cash.app/$ZeroPointArk" target="_blank" rel="noopener">Cash App</a>
-            <a class="venmo" href="https://venmo.com/u/ZeroPointArk" target="_blank" rel="noopener">Venmo</a>
-          </div>
+        </div>
+        <p class="pkg-desc">Maximum value — admin-delivered directly for large tribes.</p>
+        <div class="pkg-tags">
+          <span class="pkg-tag">PvE Safe</span>
+          <span class="pkg-tag">Admin Delivered</span>
+        </div>
+        <div class="pkg-payments">
+          <a class="pay-btn paypal"  href="https://paypal.me/ZeropointHosting" target="_blank" rel="noopener">PayPal</a>
+          <a class="pay-btn cashapp" href="https://cash.app/$ZeroPointArk"     target="_blank" rel="noopener">Cash App</a>
+          <a class="pay-btn venmo"   href="https://venmo.com/u/ZeroPointArk"   target="_blank" rel="noopener">Venmo</a>
         </div>
       </div>
 
     </div>
-  </section>
+  </div>
 
+  <!-- FOOTER -->
   <footer>
-    © 2026 Zeropoint Hosting · ARK PvE Community
+    <p>&copy; 2026 Zeropoint &mdash; <a href="discord.html">Join our Discord</a> &mdash; <a href="rules.html">Community Rules</a></p>
   </footer>
-</div>
+
+  <script>
+  (function () {
+    const page = location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('nav a').forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === page);
+    });
+  })();
+  </script>
 
 </body>
 </html>

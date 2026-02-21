@@ -85,8 +85,8 @@
     .block-label h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; }
     .block-body p { color: var(--muted); font-size: 0.97rem; margin-bottom: 1rem; }
     .block-body p:last-child { margin-bottom: 0; }
-    .server-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.5rem; }
-    @media (max-width: 480px) { .server-cards { grid-template-columns: 1fr; } }
+    .server-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 0.5rem; }
+    @media (max-width: 640px) { .server-cards { grid-template-columns: 1fr; } }
     .server-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; transition: border-color 0.2s; }
     .server-card:hover { border-color: var(--accent); }
     .server-card .game { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: 0.4rem; }
@@ -95,10 +95,109 @@
     .badge { display: inline-block; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.2rem 0.55rem; border-radius: 4px; margin-top: 0.75rem; }
     .badge-live { background: rgba(0,230,118,0.12); color: var(--accent); border: 1px solid rgba(0,230,118,0.25); }
     .badge-soon { background: rgba(120,80,255,0.1); color: #a78bfa; border: 1px solid rgba(120,80,255,0.2); }
-    .community-highlight { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius); padding: 1.5rem; margin-top: 1rem; }
-    .community-highlight p { margin: 0; color: var(--muted); font-size: 0.97rem; }
-    .community-highlight strong { color: var(--text); }
     hr.divider { border: none; border-top: 1px solid var(--border); }
+
+    /* ── RESTART COUNTDOWN ── */
+    .restart-bar {
+      margin-top: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.85rem 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .restart-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .restart-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 6px rgba(0,230,118,0.7);
+      animation: restart-pulse 1.4s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    @keyframes restart-pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.35; }
+    }
+    .restart-timer {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+      color: var(--accent);
+    }
+    .restart-next {
+      font-size: 0.72rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    /* ── MINI DISCORD CARD ── */
+    .dc-mini {
+      margin-top: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .dc-mini:hover { border-color: #5865f2; box-shadow: 0 0 20px rgba(88,101,242,0.1); }
+    .dc-mini-banner {
+      height: 56px;
+      background: linear-gradient(135deg, #1e2a3a 0%, #0f1923 40%, #111828 100%);
+      position: relative; overflow: hidden;
+    }
+    .dc-mini-banner::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 120% at 20% 50%, rgba(88,101,242,0.28) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 100% at 80% 50%, rgba(0,230,118,0.1) 0%, transparent 55%);
+    }
+    .dc-mini-banner::after {
+      content: ''; position: absolute; inset: 0;
+      background:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+    .dc-mini-icon-wrap { position: relative; z-index: 1; margin-top: -22px; padding-left: 16px; }
+    .dc-mini-icon {
+      width: 48px; height: 48px; border-radius: 50%;
+      border: 3px solid var(--surface); object-fit: cover; display: block;
+      box-shadow: 0 0 0 1px rgba(0,230,118,0.2);
+    }
+    .dc-mini-body { padding: 8px 16px 16px; }
+    .dc-mini-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 0.85rem; }
+    .dc-mini-info { display: flex; flex-direction: column; gap: 0.2rem; }
+    .dc-mini-name { font-size: 0.95rem; font-weight: 700; }
+    .dc-mini-stats { display: flex; gap: 0.9rem; }
+    .dc-mini-stat { display: flex; align-items: center; gap: 0.35rem; font-size: 0.75rem; color: var(--muted); }
+    .dc-mini-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .dot-on  { background: var(--accent); box-shadow: 0 0 4px rgba(0,230,118,0.6); }
+    .dot-off { background: #4d4d6a; }
+    .dc-mini-btn {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      padding: 0.55rem 1.1rem; border-radius: 6px;
+      background: #5865f2; color: #fff;
+      font-size: 0.8rem; font-weight: 700; text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.18s, box-shadow 0.18s;
+      box-shadow: 0 3px 12px rgba(88,101,242,0.35);
+    }
+    .dc-mini-btn:hover { background: #4752c4; box-shadow: 0 4px 18px rgba(88,101,242,0.5); }
+    .dc-mini-btn svg { width: 15px; height: 15px; fill: #fff; flex-shrink: 0; }
 
     /* ── FOOTER ── */
     footer { border-top: 1px solid var(--border); padding: 2.5rem 1.5rem; text-align: center; }
@@ -114,8 +213,8 @@
     <ul>
       <li><a href="index.html" class="active">Home</a></li>
       <li><a href="servers.html">Servers</a></li>
+      <li><a href="ark.html">ARK</a></li>
       <li><a href="discord.html">Discord</a></li>
-      <li><a href="rules.html">Rules</a></li>
       <li><a href="admin.html">Admin</a></li>
     </ul>
   </nav>
@@ -168,23 +267,34 @@
 
     <div class="content-block">
       <div class="block-label">
-        <span class="block-tag">Servers</span>
-        <h2>Server Highlights</h2>
+        <span class="block-tag">ARK</span>
+        <h2>ARK PvE Maps</h2>
       </div>
       <div class="block-body">
         <div class="server-cards">
           <div class="server-card">
             <p class="game">ARK: Survival Evolved</p>
-            <h3>PvE Island</h3>
-            <p>Boosted rates, active tribe community, seasonal events and weekly admin drops.</p>
+            <h3>Crystal Isles</h3>
+            <p>Miami &middot; Xbox &middot; PvE</p>
             <span class="badge badge-live">Live</span>
           </div>
           <div class="server-card">
-            <p class="game">Hytale</p>
-            <h3>Adventure Realm</h3>
-            <p>Planning underway. Join Discord to help shape this server from the ground up.</p>
-            <span class="badge badge-soon">Coming Soon</span>
+            <p class="game">ARK: Survival Evolved</p>
+            <h3>Fjordur</h3>
+            <p>New York &middot; Xbox &middot; PvE</p>
+            <span class="badge badge-live">Live</span>
           </div>
+          <div class="server-card">
+            <p class="game">ARK: Survival Evolved</p>
+            <h3>Ragnarok</h3>
+            <p>Miami &middot; Xbox &middot; PvE</p>
+            <span class="badge badge-live">Live</span>
+          </div>
+        </div>
+        <div class="restart-bar">
+          <span class="restart-label"><span class="restart-dot"></span>Next Server Restart</span>
+          <span class="restart-timer" id="restart-timer">--:--:--</span>
+          <span class="restart-next" id="restart-next"></span>
         </div>
       </div>
     </div>
@@ -198,8 +308,27 @@
       </div>
       <div class="block-body">
         <p>Everything happens in our Discord — server announcements, event coordination, tribe recruitment, and direct access to our admin team.</p>
-        <div class="community-highlight">
-          <p><strong>We believe in transparency.</strong> Rules are public, decisions are discussed openly, and feedback actually shapes how we run things. This is your community as much as ours.</p>
+
+        <div class="dc-mini">
+          <div class="dc-mini-banner"></div>
+          <div class="dc-mini-icon-wrap">
+            <img class="dc-mini-icon" src="zeropoint.png" alt="Zeropoint" />
+          </div>
+          <div class="dc-mini-body">
+            <div class="dc-mini-row">
+              <div class="dc-mini-info">
+                <span class="dc-mini-name">Zeropoint</span>
+                <div class="dc-mini-stats">
+                  <span class="dc-mini-stat"><span class="dc-mini-dot dot-on"></span>10 Online</span>
+                  <span class="dc-mini-stat"><span class="dc-mini-dot dot-off"></span>71 Members</span>
+                </div>
+              </div>
+              <a class="dc-mini-btn" href="https://discord.gg/7yhvhPCKcr" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+                Join Discord
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -459,6 +588,54 @@
     }
 
     setInterval(tick, 2200);
+  })();
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // SERVER RESTART COUNTDOWN  (2:45 PM ET  and  12:00 AM ET)
+  // ─────────────────────────────────────────────────────────────────────────────
+  (function () {
+    // Restart times as [hour, minute] in ET (handles EST/EDT via timeZone)
+    const RESTARTS = [[14, 45], [0, 0]];
+
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    function tick() {
+      const now = new Date();
+      // Get current time parts in ET
+      const etParts = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/New_York',
+        hour: 'numeric', minute: 'numeric', second: 'numeric',
+        hour12: false
+      }).formatToParts(now);
+      const etH = +etParts.find(p => p.type === 'hour').value;
+      const etM = +etParts.find(p => p.type === 'minute').value;
+      const etS = +etParts.find(p => p.type === 'second').value;
+      const nowSec = etH * 3600 + etM * 60 + etS;
+
+      // Find the nearest upcoming restart in seconds from now
+      let minSecs = Infinity;
+      let nextLabel = '';
+      for (const [h, m] of RESTARTS) {
+        const targetSec = h * 3600 + m * 60;
+        let diff = targetSec - nowSec;
+        if (diff <= 0) diff += 86400; // wrap to next day
+        if (diff < minSecs) {
+          minSecs = diff;
+          const label12 = h === 0 ? '12:00 AM ET' : (h > 12 ? `${h-12}:${pad(m)} PM ET` : `${h}:${pad(m)} AM ET`);
+          nextLabel = label12;
+        }
+      }
+
+      const hh = Math.floor(minSecs / 3600);
+      const mm = Math.floor((minSecs % 3600) / 60);
+      const ss = minSecs % 60;
+
+      document.getElementById('restart-timer').textContent = `${pad(hh)}:${pad(mm)}:${pad(ss)}`;
+      document.getElementById('restart-next').textContent  = `Next: ${nextLabel}`;
+    }
+
+    tick();
+    setInterval(tick, 1000);
   })();
 
   // ─────────────────────────────────────────────────────────────────────────────

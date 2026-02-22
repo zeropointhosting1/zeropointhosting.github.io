@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    button { touch-action: manipulation; }
     :root {
       --bg: #0a0a0f; --surface: #111118; --surface2: #1a1a24;
       --border: #22222e; --accent: #00e676;
@@ -110,6 +111,7 @@
     .dino-shop-list {
       border: 1px solid var(--border); border-radius: 10px;
       background: var(--bg); overflow-x: hidden; overflow-y: auto;
+      -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
       max-height: 420px; margin-bottom: 2.5rem;
     }
     .shop-row {
@@ -147,6 +149,60 @@
     }
     .shop-remove-btn:hover { background: rgba(255,82,82,0.18); }
     .no-results { padding: 2rem; text-align: center; color: var(--muted); font-size: 0.85rem; }
+
+    /* ── BLUEPRINT SECTION ── */
+    .shop-section-title {
+      font-size: 0.73rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase;
+      color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;
+      margin-bottom: 1rem; margin-top: 2.5rem;
+    }
+    .cat-badge {
+      font-size: 0.58rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.15rem 0.45rem; border-radius: 4px; flex-shrink: 0;
+      background: rgba(120,120,160,0.12); color: #9090b0; border: 1px solid rgba(120,120,160,0.25);
+    }
+    .quality-badge {
+      font-size: 0.58rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.15rem 0.45rem; border-radius: 4px; flex-shrink: 0;
+    }
+    .quality-badge.Common      { background: rgba(160,160,180,0.12); color: #a0a0b8; border: 1px solid rgba(160,160,180,0.25); }
+    .quality-badge.Journeyman  { background: rgba(100,180,255,0.12); color: #7ab8ff; border: 1px solid rgba(100,180,255,0.25); }
+    .quality-badge.Mastercraft { background: rgba(255,200,80,0.12);  color: #ffd060; border: 1px solid rgba(255,200,80,0.25); }
+    .quality-badge.Ascendant   { background: rgba(0,230,118,0.12);   color: #00e676; border: 1px solid rgba(0,230,118,0.25); }
+    .bp-quality-select {
+      background: var(--surface2); border: 1px solid var(--border); color: var(--text);
+      border-radius: 5px; padding: 0.22rem 0.45rem; font-size: 0.72rem;
+      font-family: inherit; outline: none; cursor: pointer; transition: border-color 0.15s;
+    }
+    .bp-quality-select:focus { border-color: var(--accent); }
+
+    /* ── COLOR SERVICE ── */
+    .color-job-panel {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; margin-bottom: 2.5rem; overflow: hidden;
+    }
+    .color-job-toggle {
+      width: 100%; display: flex; align-items: center; justify-content: space-between;
+      gap: 0.75rem; padding: 1rem 1.25rem; background: none; border: none; cursor: pointer;
+      color: var(--text); text-align: left;
+    }
+    .color-job-toggle:hover { background: var(--surface2); }
+    .color-job-toggle-left { display: flex; flex-direction: column; gap: 0.15rem; }
+    .color-job-toggle-title { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+    .color-job-toggle-sub { font-size: 0.72rem; color: var(--muted); }
+    .color-job-chevron { width: 16px; height: 16px; stroke: var(--muted); stroke-width: 2.5; fill: none; flex-shrink: 0; transition: transform 0.2s; }
+    .color-job-panel.open .color-job-chevron { transform: rotate(180deg); }
+    .color-job-body {
+      display: none; padding: 0 1.25rem 1.25rem; border-top: 1px solid var(--border);
+    }
+    .color-job-panel.open .color-job-body { display: block; }
+    .color-job-body-inner { padding-top: 1rem; }
+    .color-job-info {
+      background: rgba(0,230,118,0.05); border: 1px solid rgba(0,230,118,0.15);
+      border-radius: 8px; padding: 0.7rem 1rem; margin-bottom: 1rem;
+      font-size: 0.82rem; color: var(--muted);
+    }
+    .color-job-info strong { color: var(--accent); }
 
     /* ── ORDER SUMMARY ── */
     .order-summary-section { margin-bottom: 2rem; }
@@ -255,8 +311,8 @@
   <div class="page-header">
     <span class="bbs-icon">🍓</span>
     <p class="page-eyebrow">In-Game Currency</p>
-    <h1>BBS Dino Shop</h1>
-    <p>Spend your in-game BBS to get tamed dinos delivered straight to your teleporter. An admin will verify your balance before delivery.</p>
+    <h1>BBS Shop</h1>
+    <p>Spend your in-game BBS to buy tamed dinos, get existing dinos painted, or pick up high-quality blueprints. An admin will verify your balance before delivery.</p>
   </div>
 
   <!-- PRICE GUIDE -->
@@ -318,6 +374,65 @@
 
     <!-- Dino list -->
     <div class="dino-shop-list" id="dino-shop-list"></div>
+
+    <!-- Blueprint section -->
+    <h3 class="shop-section-title">📋 Blueprints</h3>
+    <div class="price-grid" style="margin-bottom:1rem;">
+      <div class="price-card">
+        <div class="price-size">Common</div>
+        <div class="price-bbs">10,000 <span class="price-sym">🍓</span></div>
+        <div class="price-unit">per blueprint</div>
+      </div>
+      <div class="price-card">
+        <div class="price-size">Journeyman</div>
+        <div class="price-bbs">20,000 <span class="price-sym">🍓</span></div>
+        <div class="price-unit">per blueprint</div>
+      </div>
+      <div class="price-card">
+        <div class="price-size">Mastercraft</div>
+        <div class="price-bbs">30,000 <span class="price-sym">🍓</span></div>
+        <div class="price-unit">per blueprint</div>
+      </div>
+      <div class="price-card">
+        <div class="price-size">Ascendant</div>
+        <div class="price-bbs">50,000 <span class="price-sym">🍓</span></div>
+        <div class="price-unit">per blueprint</div>
+      </div>
+    </div>
+    <div class="shop-controls">
+      <input type="text" id="bp-search" placeholder="Search blueprints..." autocomplete="off">
+      <select id="bp-cat-filter">
+        <option value="">All Categories</option>
+        <option value="Saddle">Saddles</option>
+        <option value="Weapon">Weapons</option>
+        <option value="Armor">Armor</option>
+      </select>
+    </div>
+    <div class="dino-shop-list" id="bp-shop-list" style="margin-bottom:2.5rem;"></div>
+
+    <!-- Dino Color Service -->
+    <div class="color-job-panel" id="color-job-panel">
+      <button type="button" class="color-job-toggle" id="color-job-toggle" aria-expanded="false">
+        <div class="color-job-toggle-left">
+          <span class="color-job-toggle-title">🎨 Dino Color Service</span>
+          <span class="color-job-toggle-sub">Paint a dino you already own — 50,000 🍓 per dino</span>
+        </div>
+        <svg class="color-job-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="color-job-body">
+        <div class="color-job-body-inner">
+          <div class="color-job-info">
+            This service is for <strong>dinos you already own</strong> in-game. An admin will paint your existing tamed dino. Pick colors for up to 6 regions. <strong>50,000 🍓 per dino.</strong>
+          </div>
+          <div class="form-group">
+            <label for="color-dino-name">Dino Name *</label>
+            <input id="color-dino-name" type="text" placeholder="e.g. Rex, Argy, Wyvern...">
+          </div>
+          <div id="color-job-regions"></div>
+          <button type="button" id="color-job-add-btn" class="shop-add-btn" style="margin-top:0.75rem;">+ Add Color Job</button>
+        </div>
+      </div>
+    </div>
 
     <!-- Order summary -->
     <div class="order-summary-section" id="order-summary-section" hidden>
@@ -381,6 +496,17 @@
     });
   })();
 
+  // ── COLOR SERVICE TOGGLE ──
+  (function () {
+    const panel  = document.getElementById('color-job-panel');
+    const toggle = document.getElementById('color-job-toggle');
+    if (!panel || !toggle) return;
+    toggle.addEventListener('click', function () {
+      const open = panel.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open);
+    });
+  })();
+
   // ── MOBILE NAV TOGGLE ──
   (function () {
     var t = document.querySelector('.nav-toggle');
@@ -400,6 +526,8 @@
   // ══════════════════════════════════════
 
   const BBS_PRICES = { Small: 250000, Medium: 400000, Large: 800000, XL: 900000 };
+  const BP_PRICES   = { Common: 10000, Journeyman: 20000, Mastercraft: 30000, Ascendant: 50000 };
+  const COLOR_PRICE = 50000;
 
   const DINOS = [
     // Small
@@ -483,6 +611,46 @@
     { name: 'Mosasaurus',     size: 'XL' },
   ];
 
+  const BLUEPRINTS = [
+    // Saddles
+    { name: 'Argy Saddle',        cat: 'Saddle' },
+    { name: 'Bary Saddle',        cat: 'Saddle' },
+    { name: 'Bronto Saddle',      cat: 'Saddle' },
+    { name: 'Carno Saddle',       cat: 'Saddle' },
+    { name: 'Mammoth Saddle',     cat: 'Saddle' },
+    { name: 'Paracer Saddle',     cat: 'Saddle' },
+    { name: 'Quetzal Saddle',     cat: 'Saddle' },
+    { name: 'Rex Saddle',         cat: 'Saddle' },
+    { name: 'Spino Saddle',       cat: 'Saddle' },
+    { name: 'Stego Saddle',       cat: 'Saddle' },
+    { name: 'Theri Saddle',       cat: 'Saddle' },
+    { name: 'Trike Saddle',       cat: 'Saddle' },
+    { name: 'Wyvern Saddle',      cat: 'Saddle' },
+    // Weapons
+    { name: 'Assault Rifle',            cat: 'Weapon' },
+    { name: 'Compound Bow',             cat: 'Weapon' },
+    { name: 'Crossbow',                 cat: 'Weapon' },
+    { name: 'Fabricated Pistol',        cat: 'Weapon' },
+    { name: 'Fabricated Sniper Rifle',  cat: 'Weapon' },
+    { name: 'Longneck Rifle',           cat: 'Weapon' },
+    { name: 'Pike',                     cat: 'Weapon' },
+    { name: 'Pump-Action Shotgun',      cat: 'Weapon' },
+    { name: 'Sword',                    cat: 'Weapon' },
+    // Armor
+    { name: 'Flak Helmet',     cat: 'Armor' },
+    { name: 'Flak Chestpiece', cat: 'Armor' },
+    { name: 'Flak Leggings',   cat: 'Armor' },
+    { name: 'Flak Gauntlets',  cat: 'Armor' },
+    { name: 'Flak Boots',      cat: 'Armor' },
+    { name: 'Riot Helmet',     cat: 'Armor' },
+    { name: 'Riot Chestpiece', cat: 'Armor' },
+    { name: 'Riot Leggings',   cat: 'Armor' },
+    { name: 'Riot Gauntlets',  cat: 'Armor' },
+    { name: 'Riot Boots',      cat: 'Armor' },
+    { name: 'Ghillie Suit',    cat: 'Armor' },
+    { name: 'Hazard Suit',     cat: 'Armor' },
+  ];
+
   const COLORS = [
     { name: 'White',      hex: '#F0F0F0' }, { name: 'Black',      hex: '#111111' },
     { name: 'Gray',       hex: '#888888' }, { name: 'Red',        hex: '#C0392B' },
@@ -496,9 +664,11 @@
     { name: 'Brown',      hex: '#7A4520' }, { name: 'Tan',        hex: '#C8A870' },
   ];
 
-  // State: array of order items (allows multiple of same dino)
-  let orderItems = [];
-  let nextId = 0;
+  // State
+  let orderItems      = [];
+  let nextId          = 0;
+  let bpRowQualities      = {}; // tracks selected quality per BP name in the shop list
+  let colorJobDraftColors = ['','','','','','']; // 6 region colors for the draft color job
 
   // DOM refs
   const shopList        = document.getElementById('dino-shop-list');
@@ -511,6 +681,9 @@
   const totalCountLabel = document.getElementById('total-count-label');
   const shopSearch      = document.getElementById('shop-search');
   const shopSizeFilter  = document.getElementById('shop-size-filter');
+  const bpList          = document.getElementById('bp-shop-list');
+  const bpSearch        = document.getElementById('bp-search');
+  const bpCatFilter     = document.getElementById('bp-cat-filter');
   const bbsForm         = document.getElementById('bbs-order-form');
   const bbsSuccess      = document.getElementById('bbs-success');
   const bbsSubmitBtn    = document.getElementById('bbs-submit-btn');
@@ -524,6 +697,8 @@
   function fmt(n) { return n.toLocaleString(); }
 
   function calcItemBBS(item) {
+    if (item.kind === 'bp')    return BP_PRICES[item.quality];
+    if (item.kind === 'color') return COLOR_PRICE;
     return BBS_PRICES[item.size] * (item.type === 'pair' ? 2 : 1);
   }
 
@@ -551,6 +726,119 @@
       if (orderItems[i].name === name) { orderItems.splice(i, 1); break; }
     }
     render();
+  }
+
+  function addBP(name, quality, cat) {
+    orderItems.push({ id: nextId++, name, quality, cat, kind: 'bp' });
+    render();
+  }
+
+  function removeLastBP(name, quality) {
+    for (let i = orderItems.length - 1; i >= 0; i--) {
+      if (orderItems[i].kind === 'bp' && orderItems[i].name === name && orderItems[i].quality === quality) {
+        orderItems.splice(i, 1); break;
+      }
+    }
+    render();
+  }
+
+  function renderColorJobForm() {
+    const container = document.getElementById('color-job-regions');
+    if (!container) return;
+    container.innerHTML = [0,1,2,3,4,5].map(r => {
+      const swatches =
+        '<button type="button" class="swatch skip' + (colorJobDraftColors[r] === '' ? ' active' : '') + '" data-cjr="' + r + '" data-color="" title="Any / Skip">–</button>' +
+        COLORS.map(c =>
+          '<button type="button" class="swatch' + (colorJobDraftColors[r] === c.name ? ' active' : '') + '" style="background:' + c.hex + '" data-cjr="' + r + '" data-color="' + esc(c.name) + '" title="' + esc(c.name) + '"></button>'
+        ).join('');
+      return '<div class="region-row"><span class="region-label">Reg ' + r + '</span><div class="color-swatches">' + swatches + '</div></div>';
+    }).join('');
+
+    container.querySelectorAll('.swatch').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const r = +btn.dataset.cjr;
+        colorJobDraftColors[r] = btn.dataset.color;
+        btn.parentElement.querySelectorAll('.swatch').forEach(s =>
+          s.classList.toggle('active', s.dataset.color === btn.dataset.color)
+        );
+      });
+    });
+  }
+
+  document.getElementById('color-job-add-btn').addEventListener('click', () => {
+    const nameInput = document.getElementById('color-dino-name');
+    const name = nameInput.value.trim();
+    if (!name) { nameInput.focus(); return; }
+    orderItems.push({ id: nextId++, name, colors: colorJobDraftColors.slice(), kind: 'color' });
+    nameInput.value = '';
+    colorJobDraftColors = ['','','','','',''];
+    renderColorJobForm();
+    render();
+  });
+
+  function renderBPList() {
+    const q   = bpSearch.value.trim().toLowerCase();
+    const cat = bpCatFilter.value;
+    const filtered = BLUEPRINTS.filter(d =>
+      (!q   || d.name.toLowerCase().includes(q)) &&
+      (!cat || d.cat === cat)
+    );
+
+    if (!filtered.length) {
+      bpList.innerHTML = '<div class="no-results">No blueprints match your search.</div>';
+      return;
+    }
+
+    // Count how many of each bp+quality in the order
+    const counts = {};
+    orderItems.filter(i => i.kind === 'bp').forEach(i => {
+      const key = i.name + '||' + i.quality;
+      counts[key] = (counts[key] || 0) + 1;
+    });
+
+    bpList.innerHTML = filtered.map(d => {
+      const sel      = bpRowQualities[d.name] || 'Ascendant';
+      const price    = BP_PRICES[sel];
+      const countKey = d.name + '||' + sel;
+      const count    = counts[countKey] || 0;
+      return '<div class="shop-row">' +
+        '<div class="shop-row-left">' +
+          '<span class="shop-dino-name">' + esc(d.name) + ' BP</span>' +
+          (count ? '<span class="shop-added-count">×' + count + ' added</span>' : '') +
+        '</div>' +
+        '<div class="shop-row-right">' +
+          '<span class="cat-badge">' + d.cat + '</span>' +
+          '<select class="bp-quality-select" data-bp="' + esc(d.name) + '">' +
+            ['Common','Journeyman','Mastercraft','Ascendant'].map(q =>
+              '<option value="' + q + '"' + (sel === q ? ' selected' : '') + '>' + q + '</option>'
+            ).join('') +
+          '</select>' +
+          '<span class="shop-price">' + fmt(price) + ' <span class="shop-price-sym">🍓</span></span>' +
+          (count ? '<button class="shop-remove-btn" data-bp="' + esc(d.name) + '" data-quality="' + sel + '">– 1</button>' : '') +
+          '<button class="shop-add-btn" data-bp="' + esc(d.name) + '" data-cat="' + esc(d.cat) + '">+ Add</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    // Quality select → re-render to update price + remove btn
+    bpList.querySelectorAll('.bp-quality-select').forEach(sel => {
+      sel.addEventListener('change', () => {
+        bpRowQualities[sel.dataset.bp] = sel.value;
+        renderBPList();
+      });
+    });
+
+    bpList.querySelectorAll('.shop-add-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const name    = btn.dataset.bp;
+        const quality = bpRowQualities[name] || 'Ascendant';
+        addBP(name, quality, btn.dataset.cat);
+      });
+    });
+
+    bpList.querySelectorAll('.shop-remove-btn').forEach(btn => {
+      btn.addEventListener('click', () => removeLastBP(btn.dataset.bp, btn.dataset.quality));
+    });
   }
 
   function setItemType(id, type) {
@@ -582,6 +870,7 @@
   // ── Render ──
   function render() {
     renderShopList();
+    renderBPList();
     renderOrderSummary();
     updateTotals();
     updateFormFields();
@@ -634,9 +923,42 @@
     orderSummary.hidden = !hasItems;
     if (!hasItems) { orderItemsList.innerHTML = ''; return; }
 
-    orderItemCount.textContent = '(' + orderItems.length + ' dino' + (orderItems.length !== 1 ? 's' : '') + ')';
+    orderItemCount.textContent = '(' + orderItems.length + ' item' + (orderItems.length !== 1 ? 's' : '') + ')';
 
     orderItemsList.innerHTML = orderItems.map(item => {
+      if (item.kind === 'color') {
+        const colorParts = item.colors.map((c, i) => c ? 'R' + i + ': ' + c : null).filter(Boolean);
+        return '<div class="order-item-card" data-item-id="' + item.id + '">' +
+          '<div class="order-item-top">' +
+            '<div class="order-item-meta">' +
+              '<span class="order-item-name">' + esc(item.name) + '</span>' +
+              '<span class="cat-badge">Color Job</span>' +
+            '</div>' +
+            '<div class="order-item-controls">' +
+              '<span class="order-item-price">' + fmt(COLOR_PRICE) + ' 🍓</span>' +
+              '<button class="remove-item-btn" data-id="' + item.id + '" title="Remove">✕</button>' +
+            '</div>' +
+          '</div>' +
+          '<div style="font-size:0.75rem;color:var(--muted);margin-top:0.25rem;">' +
+            (colorParts.length ? 'Colors: ' + colorParts.join(', ') : 'No specific colors (any/random)') +
+          '</div>' +
+        '</div>';
+      }
+      if (item.kind === 'bp') {
+        return '<div class="order-item-card" data-item-id="' + item.id + '">' +
+          '<div class="order-item-top">' +
+            '<div class="order-item-meta">' +
+              '<span class="order-item-name">' + esc(item.name) + ' BP</span>' +
+              '<span class="quality-badge ' + item.quality + '">' + item.quality + '</span>' +
+              '<span class="cat-badge">' + item.cat + '</span>' +
+            '</div>' +
+            '<div class="order-item-controls">' +
+              '<span class="order-item-price">' + fmt(calcItemBBS(item)) + ' 🍓</span>' +
+              '<button class="remove-item-btn" data-id="' + item.id + '" title="Remove">✕</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      }
       const itemBBS = calcItemBBS(item);
       const regionsHtml = [0,1,2,3,4,5].map(r => {
         const swatches =
@@ -682,14 +1004,20 @@
   }
 
   function updateTotals() {
-    const total    = calcTotal();
-    const count    = orderItems.length;
-    const hasItems = count > 0;
+    const total      = calcTotal();
+    const hasItems   = orderItems.length > 0;
+    const dinoCount  = orderItems.filter(i => !i.kind).length;
+    const bpCount    = orderItems.filter(i => i.kind === 'bp').length;
+    const colorCount = orderItems.filter(i => i.kind === 'color').length;
 
     totalBar.hidden = !hasItems;
     if (hasItems) {
-      totalDisplay.textContent    = fmt(total);
-      totalCountLabel.textContent = count + ' dino' + (count !== 1 ? 's' : '');
+      totalDisplay.textContent = fmt(total);
+      const parts = [];
+      if (dinoCount)  parts.push(dinoCount  + ' dino'      + (dinoCount  !== 1 ? 's' : ''));
+      if (bpCount)    parts.push(bpCount    + ' BP'        + (bpCount    !== 1 ? 's' : ''));
+      if (colorCount) parts.push(colorCount + ' color job' + (colorCount !== 1 ? 's' : ''));
+      totalCountLabel.textContent = parts.join(', ');
     }
     orderTotalDisp.textContent = fmt(total);
   }
@@ -697,8 +1025,10 @@
   function updateFormFields() { /* totals are now Discord-only */ }
 
   // ── Search / Filter ──
-  shopSearch.addEventListener('input',  () => renderShopList());
-  shopSizeFilter.addEventListener('change', () => renderShopList());
+  shopSearch.addEventListener('input',     () => renderShopList());
+  shopSizeFilter.addEventListener('change',() => renderShopList());
+  bpSearch.addEventListener('input',       () => renderBPList());
+  bpCatFilter.addEventListener('change',   () => renderBPList());
 
   // ── Discord Webhooks ──
   const DISCORD_WEBHOOK       = 'https://discord.com/api/webhooks/1474841263294517433/h_8duaJjzmRQ4NQQo9B1tnpTEUArqCoD_UKl4RHXe7qZSZ0JF7NXLeLrtMt0P7DImpnk';
@@ -706,7 +1036,18 @@
   const ARK_ADMIN_ROLE        = '1474505890827866175';
 
   function buildOrderFields(ingame, teleporter, discord, notes, total) {
-    const dinoLines = orderItems.map(item => {
+    const dinoItems  = orderItems.filter(i => !i.kind);
+    const bpItems    = orderItems.filter(i => i.kind === 'bp');
+    const colorItems = orderItems.filter(i => i.kind === 'color');
+
+    const colorLines = colorItems.map(item => {
+      const colorParts = item.colors.map((c, i) => c ? 'R' + i + ': ' + c : null).filter(Boolean);
+      let line = '• **' + item.name + '** — ' + fmt(COLOR_PRICE) + ' 🍓';
+      if (colorParts.length) line += '\n  Colors: ' + colorParts.join(', ');
+      return line;
+    }).join('\n');
+
+    const dinoLines = dinoItems.map(item => {
       const typeStr    = item.type === 'pair' ? 'Breeding Pair' : 'Single';
       const colorParts = item.colors.map((c, i) => c ? 'R' + i + ': ' + c : null).filter(Boolean);
       let line = '• **' + item.name + '** (' + typeStr + ') — ' + fmt(calcItemBBS(item)) + ' 🍓';
@@ -714,14 +1055,20 @@
       return line;
     }).join('\n');
 
+    const bpLines = bpItems.map(item =>
+      '• **' + item.name + ' BP** (' + item.quality + ') — ' + fmt(calcItemBBS(item)) + ' 🍓'
+    ).join('\n');
+
     const fields = [
-      { name: 'PLAYER',        value: ingame,                      inline: true  },
-      { name: 'TELEPORTER',    value: teleporter,                  inline: true  },
-      { name: 'DISCORD',       value: discord || '_not provided_', inline: true  },
-      { name: 'DINOS ORDERED', value: dinoLines || '(none)',       inline: false },
-      { name: 'TOTAL BBS',     value: fmt(total) + ' 🍓',          inline: true  },
-      { name: '# DINOS',       value: String(orderItems.length),   inline: true  },
+      { name: 'PLAYER',     value: ingame,                      inline: true  },
+      { name: 'TELEPORTER', value: teleporter,                  inline: true  },
+      { name: 'DISCORD',    value: discord || '_not provided_', inline: true  },
+      { name: 'TOTAL BBS',  value: fmt(total) + ' 🍓',          inline: true  },
+      { name: '# ITEMS',    value: String(orderItems.length),   inline: true  },
     ];
+    if (dinoLines)  fields.push({ name: 'DINOS ORDERED', value: dinoLines,  inline: false });
+    if (bpLines)    fields.push({ name: 'BLUEPRINTS',    value: bpLines,    inline: false });
+    if (colorLines) fields.push({ name: 'COLOR JOBS',    value: colorLines, inline: false });
     if (notes && notes.trim()) fields.push({ name: 'NOTES', value: notes.trim(), inline: false });
     return fields;
   }
@@ -793,6 +1140,8 @@
 
   // ── Init ──
   renderShopList();
+  renderBPList();
+  renderColorJobForm();
   </script>
 
 </body>

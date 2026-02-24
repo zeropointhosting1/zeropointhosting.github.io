@@ -9,7 +9,7 @@
     button { touch-action: manipulation; }
     :root {
       --bg: #0a0a0f; --surface: #111118; --surface2: #1a1a24;
-      --border: #22222e; --accent: #00e676;
+      --border: #22222e; --accent: #ff4d94;
       --text: #e8e8f0; --muted: #7a7a90; --radius: 10px;
     }
     html { scroll-behavior: smooth; }
@@ -55,7 +55,7 @@
     .page-header { padding: 100px 1.5rem 2.5rem; text-align: center; position: relative; }
     .page-header::before {
       content: ''; position: absolute; inset: 0;
-      background: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(0,230,118,0.05) 0%, transparent 70%);
+      background: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(255,77,148,0.05) 0%, transparent 70%);
       pointer-events: none;
     }
     .back-link {
@@ -75,7 +75,7 @@
     .order-badge {
       font-size: 0.71rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
       padding: 0.28rem 0.7rem; border-radius: 5px;
-      background: rgba(0,230,118,0.1); color: var(--accent); border: 1px solid rgba(0,230,118,0.25);
+      background: rgba(255,77,148,0.1); color: var(--accent); border: 1px solid rgba(255,77,148,0.25);
     }
     .order-badge.secondary { background: rgba(255,255,255,0.06); color: var(--text); border-color: var(--border); }
 
@@ -112,7 +112,7 @@
     .dino-search-bar select { background-color: var(--surface2); }
 
     .dino-limit-banner {
-      background: rgba(0,230,118,0.07); border: 1px solid rgba(0,230,118,0.22);
+      background: rgba(255,77,148,0.07); border: 1px solid rgba(255,77,148,0.22);
       border-radius: 7px; padding: 0.55rem 0.9rem; font-size: 0.8rem; color: var(--accent);
       margin-bottom: 0.5rem; text-align: center; font-weight: 600;
     }
@@ -130,17 +130,17 @@
     }
     .dino-row:last-child { border-bottom: none; }
     .dino-row:hover { background: var(--surface2); }
-    .dino-row.is-added { background: rgba(0,230,118,0.04); }
+    .dino-row.is-added { background: rgba(255,77,148,0.04); }
     .dino-info { display: flex; flex-direction: column; gap: 0.05rem; }
     .dino-name-text { font-size: 0.875rem; font-weight: 600; }
     .dino-cat-label { font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
     .dino-add-btn {
-      background: rgba(0,230,118,0.1); border: 1px solid rgba(0,230,118,0.25);
+      background: rgba(255,77,148,0.1); border: 1px solid rgba(255,77,148,0.25);
       color: var(--accent); border-radius: 5px; padding: 0.26rem 0.65rem;
       font-size: 0.7rem; font-weight: 700; cursor: pointer; letter-spacing: 0.04em;
       text-transform: uppercase; transition: background 0.15s; white-space: nowrap; flex-shrink: 0;
     }
-    .dino-add-btn:hover:not(:disabled) { background: rgba(0,230,118,0.18); }
+    .dino-add-btn:hover:not(:disabled) { background: rgba(255,77,148,0.18); }
     .dino-add-btn:disabled { background: rgba(255,255,255,0.04); border-color: var(--border); color: var(--muted); cursor: default; }
     .no-results { padding: 2rem; text-align: center; color: var(--muted); font-size: 0.85rem; }
 
@@ -153,7 +153,7 @@
       background: var(--surface2); border: 1px solid var(--border);
       border-left: 3px solid var(--accent); border-radius: 8px; padding: 0.9rem 1rem;
     }
-    .selected-dino-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 0.85rem; }
+    .selected-dino-top { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.85rem; flex-wrap: wrap; }
     .selected-dino-name { font-size: 0.9rem; font-weight: 700; }
     .dino-type-toggle { display: flex; gap: 0.35rem; flex-shrink: 0; }
     .type-btn {
@@ -162,7 +162,7 @@
       background: transparent; color: var(--muted); transition: all 0.15s; text-transform: uppercase;
       font-family: inherit;
     }
-    .type-btn.active { background: rgba(0,230,118,0.15); border-color: rgba(0,230,118,0.4); color: var(--accent); }
+    .type-btn.active { background: rgba(255,77,148,0.15); border-color: rgba(255,77,148,0.4); color: var(--accent); }
     .remove-dino-btn {
       background: none; border: none; color: var(--muted); cursor: pointer;
       font-size: 1rem; line-height: 1; padding: 0.1rem 0.3rem; border-radius: 4px; transition: color 0.15s;
@@ -201,7 +201,7 @@
     .form-success[hidden] { display: none; }
     .success-icon {
       width: 56px; height: 56px; border-radius: 50%;
-      background: rgba(0,230,118,0.12); border: 2px solid var(--accent);
+      background: rgba(255,77,148,0.12); border: 2px solid var(--accent);
       color: var(--accent); font-size: 1.5rem;
       display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem;
     }
@@ -213,6 +213,16 @@
     footer p { color: var(--muted); font-size: 0.82rem; }
     footer a { color: var(--accent); text-decoration: none; }
     footer a:hover { text-decoration: underline; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 520px) {
+      .swatch { width: 28px; height: 28px; }
+      .region-label { min-width: 40px; font-size: 0.58rem; }
+      .form-footer { flex-direction: column; align-items: stretch; }
+      .submit-btn { width: 100%; text-align: center; }
+      .order-badges { gap: 0.35rem; }
+      .order-badge { font-size: 0.65rem; padding: 0.22rem 0.5rem; }
+    }
   </style>
 </head>
 <body>
@@ -237,8 +247,8 @@
   <!-- PAGE HEADER -->
   <div class="page-header">
     <a class="back-link" href="ark.html">← Back to Packages</a>
-    <p class="page-eyebrow">Step 2 of 2 — Place Your Order</p>
-    <h1>Complete Your Order</h1>
+    <p class="page-eyebrow">Step 1 of 2 — Choose Your Dinos</p>
+    <h1>Place Your Order</h1>
     <div class="order-badges">
       <span class="order-badge"           id="badge-pkg"></span>
       <span class="order-badge secondary" id="badge-pay"></span>
@@ -306,16 +316,15 @@
       </div>
 
       <div class="form-footer">
-        <p class="form-note">Submit this after you've sent payment — we'll deliver once it clears.</p>
-        <button type="submit" class="submit-btn" id="submit-btn">Submit Order →</button>
+        <p class="form-note">Your order is logged first, then you'll be sent to <em id="pay-method-name">pay</em> to complete payment.</p>
+        <button type="submit" class="submit-btn" id="submit-btn">Submit &amp; Pay →</button>
       </div>
     </form>
 
     <div class="form-success" id="form-success" hidden>
       <div class="success-icon">✓</div>
-      <h3>Order Received!</h3>
-      <p>We'll process your dinos once your payment clears. Watch Discord for updates.</p>
-      <a href="ark.html" class="submit-btn" style="display:inline-block;text-decoration:none;">← Back to Packages</a>
+      <h3>Order Logged!</h3>
+      <p id="success-msg">Redirecting you to complete payment…</p>
     </div>
 
   </div>
@@ -348,14 +357,25 @@
     });
   })();
 
+  // ── PAYMENT CONFIG ──
+  const PAYMENT_CONFIG = {
+    'PayPal':   { baseUrl: 'https://paypal.me/ZeropointHosting' },
+    'Cash App': { baseUrl: 'https://cash.app/$ZeroPointArk' },
+    'Venmo':    { baseUrl: 'https://venmo.com/u/ZeroPointArk' },
+  };
+
   // ── READ URL PARAMS ──
   const params  = new URLSearchParams(location.search);
-  const PKG     = params.get('pkg')    || 'Unknown Package';
-  const PAY     = params.get('pay')    || 'Unknown';
-  const AMOUNT  = params.get('amount') || '';
+  const PKG     = params.get('pkg') || 'Unknown Package';
+  const PAY     = params.get('pay') || 'Unknown';
+  const AMOUNT  = (PKG.match(/\$(\d+)/) || [])[1] || '';
 
   document.getElementById('badge-pkg').textContent = PKG;
   document.getElementById('badge-pay').textContent = PAY;
+
+  // Update button label and form note with payment method name
+  document.getElementById('submit-btn').textContent   = 'Submit & Pay with ' + PAY + ' →';
+  document.getElementById('pay-method-name').textContent = PAY;
 
   // Extract dino limit from package name e.g. "(7 Dinos)" → 7, "Single Dino" → 1
   const limitMatch     = PKG.match(/\((\d+)\s*Dino/i);
@@ -655,12 +675,23 @@
 
     try {
       await postDonationToDiscord(ingame, discord, teleporter, notes);
-      orderForm.hidden    = true;
-      formSuccess.hidden  = false;
+      orderForm.hidden   = true;
+      formSuccess.hidden = false;
+
+      // Build payment redirect URL
+      const cfg    = PAYMENT_CONFIG[PAY] || {};
+      const payUrl = (PAY === 'PayPal' && AMOUNT)
+        ? cfg.baseUrl + '/' + AMOUNT
+        : cfg.baseUrl || 'ark.html';
+
+      document.getElementById('success-msg').textContent =
+        'Redirecting you to ' + PAY + ' to send $' + (AMOUNT || '?') + '…';
+
+      setTimeout(() => { window.location.href = payUrl; }, 2000);
     } catch {
       alert('Could not send order — check your connection and try again.');
       submitBtn.disabled    = false;
-      submitBtn.textContent = 'Submit Order →';
+      submitBtn.textContent = 'Submit & Pay with ' + PAY + ' →';
     }
   });
   </script>

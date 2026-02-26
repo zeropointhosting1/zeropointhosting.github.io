@@ -120,6 +120,45 @@
       .pay-btn { padding: 0.65rem 0.5rem; }
     }
 
+    /* ── SECTION DIVIDERS ── */
+    .section-divider {
+      display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem;
+    }
+    .section-divider + .section-divider { margin-top: 3rem; }
+    .section-divider-line { flex: 1; height: 1px; background: var(--border); }
+    .section-divider-label {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--muted); white-space: nowrap; padding: 0 0.25rem;
+    }
+    .pvp-section-header { margin-top: 3rem; }
+
+    /* ── PVP CARDS (orange) ── */
+    :root { --orange: #f97316; }
+    .pvp-card {
+      border-top-color: var(--orange);
+    }
+    .pvp-card:hover {
+      border-color: var(--orange);
+      box-shadow: 0 0 28px rgba(249,115,22,0.1), 0 6px 28px rgba(0,0,0,0.45);
+    }
+    .pvp-card .pkg-icon { color: var(--orange); }
+    .pvp-card .pkg-quantity { color: var(--orange); }
+    .pvp-card .pkg-tag {
+      background: rgba(249,115,22,0.08); color: var(--orange);
+      border-color: rgba(249,115,22,0.22);
+    }
+
+    /* Resource list inside PvP card desc */
+    .pkg-resources {
+      display: flex; flex-direction: column; gap: 0.18rem; flex: 1;
+    }
+    .pkg-resource-item {
+      display: flex; align-items: baseline; gap: 0.4rem;
+      font-size: 0.76rem; color: var(--muted);
+    }
+    .pkg-resource-item::before { content: '·'; color: var(--orange); flex-shrink: 0; font-weight: 700; }
+    .pkg-resource-qty { color: var(--text); font-weight: 600; white-space: nowrap; font-size: 0.76rem; }
+
     /* ══════════════════════════════════════════
        MODAL
     ══════════════════════════════════════════ */
@@ -392,8 +431,8 @@
     <ul>
       <li><a href="index.html">Home</a></li>
       <li><a href="servers.html">Servers</a></li>
-      <li><a href="ark.html">ARK</a></li>
-      <li><a href="bbs.html">BBS Shop</a></li>
+      <li><a href="ark.html">Ark Donations</a></li>
+      <li><a href="bbs.html">Admin Shop</a></li>
       <li><a href="discord.html">Discord</a></li>
       <li><a href="aboutus.html">About</a></li>
       <li><a href="admin.html">Admin</a></li>
@@ -412,6 +451,13 @@
 
   <!-- PACKAGES -->
   <div class="packages">
+
+    <div class="section-divider">
+      <div class="section-divider-line"></div>
+      <span class="section-divider-label">🦕 PvE Dino Packages</span>
+      <div class="section-divider-line"></div>
+    </div>
+
     <div class="package-grid">
 
       <!-- SINGLE DINO -->
@@ -538,6 +584,168 @@
         <p class="pkg-desc">Maximum value — admin-delivered directly for large tribes.</p>
         <div class="pkg-tags">
           <span class="pkg-tag">PvE Safe</span>
+          <span class="pkg-tag">Admin Delivered</span>
+        </div>
+        <div class="pkg-payments">
+          <button class="pay-btn paypal"  data-payment="PayPal">PayPal</button>
+          <button class="pay-btn cashapp" data-payment="Cash App">Cash App</button>
+          <button class="pay-btn venmo"   data-payment="Venmo">Venmo</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── PVP RESOURCE PACKS ── -->
+    <div class="section-divider pvp-section-header">
+      <div class="section-divider-line"></div>
+      <span class="section-divider-label">⚔️ PvP Resource Packs</span>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="package-grid">
+
+      <!-- STARTER $5 -->
+      <div class="pkg-card pvp-card" data-package="Starter Donation Pack (PvP) — $5">
+        <i class="pkg-icon fas fa-seedling"></i>
+        <div class="pkg-header">
+          <span class="pkg-name">Starter Donation Pack</span>
+          <div class="pkg-pricing">
+            <span class="pkg-price">$5</span>
+            <span class="pkg-quantity">PvP Resources</span>
+          </div>
+        </div>
+        <div class="pkg-resources">
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">5,000</span> Wood</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">2,500</span> Stone</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">1,500</span> Metal Ingots</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">300</span> Crystal</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">1,000</span> Fiber</div>
+        </div>
+        <div class="pkg-tags">
+          <span class="pkg-tag">PvP</span>
+          <span class="pkg-tag">Building Materials</span>
+        </div>
+        <div class="pkg-payments">
+          <button class="pay-btn paypal"  data-payment="PayPal">PayPal</button>
+          <button class="pay-btn cashapp" data-payment="Cash App">Cash App</button>
+          <button class="pay-btn venmo"   data-payment="Venmo">Venmo</button>
+        </div>
+      </div>
+
+      <!-- BEGINNER $10 -->
+      <div class="pkg-card pvp-card" data-package="Beginner Donation Pack (PvP) — $10">
+        <i class="pkg-icon fas fa-layer-group"></i>
+        <div class="pkg-header">
+          <span class="pkg-name">Beginner Donation Pack</span>
+          <div class="pkg-pricing">
+            <span class="pkg-price">$10</span>
+            <span class="pkg-quantity">PvP Resources</span>
+          </div>
+        </div>
+        <div class="pkg-resources">
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">10,000</span> Wood</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">5,000</span> Stone</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">3,000</span> Metal Ingots</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">500</span> Crystal</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">2,000</span> Fiber</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">100</span> Sparkpowder</div>
+        </div>
+        <div class="pkg-tags">
+          <span class="pkg-tag">PvP</span>
+          <span class="pkg-tag">Building Materials</span>
+        </div>
+        <div class="pkg-payments">
+          <button class="pay-btn paypal"  data-payment="PayPal">PayPal</button>
+          <button class="pay-btn cashapp" data-payment="Cash App">Cash App</button>
+          <button class="pay-btn venmo"   data-payment="Venmo">Venmo</button>
+        </div>
+      </div>
+
+      <!-- STANDARD $15 -->
+      <div class="pkg-card pvp-card" data-package="Standard Donation Pack (PvP) — $15">
+        <i class="pkg-icon fas fa-cube"></i>
+        <div class="pkg-header">
+          <span class="pkg-name">Standard Donation Pack</span>
+          <div class="pkg-pricing">
+            <span class="pkg-price">$15</span>
+            <span class="pkg-quantity">PvP Resources</span>
+          </div>
+        </div>
+        <div class="pkg-resources">
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">15,000</span> Wood</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">8,000</span> Stone</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">5,000</span> Metal Ingots</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">1,000</span> Crystal</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">4,000</span> Fiber</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">200</span> Cementing Paste</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">500</span> Rare Mushrooms</div>
+        </div>
+        <div class="pkg-tags">
+          <span class="pkg-tag">PvP</span>
+          <span class="pkg-tag">Mid-Tier</span>
+        </div>
+        <div class="pkg-payments">
+          <button class="pay-btn paypal"  data-payment="PayPal">PayPal</button>
+          <button class="pay-btn cashapp" data-payment="Cash App">Cash App</button>
+          <button class="pay-btn venmo"   data-payment="Venmo">Venmo</button>
+        </div>
+      </div>
+
+      <!-- ADVANCED $20 -->
+      <div class="pkg-card pvp-card" data-package="Advanced Donation Pack (PvP) — $20">
+        <i class="pkg-icon fas fa-shield-halved"></i>
+        <div class="pkg-header">
+          <span class="pkg-name">Advanced Donation Pack</span>
+          <div class="pkg-pricing">
+            <span class="pkg-price">$20</span>
+            <span class="pkg-quantity">PvP Resources</span>
+          </div>
+        </div>
+        <div class="pkg-resources">
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">20,000</span> Wood</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">12,000</span> Stone</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">7,000</span> Metal Ingots</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">2,000</span> Crystal</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">5,000</span> Fiber</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">400</span> Cementing Paste</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">1,000</span> Rare Mushrooms</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">100</span> Gunpowder</div>
+        </div>
+        <div class="pkg-tags">
+          <span class="pkg-tag">PvP</span>
+          <span class="pkg-tag">High-Tier</span>
+        </div>
+        <div class="pkg-payments">
+          <button class="pay-btn paypal"  data-payment="PayPal">PayPal</button>
+          <button class="pay-btn cashapp" data-payment="Cash App">Cash App</button>
+          <button class="pay-btn venmo"   data-payment="Venmo">Venmo</button>
+        </div>
+      </div>
+
+      <!-- MEGA $30 -->
+      <div class="pkg-card pvp-card" data-package="Mega Donation Pack (PvP) — $30">
+        <i class="pkg-icon fas fa-fire"></i>
+        <div class="pkg-header">
+          <span class="pkg-name">Mega Donation Pack</span>
+          <div class="pkg-pricing">
+            <span class="pkg-price">$30</span>
+            <span class="pkg-quantity">PvP Resources</span>
+          </div>
+        </div>
+        <div class="pkg-resources">
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">25,000</span> Wood</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">15,000</span> Stone</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">10,000</span> Metal Ingots</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">3,000</span> Crystal</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">7,000</span> Fiber</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">800</span> Cementing Paste</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">1,500</span> Rare Mushrooms</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">300</span> Gunpowder</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">200</span> Metal Tools <span style="font-size:0.68rem;color:var(--muted)">(scaled solo/duo/trio)</span></div>
+        </div>
+        <div class="pkg-tags">
+          <span class="pkg-tag">PvP</span>
+          <span class="pkg-tag">Max Value</span>
           <span class="pkg-tag">Admin Delivered</span>
         </div>
         <div class="pkg-payments">

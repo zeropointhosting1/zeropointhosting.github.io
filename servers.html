@@ -8,7 +8,7 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --bg: #0a0a0f; --surface: #111118; --surface2: #1a1a24;
-      --border: #22222e; --accent: #00e676;
+      --border: #22222e; --accent: #ff4d94;
       --text: #e8e8f0; --muted: #7a7a90; --radius: 10px;
     }
     html { scroll-behavior: smooth; }
@@ -60,14 +60,14 @@
     .page-header::before {
       content: '';
       position: absolute; inset: 0;
-      background: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(0,230,118,0.05) 0%, transparent 70%);
+      background: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(255,77,148,0.05) 0%, transparent 70%);
       pointer-events: none;
     }
     .page-eyebrow { font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; opacity: 0.85; }
     .total-stat { display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 0.85rem; padding: 0.4rem 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 99px; font-size: 0.82rem; color: var(--muted); font-weight: 500; }
-    .total-stat-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 5px rgba(0,230,118,0.6); flex-shrink: 0; animation: tpulse 1.6s ease-in-out infinite; }
+    .total-stat-dot { width: 7px; height: 7px; border-radius: 50%; background: #00e676; box-shadow: 0 0 5px rgba(0,230,118,0.6); flex-shrink: 0; animation: tpulse 1.6s ease-in-out infinite; }
     @keyframes tpulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
-    .total-stat strong { color: var(--accent); font-variant-numeric: tabular-nums; }
+    .total-stat strong { color: #00e676; font-variant-numeric: tabular-nums; }
     .page-header h1 { font-size: clamp(2rem, 6vw, 3.5rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1; background: linear-gradient(160deg, #ffffff 0%, #a0a0b8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.75rem; }
     .page-header p { font-size: 1rem; color: var(--muted); }
 
@@ -103,11 +103,11 @@
     .server-right { display: flex; align-items: center; gap: 0.65rem; flex-shrink: 0; }
     .status-dot {
       width: 9px; height: 9px; border-radius: 50%;
-      background: var(--accent);
+      background: #00e676;
       box-shadow: 0 0 8px rgba(0,230,118,0.7);
       flex-shrink: 0;
     }
-    .ping-value { font-size: 0.88rem; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+    .ping-value { font-size: 0.88rem; font-weight: 700; color: #00e676; font-variant-numeric: tabular-nums; }
     .pc-sep { color: var(--border); font-size: 0.85rem; }
     .player-count {
       font-size: 0.82rem;
@@ -116,7 +116,7 @@
       font-variant-numeric: tabular-nums;
       transition: color 0.3s;
     }
-    .player-count.pc-live { color: var(--accent); }
+    .player-count.pc-live { color: #00e676; }
     .player-count.pc-offline { color: #ff5252; }
 
     /* ── SECTION DIVIDER ── */
@@ -140,11 +140,29 @@
       gap: 1rem;
       opacity: 0.75;
     }
+    .server-card-soon-asa {
+      background: var(--surface);
+      border: 1px solid rgba(255,160,50,0.2);
+      border-radius: var(--radius);
+      padding: 1.4rem 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      opacity: 0.8;
+    }
     .server-game-soon { font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: #a78bfa; font-weight: 600; }
+    .server-game-asa  { font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: #ffb347; font-weight: 600; }
     .badge-soon {
       font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
       padding: 0.2rem 0.55rem; border-radius: 4px; font-weight: 600;
       background: rgba(120,80,255,0.1); color: #a78bfa; border: 1px solid rgba(120,80,255,0.25);
+    }
+    .badge-asa {
+      font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.2rem 0.55rem; border-radius: 4px; font-weight: 600;
+      background: rgba(255,160,50,0.1); color: #ffb347; border: 1px solid rgba(255,160,50,0.25);
     }
 
     /* ── ARKBUDDY CREDIT ── */
@@ -167,9 +185,10 @@
     <ul>
       <li><a href="index.html">Home</a></li>
       <li><a href="servers.html">Servers</a></li>
-      <li><a href="ark.html">ARK</a></li>
-      <li><a href="bbs.html">BBS Shop</a></li>
+      <li><a href="ark.html">Ark Donations</a></li>
+      <li><a href="bbs.html">Admin Shop</a></li>
       <li><a href="discord.html">Discord</a></li>
+      <li><a href="aboutus.html">About</a></li>
       <li><a href="admin.html">Admin</a></li>
     </ul>
     <button class="nav-toggle" aria-label="Toggle navigation">
@@ -237,6 +256,17 @@
     <p class="arkbuddy-credit">Live stats powered by <a href="https://arkbuddy.app" target="_blank" rel="noopener">ArkBuddy</a></p>
 
     <div class="list-divider"><span>Coming Soon</span></div>
+
+    <div class="server-card-soon-asa">
+      <div class="server-left">
+        <span class="server-game-asa">ARK: Survival Ascended</span>
+        <span class="server-name">PvE · 50x · Modded</span>
+        <span class="server-meta">New York &middot; Xbox</span>
+      </div>
+      <div class="server-right">
+        <span class="badge-asa">Coming Soon</span>
+      </div>
+    </div>
 
     <div class="server-card-soon">
       <div class="server-left">

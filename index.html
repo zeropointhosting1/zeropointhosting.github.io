@@ -652,39 +652,111 @@
       { lat: 40.71, lon: -74.01 },
     ];
 
-    // Continent outlines [lat, lon].
-    // Kept moderately dense so no single edge spans too many degrees.
+    // ── Continent outlines (simplified polygons, [lat, lon]) ─────────────────
     const CONTINENTS = [
-      // North America — max lat 68°N, clean clockwise outline
-      [[68,-168],[57,-153],[58,-136],[48,-124],[37,-122],[32,-117],
-       [22,-106],[16,-90],[8,-77],[9,-79],[12,-62],[18,-66],
-       [26,-80],[30,-80],[36,-76],[42,-70],[47,-53],[54,-57],
-       [58,-64],[62,-76],[64,-87],[68,-107],[68,-140],[68,-168]],
-
+      // North America
+      [[71,-156],[71,-141],[70,-135],[68,-137],[60,-140],[57,-136],
+       [54,-130],[50,-124],[46,-124],[42,-124],[38,-122],[34,-120],
+       [30,-116],[28,-110],[22,-106],[18,-94],[16,-90],[15,-87],[10,-83],
+       [8,-77],[10,-75],[12,-72],[18,-66],[20,-70],[23,-82],[25,-80],
+       [30,-80],[35,-76],[40,-74],[44,-66],[48,-60],[52,-56],[56,-60],
+       [60,-64],[65,-72],[70,-80],[72,-78],[74,-84],[72,-96],[68,-102],
+       [68,-108],[70,-112],[70,-120],[72,-124],[76,-116],[80,-90],
+       [83,-70],[83,-90],[83,-110],[83,-130],[80,-140],[76,-152],[71,-156]],
+      // Greenland
+      [[76,-72],[72,-56],[68,-52],[64,-52],[60,-44],[63,-42],[66,-38],
+       [70,-24],[76,-18],[80,-18],[83,-30],[83,-52],[80,-68],[76,-72]],
       // South America
-      [[12,-72],[5,-52],[-5,-35],[-23,-43],[-34,-53],[-55,-67],
-       [-42,-72],[-18,-70],[-5,-80],[1,-78],[12,-72]],
-
-      // Europe — clean, no repeated points, max lat 71°N
-      [[71,27],[65,14],[58,5],[54,9],[52,5],[51,-1],[44,-8],
-       [37,-9],[36,5],[38,16],[37,22],[38,26],[42,28],
-       [46,30],[52,22],[60,25],[65,25],[71,27]],
-
+      [[12,-72],[10,-62],[8,-60],[4,-52],[2,-50],[0,-50],[-2,-52],
+       [-4,-36],[-8,-35],[-12,-38],[-16,-39],[-20,-40],[-22,-43],
+       [-24,-46],[-28,-49],[-32,-52],[-34,-54],[-38,-58],[-40,-62],
+       [-44,-66],[-50,-68],[-54,-68],[-56,-66],[-52,-72],[-48,-74],
+       [-44,-74],[-38,-73],[-32,-70],[-26,-72],[-18,-70],[-14,-76],
+       [-8,-78],[-2,-80],[2,-78],[6,-76],[8,-74],[10,-72],[12,-72]],
+      // Europe (west)
+      [[36,-9],[38,-9],[40,-8],[44,-8],[46,-2],[48,-2],[48,2],[51,4],
+       [53,5],[54,9],[55,9],[55,12],[57,12],[59,18],[60,25],[59,28],
+       [62,28],[65,28],[70,24],[70,20],[68,14],[63,8],[60,5],[58,7],
+       [57,8],[55,14],[54,20],[54,18],[52,14],[50,14],[50,16],[48,16],
+       [46,18],[44,14],[43,6],[42,3],[40,0],[38,-2],[36,-5],[36,-9]],
+      // Eastern Europe / Turkey / Caucasus
+      [[36,26],[36,36],[38,38],[40,40],[42,44],[44,48],[46,50],[48,56],
+       [44,56],[42,48],[40,44],[38,36],[36,30],[36,26]],
       // Africa
-      [[37,-5],[5,-17],[-5,10],[-34,18],[-35,27],[-10,40],
-       [12,44],[22,37],[30,32],[37,12],[37,-5]],
-
-      // Asia — max lat 70°N, includes key peninsula waypoints
-      [[42,28],[46,36],[42,46],[50,58],
-       [70,65],[70,100],[70,140],[70,170],
-       [52,140],[40,127],[22,114],[1,104],
-       [8,77],[22,68],[22,60],[12,44],[20,39],
-       [30,32],[36,36],[38,28],[42,28]],
-
+      [[36,-5],[36,10],[32,12],[28,34],[22,38],[12,44],[8,44],[4,42],
+       [0,42],[-4,40],[-8,40],[-12,36],[-16,36],[-20,36],[-24,34],
+       [-28,33],[-30,31],[-34,26],[-35,20],[-34,18],[-28,16],[-20,15],
+       [-14,12],[-10,15],[-8,13],[-4,10],[0,8],[4,8],[6,2],[4,-2],
+       [4,-6],[6,-10],[8,-14],[10,-15],[12,-16],[14,-17],[16,-16],
+       [18,-16],[20,-16],[24,-14],[28,-12],[32,-8],[34,-6],[36,-5]],
+      // Asia (main body)
+      [[70,30],[70,40],[68,50],[66,58],[64,60],[64,68],[66,72],[68,74],
+       [70,80],[72,90],[72,100],[70,102],[68,110],[64,120],[62,130],
+       [60,140],[60,150],[56,162],[52,156],[50,142],[46,136],[44,130],
+       [41,128],[38,122],[34,120],[30,122],[28,120],[26,114],[22,110],
+       [18,110],[16,104],[14,104],[10,100],[8,98],[10,96],[14,100],
+       [16,100],[18,94],[20,92],[22,92],[24,88],[26,80],[28,68],
+       [32,60],[36,36],[38,28],[40,28],[42,28],[44,28],[46,30],
+       [48,34],[50,36],[52,38],[56,40],[58,46],[60,50],[62,54],
+       [64,56],[66,52],[68,46],[70,40],[70,30]],
+      // India
+      [[28,68],[22,70],[20,68],[14,74],[8,76],[8,78],[10,80],[14,80],
+       [18,84],[20,86],[22,90],[24,90],[24,86],[22,82],[20,80],
+       [22,72],[24,70],[26,70],[28,68]],
+      // SE Asia / Indochina
+      [[22,100],[18,100],[14,106],[10,104],[6,100],[4,102],[2,104],
+       [0,106],[-2,108],[-4,108],[-6,106],[-4,104],[-2,102],[0,104],
+       [4,100],[8,98],[10,96],[14,100],[16,98],[18,100],[22,100]],
       // Australia
-      [[-15,122],[-12,130],[-15,142],[-25,154],
-       [-38,146],[-38,140],[-32,115],[-22,113],[-15,122]],
+      [[-14,130],[-14,136],[-12,136],[-14,126],[-16,122],[-20,116],
+       [-24,114],[-28,116],[-32,116],[-34,118],[-38,140],[-38,146],
+       [-34,150],[-28,154],[-22,150],[-16,142],[-14,136],[-14,130]],
+      // New Guinea
+      [[0,132],[0,140],[-2,144],[-6,148],[-8,146],[-8,142],[-4,140],[0,132]],
+      // Borneo
+      [[6,116],[4,118],[0,116],[-4,114],[-4,116],[0,118],[4,118],[6,118],[6,116]],
+      // Sumatra
+      [[4,96],[2,98],[0,102],[-4,104],[-5,106],[-2,106],[0,104],[2,100],[4,96]],
+      // UK (Great Britain)
+      [[50,-6],[52,-4],[52,0],[54,0],[56,-2],[58,-2],[58,-4],[56,-6],[52,-6],[50,-6]],
+      // Ireland
+      [[52,-10],[54,-8],[54,-6],[52,-8],[52,-10]],
+      // Iceland
+      [[63,-24],[64,-14],[66,-14],[66,-22],[63,-24]],
+      // Japan (Honshu + Kyushu)
+      [[34,130],[36,136],[38,140],[40,142],[42,142],[44,144],[42,140],[40,140],[36,136],[34,130]],
+      // Madagascar
+      [[-12,48],[-14,48],[-18,44],[-22,44],[-25,46],[-22,48],[-14,50],[-12,48]],
+      // Cuba
+      [[22,-84],[22,-76],[20,-76],[20,-80],[22,-84]],
+      // Sri Lanka
+      [[10,80],[8,80],[8,82],[10,82],[10,80]],
+      // Svalbard
+      [[76,16],[78,18],[79,20],[78,22],[77,20],[76,16]],
     ];
+
+    // Ray-casting point-in-polygon (poly = [[lat,lon],...])
+    function pip(lat, lon, poly) {
+      let inside = false;
+      for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+        const [ilat, ilon] = poly[i];
+        const [jlat, jlon] = poly[j];
+        if (((ilon > lon) !== (jlon > lon)) &&
+            (lat < (jlat - ilat) * (lon - ilon) / (jlon - ilon) + ilat))
+          inside = !inside;
+      }
+      return inside;
+    }
+
+    // Pre-compute land dots synchronously (runs once at page load)
+    const LAND_DOTS = [];
+    for (let lat = -80; lat <= 80; lat += 2) {
+      for (let lon = -180; lon < 180; lon += 2) {
+        for (const poly of CONTINENTS) {
+          if (pip(lat, lon, poly)) { LAND_DOTS.push([lat, lon]); break; }
+        }
+      }
+    }
 
     // Project (lat, lon) → screen coords + z-depth
     function project(lat, lon) {
@@ -730,59 +802,64 @@
       }
     }
 
-    // Sutherland-Hodgman clip of a polygon to the front hemisphere (z > 0).
-    // This properly clips each edge at the z=0 silhouette, producing a clean
-    // polygon with no stray diagonal lines across the globe.
-    function clipToFront(poly) {
-      const pts = poly.map(([lat, lon]) => project(lat, lon));
-      const n = pts.length;
-      const out = [];
-      for (let i = 0; i < n; i++) {
-        const a = pts[i];
-        const b = pts[(i + 1) % n];
-        const aIn = a.z > 0;
-        const bIn = b.z > 0;
-        if (aIn) out.push({ x: a.x, y: a.y });
-        if (aIn !== bIn) {
-          // Compute the intersection point where z == 0
-          const t = a.z / (a.z - b.z);
-          out.push({ x: a.x + t * (b.x - a.x), y: a.y + t * (b.y - a.y) });
-        }
-      }
-      return out;
-    }
-
-    function drawContinents() {
-      for (const poly of CONTINENTS) {
-        const pts = clipToFront(poly);
-        if (pts.length < 3) continue;
-
+    function drawLandDots() {
+      for (const [lat, lon] of LAND_DOTS) {
+        const p = project(lat, lon);
+        if (p.z < 0) continue;
+        const alpha = 0.28 + p.z * 0.62;
+        const r     = 0.85 + p.z * 0.65;
         ctx.beginPath();
-        ctx.moveTo(pts[0].x, pts[0].y);
-        for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
-        ctx.closePath();
-
-        ctx.fillStyle   = 'rgba(45,85,155,0.82)';
+        ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(190,218,255,${alpha.toFixed(2)})`;
         ctx.fill();
-        ctx.strokeStyle = 'rgba(80,140,230,0.9)';
-        ctx.lineWidth   = 0.9;
-        ctx.stroke();
       }
     }
 
     function drawServers() {
       for (const s of SERVERS) {
         const p = project(s.lat, s.lon);
-        if (p.z < 0.08) continue;
-        const pulse = 0.5 + 0.5 * Math.sin(pulseT + s.lon * 0.02);
-        const halo  = ctx.createRadialGradient(p.x, p.y, 1, p.x, p.y, 10 + pulse * 7);
-        halo.addColorStop(0, 'rgba(255,77,148,0.5)');
-        halo.addColorStop(1, 'rgba(255,77,148,0)');
-        ctx.beginPath(); ctx.arc(p.x, p.y, 10 + pulse * 7, 0, Math.PI*2);
-        ctx.fillStyle = halo; ctx.fill();
-        ctx.beginPath(); ctx.arc(p.x, p.y, 3.8, 0, Math.PI*2);
-        ctx.fillStyle = '#00e676'; ctx.fill();
+        if (p.z < 0.05) continue;
+        // Outer circle
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 5, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(0,230,118,0.85)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        // Center dot
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
+        ctx.fillStyle = '#00e676';
+        ctx.fill();
       }
+    }
+
+    function drawArc(lat1, lon1, lat2, lon2) {
+      const toRad = d => d * Math.PI / 180;
+      const p1 = [Math.cos(toRad(lat1)) * Math.cos(toRad(lon1)),
+                  Math.cos(toRad(lat1)) * Math.sin(toRad(lon1)),
+                  Math.sin(toRad(lat1))];
+      const p2 = [Math.cos(toRad(lat2)) * Math.cos(toRad(lon2)),
+                  Math.cos(toRad(lat2)) * Math.sin(toRad(lon2)),
+                  Math.sin(toRad(lat2))];
+      const steps = 64;
+      ctx.beginPath();
+      let drawing = false;
+      for (let i = 0; i <= steps; i++) {
+        const t = i / steps;
+        const lx = p1[0] + t * (p2[0] - p1[0]);
+        const ly = p1[1] + t * (p2[1] - p1[1]);
+        const lz = p1[2] + t * (p2[2] - p1[2]);
+        const len = Math.sqrt(lx*lx + ly*ly + lz*lz);
+        const lat = Math.asin(lz / len) * 180 / Math.PI;
+        const lon = Math.atan2(ly / len, lx / len) * 180 / Math.PI;
+        const p   = project(lat, lon);
+        if (p.z < 0.05) { drawing = false; continue; }
+        drawing ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y);
+        drawing = true;
+      }
+      ctx.strokeStyle = 'rgba(0,230,118,0.75)';
+      ctx.lineWidth   = 1.2;
+      ctx.stroke();
     }
 
     function drawShine() {
@@ -799,12 +876,13 @@
       ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI*2); ctx.clip();
       drawSphere();
       drawGrid();
-      drawContinents();
+      drawLandDots();
+      drawArc(25.76, -80.19, 40.71, -74.01);
       drawServers();
       drawShine();
       ctx.restore();
       ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI*2);
-      ctx.strokeStyle = 'rgba(28,46,72,0.85)'; ctx.lineWidth = 1.2; ctx.stroke();
+      ctx.strokeStyle = 'rgba(30,55,100,0.8)'; ctx.lineWidth = 1.5; ctx.stroke();
 
       rot    += 0.004;
       pulseT += 0.045;

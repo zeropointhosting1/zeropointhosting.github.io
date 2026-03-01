@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Zeropoint | Admin Shop</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -442,7 +443,6 @@
       <li><a href="bbs.html">Admin Shop</a></li>
       <li><a href="discord.html">Discord</a></li>
       <li><a href="aboutus.html">About</a></li>
-      <li><a href="admin.html">Admin</a></li>
     </ul>
     <button class="nav-toggle" aria-label="Toggle navigation">
       <span></span><span></span><span></span>
@@ -1300,8 +1300,13 @@
     });
   }
 
+  // ── SUPABASE ──
+  const SUPABASE_URL  = 'https://cairclbnutqouejtlhks.supabase.co';
+  const SUPABASE_ANON = 'sb_publishable_25_ecIfEwCQ1BdXof_ZonQ_Bi2x1CDU';
+  const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
   // ══ DISCORD WEBHOOKS ══
-  const DISCORD_WEBHOOK       = 'https://discord.com/api/webhooks/1474841263294517433/h_8duaJjzmRQ4NQQo9B1tnpTEUArqCoD_UKl4RHXe7qZSZ0JF7NXLeLrtMt0P7DImpnk';
+  const DISCORD_WEBHOOK       ='https://discord.com/api/webhooks/1474841263294517433/h_8duaJjzmRQ4NQQo9B1tnpTEUArqCoD_UKl4RHXe7qZSZ0JF7NXLeLrtMt0P7DImpnk';
   const DISCORD_WEBHOOK_ADMIN = 'https://discord.com/api/webhooks/1474846554300092506/AlxQXWBdsMWSl1he9UFuFNHPIvnCz0rDhfQE8MbeT4QcquX4sJ6AOtxaYKTeX4fTzq_2';
   const ARK_ADMIN_ROLE        = '1474505890827866175';
 
@@ -1342,6 +1347,18 @@
     return fields;
   }
 
+  async function saveOrderToSupabase(ingame, discord, teleporter, notes, total) {
+    const { error } = await _supabase.from('bbs_orders').insert({
+      ingame_name: ingame,
+      discord:     discord || null,
+      teleporter,
+      total_bbs:   total,
+      items:       orderItems,
+      notes:       notes || null,
+    });
+    if (error) console.warn('Supabase insert failed:', error.message);
+  }
+
   async function sendWebhook(url, payload) {
     const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
     if (!res.ok) console.error('Webhook failed:', res.status, await res.text());
@@ -1371,7 +1388,10 @@
     bbsSubmitBtn.disabled = true;
     bbsSubmitBtn.textContent = 'Sending…';
     try {
-      await postToDiscord(ingame, teleporter, discord, notes, total);
+      await Promise.all([
+        postToDiscord(ingame, teleporter, discord, notes, total),
+        saveOrderToSupabase(ingame, discord, teleporter, notes, total),
+      ]);
       bbsForm.hidden = true;
       bbsSuccess.hidden = false;
     } catch {

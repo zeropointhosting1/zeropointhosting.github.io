@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Zeropoint | ARK Donations</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     button { touch-action: manipulation; }
@@ -107,6 +108,159 @@
     .cashapp { background: #00c244; }
     .venmo   { background: #3d95ce; }
 
+    /* ── TRACKING CODE MODAL ── */
+    .tcode-panel { max-width: 400px; text-align: center; padding: 2.5rem 2rem; }
+    .tcode-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .tcode-title { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.4rem; }
+    .tcode-sub { font-size: 0.83rem; color: var(--muted); margin-bottom: 1.75rem; line-height: 1.5; }
+    .tcode-digits { display: flex; justify-content: center; gap: 0.6rem; margin-bottom: 1.5rem; }
+    .tcode-digit {
+      width: 58px; height: 68px; border-radius: 10px;
+      background: var(--bg); border: 1px solid rgba(255,77,148,0.35);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.2rem; font-weight: 900; font-family: ui-monospace, monospace; color: var(--text);
+    }
+    .tcode-copy {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(255,77,148,0.08); border: 1px solid rgba(255,77,148,0.28); color: var(--accent);
+      border-radius: 8px; padding: 0.55rem 1.1rem; font-size: 0.82rem; font-weight: 700;
+      cursor: pointer; letter-spacing: 0.03em; transition: background 0.15s; margin-bottom: 0.6rem;
+    }
+    .tcode-copy:hover { background: rgba(255,77,148,0.15); }
+    .tcode-hint { font-size: 0.72rem; color: var(--muted); margin-bottom: 1.5rem; }
+    .tcode-continue {
+      display: block; background: var(--accent); color: #000; border: none; border-radius: 8px;
+      padding: 0.75rem 1.5rem; font-size: 0.9rem; font-weight: 800; cursor: pointer;
+      letter-spacing: 0.01em; text-decoration: none; transition: opacity 0.15s, transform 0.15s;
+    }
+    .tcode-continue:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* ── ORDER MODAL ── */
+    body.modal-open { overflow: hidden; }
+    .order-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.82); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      display: flex; align-items: flex-start; justify-content: center;
+      padding: 1rem; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
+    }
+    .order-overlay[hidden] { display: none; }
+    .order-panel {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+      width: 100%; max-width: 680px; margin: auto; display: flex; flex-direction: column;
+    }
+    .order-header {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
+    .order-header-meta { flex: 1; min-width: 0; }
+    .order-header-title { font-size: 1.05rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.3; }
+    .order-header-sub { font-size: 0.72rem; color: var(--muted); margin-top: 0.2rem; }
+    .order-close-btn {
+      background: var(--surface2); border: 1px solid var(--border); color: var(--muted);
+      border-radius: 7px; width: 34px; height: 34px; font-size: 1rem; cursor: pointer;
+      flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+      transition: color 0.15s, background 0.15s; font-family: inherit;
+    }
+    .order-close-btn:hover { color: var(--text); background: #2a2a38; }
+    .order-body {
+      overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
+      flex: 1; padding: 1.25rem 1.5rem; max-height: calc(100vh - 180px);
+    }
+    .order-footer {
+      padding: 1rem 1.5rem; border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; flex-shrink: 0; flex-wrap: wrap;
+    }
+    .order-footer-info { font-size: 0.82rem; color: var(--muted); flex: 1; }
+    .order-submit-btn {
+      background: var(--accent); color: #000; border: none; border-radius: 8px;
+      padding: 0.7rem 1.5rem; font-size: 0.875rem; font-weight: 800; cursor: pointer;
+      letter-spacing: 0.02em; transition: opacity 0.15s, transform 0.15s; font-family: inherit;
+      white-space: nowrap;
+    }
+    .order-submit-btn:hover:not(:disabled) { opacity: 0.88; transform: translateY(-1px); }
+    .order-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .o-section { font-size: 0.73rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin: 1.25rem 0 1rem; }
+    .o-section:first-child { margin-top: 0; }
+    .o-group { display: flex; flex-direction: column; gap: 0.38rem; margin-bottom: 0.75rem; }
+    .o-group label { font-size: 0.77rem; font-weight: 600; color: var(--text); }
+    .o-group input, .o-group select, .o-group textarea {
+      background: var(--surface2); border: 1px solid var(--border); color: var(--text);
+      border-radius: 7px; padding: 0.6rem 0.85rem; font-size: 0.875rem;
+      font-family: inherit; outline: none; transition: border-color 0.15s; width: 100%;
+    }
+    .o-group input:focus, .o-group select:focus, .o-group textarea:focus { border-color: var(--accent); }
+    .o-group select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%237a7a90' d='M1 1l5 5 5-5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.85rem center; padding-right: 2rem; }
+    .o-group textarea { resize: vertical; min-height: 70px; }
+    /* dino search bar */
+    .o-search-bar { display: grid; grid-template-columns: 1fr auto; gap: 0.5rem; margin-bottom: 0.75rem; }
+    @media (max-width: 480px) { .o-search-bar { grid-template-columns: 1fr; } }
+    .o-search-bar input, .o-search-bar select {
+      background: var(--surface2); border: 1px solid var(--border); color: var(--text);
+      border-radius: 7px; padding: 0.55rem 0.85rem; font-size: 0.85rem;
+      font-family: inherit; outline: none; transition: border-color 0.15s;
+    }
+    .o-search-bar input:focus, .o-search-bar select:focus { border-color: var(--accent); }
+    .o-limit-banner {
+      background: rgba(255,77,148,0.07); border: 1px solid rgba(255,77,148,0.22);
+      border-radius: 7px; padding: 0.5rem 0.9rem; font-size: 0.8rem; color: var(--accent);
+      margin-bottom: 0.5rem; text-align: center; font-weight: 600;
+    }
+    .o-dino-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(108px, 1fr)); gap: 0.5rem; margin-bottom: 0.75rem; }
+    .o-dino-card {
+      background: var(--surface2); border: 1px solid var(--border); border-top: 2px solid var(--accent);
+      border-radius: var(--radius); padding: 0.65rem 0.6rem; display: flex; flex-direction: column; gap: 0.22rem;
+    }
+    .o-dino-card.is-added { background: rgba(255,77,148,0.06); border-color: rgba(255,77,148,0.35); }
+    .o-dino-icon { font-size: 1.1rem; line-height: 1; }
+    .o-dino-name { font-size: 0.72rem; font-weight: 700; line-height: 1.25; }
+    .o-dino-cat { font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); flex: 1; }
+    .o-add-btn {
+      margin-top: 0.22rem; width: 100%;
+      background: rgba(255,77,148,0.1); border: 1px solid rgba(255,77,148,0.25);
+      color: var(--accent); border-radius: 6px; padding: 0.28rem 0;
+      font-size: 0.64rem; font-weight: 700; cursor: pointer; letter-spacing: 0.04em;
+      text-transform: uppercase; transition: background 0.15s; font-family: inherit;
+    }
+    .o-add-btn:hover:not([disabled]) { background: rgba(255,77,148,0.18); }
+    .o-add-btn[disabled] { background: rgba(255,255,255,0.04); border-color: var(--border); color: var(--muted); cursor: default; }
+    .o-no-results { padding: 1.5rem; text-align: center; color: var(--muted); font-size: 0.85rem; }
+    /* selected dinos */
+    .o-sel-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.75rem; }
+    .o-sel-title { font-size: 0.73rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: var(--accent); }
+    .o-sel-count { background: var(--accent); color: #000; font-size: 0.63rem; font-weight: 800; padding: 0.1rem 0.42rem; border-radius: 10px; min-width: 18px; text-align: center; }
+    .o-sel-card {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-left: 3px solid var(--accent); border-radius: 8px; padding: 0.85rem 1rem; margin-bottom: 0.65rem;
+    }
+    .o-sel-top { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
+    .o-sel-name { font-size: 0.9rem; font-weight: 700; }
+    .o-type-row { display: flex; gap: 0.35rem; flex-shrink: 0; }
+    .o-type-btn {
+      padding: 0.26rem 0.6rem; border-radius: 5px; font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.04em; cursor: pointer; border: 1px solid var(--border);
+      background: transparent; color: var(--muted); transition: all 0.15s; text-transform: uppercase; font-family: inherit;
+    }
+    .o-type-btn.active { background: rgba(255,77,148,0.15); border-color: rgba(255,77,148,0.4); color: var(--accent); }
+    .o-type-btn[disabled] { opacity: 0.35; cursor: not-allowed; }
+    .o-remove-btn { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1rem; line-height: 1; padding: 0.1rem 0.3rem; border-radius: 4px; transition: color 0.15s; }
+    .o-remove-btn:hover { color: #ff5555; }
+    .o-color-regs { display: flex; flex-direction: column; gap: 0.38rem; }
+    .o-reg-row { display: flex; align-items: flex-start; gap: 0.6rem; }
+    .o-reg-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); min-width: 46px; padding-top: 0.28rem; flex-shrink: 0; }
+    .o-swatches { display: flex; flex-wrap: wrap; gap: 0.25rem; }
+    .o-swatch { width: 18px; height: 18px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; outline: none; transition: transform 0.12s, border-color 0.12s; padding: 0; flex-shrink: 0; }
+    .o-swatch:hover { transform: scale(1.25); }
+    .o-swatch.active { border-color: #fff; transform: scale(1.18); box-shadow: 0 0 0 1px rgba(255,255,255,0.25); }
+    .o-swatch.skip { background: var(--surface); border: 2px solid var(--border); color: var(--muted); font-size: 0.65rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .o-swatch.skip.active { border-color: var(--accent); color: var(--accent); }
+    @media (max-width: 520px) {
+      .o-swatch { width: 24px; height: 24px; }
+      .o-reg-label { min-width: 36px; font-size: 0.56rem; }
+      .order-footer { flex-direction: column; align-items: stretch; }
+      .order-submit-btn { text-align: center; }
+    }
+
     /* ── FOOTER ── */
     footer { border-top: 1px solid var(--border); padding: 2.5rem 1.5rem; text-align: center; }
     footer p { color: var(--muted); font-size: 0.82rem; }
@@ -119,6 +273,54 @@
       .pkg-payments { grid-template-columns: 1fr; }
       .pay-btn { padding: 0.65rem 0.5rem; }
     }
+
+    /* ── SERVER PACK (green) ── */
+    :root { --green: #00c97a; }
+    .server-pack-section { margin-bottom: 3rem; }
+    .server-pack-card {
+      background: var(--surface);
+      border: 1px solid rgba(0,201,122,0.3);
+      border-top: 3px solid var(--green);
+      border-radius: var(--radius);
+      padding: 2rem 2rem 1.75rem;
+      display: flex; flex-direction: column; gap: 1.5rem;
+      transition: box-shadow 0.2s, transform 0.22s;
+    }
+    .server-pack-card:hover {
+      box-shadow: 0 0 36px rgba(0,201,122,0.1), 0 6px 32px rgba(0,0,0,0.45);
+      transform: translateY(-3px);
+    }
+    .server-pack-badge {
+      display: inline-flex; align-items: center;
+      background: rgba(0,201,122,0.15); color: var(--green);
+      border: 1px solid rgba(0,201,122,0.35);
+      font-size: 0.62rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.2rem 0.65rem; border-radius: 99px; align-self: flex-start;
+    }
+    .server-pack-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; }
+    .server-pack-meta { display: flex; flex-direction: column; gap: 0.35rem; }
+    .server-pack-eyebrow { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--green); }
+    .server-pack-title { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+    .server-pack-sub { font-size: 0.84rem; color: var(--muted); max-width: 520px; margin-top: 0.1rem; }
+    .server-pack-price-block { display: flex; flex-direction: column; align-items: flex-end; flex-shrink: 0; gap: 0.1rem; }
+    .server-pack-price { font-size: 3rem; font-weight: 900; letter-spacing: -0.05em; color: var(--text); line-height: 1; }
+    .server-pack-period { font-size: 0.8rem; color: var(--green); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+    .server-pack-perks {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.55rem 1.5rem;
+      padding: 1.25rem 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    }
+    @media (max-width: 860px) { .server-pack-perks { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .server-pack-perks { grid-template-columns: 1fr; } }
+    .server-perk-item {
+      display: flex; align-items: flex-start; gap: 0.45rem;
+      font-size: 0.8rem; color: var(--text); line-height: 1.4;
+    }
+    .server-perk-item::before {
+      content: '✓'; color: var(--green); font-weight: 900; font-size: 0.7rem;
+      flex-shrink: 0; margin-top: 0.15rem;
+    }
+    .server-pack-payments { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+    @media (max-width: 400px) { .server-pack-payments { grid-template-columns: 1fr; } }
 
     /* ── SECTION DIVIDERS ── */
     .section-divider {
@@ -450,6 +652,60 @@
   <!-- PACKAGES -->
   <div class="packages">
 
+    <!-- ── SERVER STARTER PACK ── -->
+    <div class="server-pack-section">
+      <div class="section-divider" style="margin-bottom:1.25rem;">
+        <div class="section-divider-line"></div>
+        <span class="section-divider-label">🌟 Private Server Pack</span>
+        <div class="section-divider-line"></div>
+      </div>
+
+      <div class="server-pack-card" data-package="Private Server Starter Pack — $15/mo">
+        <span class="server-pack-badge">Best Deal</span>
+
+        <div class="server-pack-top">
+          <div class="server-pack-meta">
+            <span class="server-pack-eyebrow">Server Membership</span>
+            <h2 class="server-pack-title">Starter Pack</h2>
+            <p class="server-pack-sub">Your own private server experience — boosted stats, exclusive perks, and priority support. No base wipe guaranteed.</p>
+          </div>
+          <div class="server-pack-price-block">
+            <span class="server-pack-price">$15</span>
+            <span class="server-pack-period">/ month</span>
+          </div>
+        </div>
+
+        <div class="server-pack-perks">
+          <div class="server-perk-item">No base wipe, boosted stats</div>
+          <div class="server-perk-item">Priority admin support</div>
+          <div class="server-perk-item">3 min breeding gap between breeds</div>
+          <div class="server-perk-item">Private map code</div>
+          <div class="server-perk-item">Private server Discord channel</div>
+          <div class="server-perk-item">15 min night cycle included</div>
+          <div class="server-perk-item">4 flex capped breeder pair (2,000+ non-sellable)</div>
+          <div class="server-perk-item">1 alpha tame of your choice (non-sellable)</div>
+          <div class="server-perk-item">10 dinos of choice/color (750+) — refreshes monthly</div>
+          <div class="server-perk-item">Any base spot including artifact caves</div>
+          <div class="server-perk-item">6 ocean platforms (max) + ocean base 1 (max)</div>
+          <div class="server-perk-item">1 land base (max)</div>
+          <div class="server-perk-item">6 replicators</div>
+          <div class="server-perk-item">6 cloners</div>
+          <div class="server-perk-item">Free coloring</div>
+          <div class="server-perk-item">Max dinos online (60)</div>
+          <div class="server-perk-item">Max dinos offline (40)</div>
+          <div class="server-perk-item">Max pulsing gens per base (3)</div>
+          <div class="server-perk-item">Max shield bubble per base (3)</div>
+          <div class="server-perk-item">Max incubator per base (6)</div>
+        </div>
+
+        <div class="server-pack-payments">
+          <button class="pay-btn paypal"  data-payment="PayPal">PayPal</button>
+          <button class="pay-btn cashapp" data-payment="Cash App">Cash App</button>
+          <button class="pay-btn venmo"   data-payment="Venmo">Venmo</button>
+        </div>
+      </div>
+    </div>
+
     <div class="section-divider">
       <div class="section-divider-line"></div>
       <span class="section-divider-label">🦕 PvE Dino Packages</span>
@@ -739,11 +995,43 @@
           <div class="pkg-resource-item"><span class="pkg-resource-qty">800</span> Cementing Paste</div>
           <div class="pkg-resource-item"><span class="pkg-resource-qty">1,500</span> Rare Mushrooms</div>
           <div class="pkg-resource-item"><span class="pkg-resource-qty">300</span> Gunpowder</div>
-          <div class="pkg-resource-item"><span class="pkg-resource-qty">200</span> Metal Tools <span style="font-size:0.68rem;color:var(--muted)">(scaled solo/duo/trio)</span></div>
+
         </div>
         <div class="pkg-tags">
           <span class="pkg-tag">PvP</span>
           <span class="pkg-tag">Max Value</span>
+          <span class="pkg-tag">Admin Delivered</span>
+        </div>
+        <div class="pkg-payments">
+          <button class="pay-btn paypal"  data-payment="PayPal">PayPal</button>
+          <button class="pay-btn cashapp" data-payment="Cash App">Cash App</button>
+          <button class="pay-btn venmo"   data-payment="Venmo">Venmo</button>
+        </div>
+      </div>
+
+      <!-- ELITE $50 -->
+      <div class="pkg-card pvp-card" data-package="Elite Donation Pack (PvP) — $50">
+        <i class="pkg-icon fas fa-skull-crossbones"></i>
+        <div class="pkg-header">
+          <span class="pkg-name">Elite Donation Pack</span>
+          <div class="pkg-pricing">
+            <span class="pkg-price">$50</span>
+            <span class="pkg-quantity">PvP Resources</span>
+          </div>
+        </div>
+        <div class="pkg-resources">
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">40,000</span> Wood</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">25,000</span> Stone</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">17,000</span> Metal Ingots</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">5,000</span> Crystal</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">12,000</span> Fiber</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">1,300</span> Cementing Paste</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">2,500</span> Rare Mushrooms</div>
+          <div class="pkg-resource-item"><span class="pkg-resource-qty">500</span> Gunpowder</div>
+        </div>
+        <div class="pkg-tags">
+          <span class="pkg-tag">PvP</span>
+          <span class="pkg-tag">Elite</span>
           <span class="pkg-tag">Admin Delivered</span>
         </div>
         <div class="pkg-payments">
@@ -761,6 +1049,128 @@
     <p>&copy; 2026 Zeropoint &mdash; <a href="discord.html">Join our Discord</a> &mdash; <a href="rules.html">Community Rules</a></p>
   </footer>
 
+
+  <!-- ── ORDER INFO MODAL ── -->
+  <div class="order-overlay" id="order-overlay" hidden>
+    <div class="order-panel">
+      <div class="order-header">
+        <div class="order-header-meta">
+          <div class="order-header-title" id="order-header-title">Place Your Order</div>
+          <div class="order-header-sub" id="order-header-sub"></div>
+        </div>
+        <button class="order-close-btn" id="order-close-btn" aria-label="Close">✕</button>
+      </div>
+
+      <!-- PvE body -->
+      <div class="order-body" id="order-body-pve" style="display:none;">
+        <h3 class="o-section" style="margin-top:0;">Your Info</h3>
+        <div class="o-group">
+          <label for="o-ingame">In-Game Name *</label>
+          <input id="o-ingame" type="text" placeholder="Your survivor name">
+        </div>
+        <div class="o-group">
+          <label for="o-teleporter">Teleporter / Delivery Location *</label>
+          <input id="o-teleporter" type="text" placeholder="e.g. Bob's TP, Green Obelisk, base coords…">
+        </div>
+        <div class="o-group">
+          <label for="o-discord-pve">Discord Username</label>
+          <input id="o-discord-pve" type="text" placeholder="e.g. username#0000">
+        </div>
+
+        <h3 class="o-section">Dino Selection</h3>
+        <p id="o-dino-desc" style="font-size:0.82rem;color:var(--muted);margin-bottom:0.75rem;"></p>
+
+        <div id="o-sel-wrap" style="display:none;margin-bottom:1rem;">
+          <div class="o-sel-header">
+            <span class="o-sel-title">Your Dinos</span>
+            <span class="o-sel-count" id="o-sel-count">0</span>
+          </div>
+          <div id="o-sel-list"></div>
+        </div>
+
+        <div class="o-search-bar">
+          <input type="text" id="o-dino-search" placeholder="Search dinos…" autocomplete="off">
+          <select id="o-cat-filter">
+            <option value="">All</option>
+            <option value="Flyer">Flyers</option>
+            <option value="Carnivore">Carnivores</option>
+            <option value="Herbivore">Herbivores</option>
+            <option value="Aquatic">Aquatic</option>
+            <option value="Special">Special / DLC</option>
+            <option value="Small">Small / Misc</option>
+          </select>
+        </div>
+        <div id="o-limit-banner" class="o-limit-banner" style="display:none;"></div>
+        <div id="o-dino-grid" class="o-dino-grid"></div>
+
+        <h3 class="o-section">Additional Notes</h3>
+        <div class="o-group">
+          <textarea id="o-notes-pve" rows="3" placeholder="Stat preferences, mutations, anything else…"></textarea>
+        </div>
+      </div>
+
+      <!-- PvP body -->
+      <div class="order-body" id="order-body-pvp" style="display:none;">
+        <h3 class="o-section" style="margin-top:0;">Your Info</h3>
+        <div class="o-group">
+          <label for="o-discord-pvp">Discord Player Name *</label>
+          <input id="o-discord-pvp" type="text" placeholder="e.g. username#0000">
+        </div>
+        <div class="o-group">
+          <label for="o-map">Map *</label>
+          <select id="o-map">
+            <option value="">Select a map…</option>
+            <option value="Ragnarok 2">Ragnarok 2</option>
+            <option value="Fjordur">Fjordur</option>
+            <option value="Ragnarok">Ragnarok</option>
+            <option value="The Island">The Island</option>
+            <option value="Aberration">Aberration</option>
+            <option value="Extinction">Extinction</option>
+            <option value="Genesis 1">Genesis 1</option>
+            <option value="Genesis 2">Genesis 2</option>
+            <option value="Crystal Isles">Crystal Isles</option>
+            <option value="Lost Island">Lost Island</option>
+            <option value="ASA">ASA (Ascended)</option>
+          </select>
+        </div>
+        <div class="o-group">
+          <label for="o-notes-pvp">Additional Notes</label>
+          <textarea id="o-notes-pvp" rows="3" placeholder="Anything else we should know…"></textarea>
+        </div>
+      </div>
+
+      <!-- Server Membership body -->
+      <div class="order-body" id="order-body-server" style="display:none;">
+        <h3 class="o-section" style="margin-top:0;">Your Info</h3>
+        <div class="o-group">
+          <label for="o-discord-server">Discord Username *</label>
+          <input id="o-discord-server" type="text" placeholder="e.g. username#0000">
+        </div>
+        <h3 class="o-section">Additional Notes</h3>
+        <div class="o-group">
+          <textarea id="o-notes-server" rows="3" placeholder="Anything else we should know…"></textarea>
+        </div>
+      </div>
+
+      <div class="order-footer">
+        <div class="order-footer-info" id="order-footer-info"></div>
+        <button class="order-submit-btn" id="order-submit-btn">Continue &amp; Get Code →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRACKING CODE MODAL -->
+  <div class="modal-overlay" id="tcode-overlay" hidden>
+    <div class="modal-panel tcode-panel">
+      <div class="tcode-icon">🔖</div>
+      <h2 class="tcode-title">Your Tracking Code</h2>
+      <p class="tcode-sub">Save this before continuing — you'll use it to track your order and see updates from our team.</p>
+      <div class="tcode-digits" id="tcode-digits"></div>
+      <button class="tcode-copy" id="tcode-copy">Copy Code</button>
+      <p class="tcode-hint">Or take a screenshot of this screen.</p>
+      <a class="tcode-continue" id="tcode-continue" href="#" target="_blank" rel="noopener">Got it — Continue to Payment &rarr;</a>
+    </div>
+  </div>
 
   <script>
   // ── NAV ACTIVE ──
@@ -794,15 +1204,520 @@
     });
   })();
 
-  // ── Pay Buttons → navigate to order form ──
+  // ── SUPABASE ──
+  const SUPABASE_URL  = 'https://cairclbnutqouejtlhks.supabase.co';
+  const SUPABASE_ANON = 'sb_publishable_25_ecIfEwCQ1BdXof_ZonQ_Bi2x1CDU';
+  let _sb;
+  try { _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON); } catch(e) { console.warn('Supabase init failed', e); }
+
+  // ── PAYMENT CONFIG ──
+  const PAYMENT_CONFIG = {
+    'PayPal':   { baseUrl: 'https://paypal.me/ZeropointHosting' },
+    'Cash App': { baseUrl: 'https://cash.app/$ZeroPointArk' },
+    'Venmo':    { baseUrl: 'https://venmo.com/u/ZeroPointArk' },
+  };
+
+  // ── DISCORD ──
+  const WEBHOOK_URL = 'https://discord.com/api/webhooks/1474854852327637164/y-sCCMBqPcj-H_uRWAAlhkNB0LlS5G0bmOVGKEx8CHkshfDy4N-VJHJLL0OkMVt19Ak-';
+  const ADMIN_ROLE  = '1474505890827866175';
+
+  // ── PvP RESOURCES ──
+  const PVP_RESOURCES = {
+    'Starter Donation Pack (PvP) — $5':   ['5,000 Wood','2,500 Stone','1,500 Metal Ingots','300 Crystal','1,000 Fiber'],
+    'Beginner Donation Pack (PvP) — $10': ['10,000 Wood','5,000 Stone','3,000 Metal Ingots','500 Crystal','2,000 Fiber','100 Sparkpowder'],
+    'Standard Donation Pack (PvP) — $15': ['15,000 Wood','8,000 Stone','5,000 Metal Ingots','1,000 Crystal','4,000 Fiber','200 Cementing Paste','500 Rare Mushrooms'],
+    'Advanced Donation Pack (PvP) — $20': ['20,000 Wood','12,000 Stone','7,000 Metal Ingots','2,000 Crystal','5,000 Fiber','400 Cementing Paste','1,000 Rare Mushrooms','100 Gunpowder'],
+    'Mega Donation Pack (PvP) — $30':     ['25,000 Wood','15,000 Stone','10,000 Metal Ingots','3,000 Crystal','7,000 Fiber','800 Cementing Paste','1,500 Rare Mushrooms','300 Gunpowder'],
+    'Elite Donation Pack (PvP) — $50':    ['40,000 Wood','25,000 Stone','17,000 Metal Ingots','5,000 Crystal','12,000 Fiber','1,300 Cementing Paste','2,500 Rare Mushrooms','500 Gunpowder'],
+  };
+
+  // ── DINO DATA ──
+  const DINOS = [
+    { name: 'Argentavis',             cat: 'Flyer' },
+    { name: 'Crystal Wyvern (Blood)', cat: 'Flyer' },
+    { name: 'Crystal Wyvern (Ember)', cat: 'Flyer' },
+    { name: 'Crystal Wyvern (Heart)', cat: 'Flyer' },
+    { name: 'Griffin',                cat: 'Flyer' },
+    { name: 'Pelagornis',             cat: 'Flyer' },
+    { name: 'Pteranodon',             cat: 'Flyer' },
+    { name: 'Quetzal',                cat: 'Flyer' },
+    { name: 'Tapejara',               cat: 'Flyer' },
+    { name: 'Tropeognathus',          cat: 'Flyer' },
+    { name: 'Wyvern (Fire)',          cat: 'Flyer' },
+    { name: 'Wyvern (Ice)',           cat: 'Flyer' },
+    { name: 'Wyvern (Lightning)',     cat: 'Flyer' },
+    { name: 'Wyvern (Poison)',        cat: 'Flyer' },
+    { name: 'Allosaurus',             cat: 'Carnivore' },
+    { name: 'Baryonyx',               cat: 'Carnivore' },
+    { name: 'Carnotaurus',            cat: 'Carnivore' },
+    { name: 'Deinonychus',            cat: 'Carnivore' },
+    { name: 'Giganotosaurus',         cat: 'Carnivore' },
+    { name: 'Kaprosuchus',            cat: 'Carnivore' },
+    { name: 'Megalosaurus',           cat: 'Carnivore' },
+    { name: 'Raptor',                 cat: 'Carnivore' },
+    { name: 'Rex',                    cat: 'Carnivore' },
+    { name: 'Sarcosuchus',            cat: 'Carnivore' },
+    { name: 'Spinosaurus',            cat: 'Carnivore' },
+    { name: 'Thylacoleo',             cat: 'Carnivore' },
+    { name: 'Troodon',                cat: 'Carnivore' },
+    { name: 'Yutyrannus',             cat: 'Carnivore' },
+    { name: 'Ankylosaurus',           cat: 'Herbivore' },
+    { name: 'Brontosaurus',           cat: 'Herbivore' },
+    { name: 'Castoroides',            cat: 'Herbivore' },
+    { name: 'Daeodon',                cat: 'Herbivore' },
+    { name: 'Diplodocus',             cat: 'Herbivore' },
+    { name: 'Doedicurus',             cat: 'Herbivore' },
+    { name: 'Gallimimus',             cat: 'Herbivore' },
+    { name: 'Iguanodon',              cat: 'Herbivore' },
+    { name: 'Mammoth',                cat: 'Herbivore' },
+    { name: 'Megaloceros',            cat: 'Herbivore' },
+    { name: 'Moschops',               cat: 'Herbivore' },
+    { name: 'Pachycephalosaurus',     cat: 'Herbivore' },
+    { name: 'Paraceratherium',        cat: 'Herbivore' },
+    { name: 'Parasaur',               cat: 'Herbivore' },
+    { name: 'Procoptodon',            cat: 'Herbivore' },
+    { name: 'Stegosaurus',            cat: 'Herbivore' },
+    { name: 'Therizinosaurus',        cat: 'Herbivore' },
+    { name: 'Triceratops',            cat: 'Herbivore' },
+    { name: 'Woolly Rhino',           cat: 'Herbivore' },
+    { name: 'Basilosaurus',           cat: 'Aquatic' },
+    { name: 'Electrophorus',          cat: 'Aquatic' },
+    { name: 'Megalodon',              cat: 'Aquatic' },
+    { name: 'Mosasaurus',             cat: 'Aquatic' },
+    { name: 'Plesiosaur',             cat: 'Aquatic' },
+    { name: 'Astrocetus',             cat: 'Special' },
+    { name: 'Astrodelphis',           cat: 'Special' },
+    { name: 'Desmodus',               cat: 'Special' },
+    { name: 'Fjordhawk',              cat: 'Special' },
+    { name: 'Gacha',                  cat: 'Special' },
+    { name: 'Magmasaur',              cat: 'Special' },
+    { name: 'Maewing',                cat: 'Special' },
+    { name: 'Managarmr',              cat: 'Special' },
+    { name: 'Rock Drake',             cat: 'Special' },
+    { name: 'Shadowmane',             cat: 'Special' },
+    { name: 'Snow Owl',               cat: 'Special' },
+    { name: 'Stryder',                cat: 'Special' },
+    { name: 'Velonasaur',             cat: 'Special' },
+    { name: 'Archaeopteryx',          cat: 'Small' },
+    { name: 'Dilophosaurus',          cat: 'Small' },
+    { name: 'Dimorphodon',            cat: 'Small' },
+    { name: 'Dodo',                   cat: 'Small' },
+    { name: 'Jerboa',                 cat: 'Small' },
+    { name: 'Lystrosaurus',           cat: 'Small' },
+    { name: 'Mesopithecus',           cat: 'Small' },
+    { name: 'Otter',                  cat: 'Small' },
+    { name: 'Oviraptor',              cat: 'Small' },
+    { name: 'Pegomastax',             cat: 'Small' },
+  ];
+
+  const COLORS = [
+    { name: 'White',      hex: '#F0F0F0' }, { name: 'Black',      hex: '#111111' },
+    { name: 'Gray',       hex: '#888888' }, { name: 'Red',        hex: '#C0392B' },
+    { name: 'Dark Red',   hex: '#7B0E0E' }, { name: 'Orange',     hex: '#D4581A' },
+    { name: 'Yellow',     hex: '#D4B800' }, { name: 'Lime',       hex: '#7DC800' },
+    { name: 'Green',      hex: '#1E8B1E' }, { name: 'Forest',     hex: '#145214' },
+    { name: 'Teal',       hex: '#1A9090' }, { name: 'Cyan',       hex: '#00BFBF' },
+    { name: 'Light Blue', hex: '#5B9BD5' }, { name: 'Blue',       hex: '#1C40CC' },
+    { name: 'Navy',       hex: '#0F1F6E' }, { name: 'Purple',     hex: '#7B22CC' },
+    { name: 'Magenta',    hex: '#CC22A0' }, { name: 'Pink',       hex: '#E06090' },
+    { name: 'Brown',      hex: '#7A4520' }, { name: 'Tan',        hex: '#C8A870' },
+  ];
+
+  const CAT_ICON = { Flyer: '🦅', Carnivore: '🦖', Herbivore: '🌿', Aquatic: '🐟', Special: '⭐', Small: '🐾' };
+
+  // ── ORDER MODAL STATE ──
+  let currentPkg = '', currentPay = '', currentIsPvp = false, currentIsServer = false, currentDinoLimit = 1;
+  let selectedDinos = {}, dinoOrderText = '(none selected)';
+
+  function usedSlots() {
+    return Object.values(selectedDinos).reduce((s, d) => s + (d.type === 'pair' ? 2 : 1), 0);
+  }
+
+  function esc(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // ── ORDER MODAL DOM ──
+  const orderOverlay  = document.getElementById('order-overlay');
+  const orderTitle    = document.getElementById('order-header-title');
+  const orderSub      = document.getElementById('order-header-sub');
+  const orderBodyPve    = document.getElementById('order-body-pve');
+  const orderBodyPvp    = document.getElementById('order-body-pvp');
+  const orderBodyServer = document.getElementById('order-body-server');
+  const orderFootInfo = document.getElementById('order-footer-info');
+  const orderSubmit   = document.getElementById('order-submit-btn');
+  const oDinoSearch   = document.getElementById('o-dino-search');
+  const oCatFilter    = document.getElementById('o-cat-filter');
+  const oDinoGrid     = document.getElementById('o-dino-grid');
+  const oSelWrap      = document.getElementById('o-sel-wrap');
+  const oSelList      = document.getElementById('o-sel-list');
+  const oSelCount     = document.getElementById('o-sel-count');
+  const oLimitBanner  = document.getElementById('o-limit-banner');
+
+  // ── OPEN / CLOSE ──
+  function openOrderModal(pkg, pay) {
+    currentPkg      = pkg;
+    currentPay      = pay;
+    currentIsPvp    = pkg.includes('PvP');
+    currentIsServer = pkg.includes('Private Server');
+    const m         = pkg.match(/\((\d+)\s*Dino/i);
+    currentDinoLimit = m ? parseInt(m[1]) : 1;
+    selectedDinos   = {};
+    dinoOrderText   = '(none selected)';
+
+    if (currentIsServer) {
+      document.getElementById('o-discord-server').value = '';
+      document.getElementById('o-notes-server').value   = '';
+      orderBodyPve.style.display    = 'none';
+      orderBodyPvp.style.display    = 'none';
+      orderBodyServer.style.display = 'block';
+      orderTitle.textContent = '🌟 Server Starter Membership Pack';
+    } else if (currentIsPvp) {
+      document.getElementById('o-discord-pvp').value = '';
+      document.getElementById('o-map').value          = '';
+      document.getElementById('o-notes-pvp').value    = '';
+      orderBodyPve.style.display    = 'none';
+      orderBodyServer.style.display = 'none';
+      orderBodyPvp.style.display    = 'block';
+      orderTitle.textContent = '⚔️ PvP Order';
+    } else {
+      document.getElementById('o-ingame').value        = '';
+      document.getElementById('o-teleporter').value    = '';
+      document.getElementById('o-discord-pve').value   = '';
+      document.getElementById('o-notes-pve').value     = '';
+      oDinoSearch.value = '';
+      oCatFilter.value  = '';
+      oSelWrap.style.display = 'none';
+      document.getElementById('o-dino-desc').innerHTML =
+        'Select up to <strong>' + currentDinoLimit + ' dino' + (currentDinoLimit > 1 ? 's' : '') + '</strong>. Hit <strong>+ Add</strong>, choose Single or Breeding Pair, and optionally pick colors per region.';
+      orderBodyPvp.style.display    = 'none';
+      orderBodyServer.style.display = 'none';
+      orderBodyPve.style.display    = 'block';
+      orderTitle.textContent = '🦕 PvE Order';
+      renderDinoGrid();
+    }
+
+    orderSub.textContent      = pkg + ' — paying via ' + pay;
+    orderFootInfo.textContent = 'Paying via ' + pay;
+    orderOverlay.hidden = false;
+    document.body.classList.add('modal-open');
+  }
+
+  function closeOrderModal() {
+    orderOverlay.hidden = true;
+    document.body.classList.remove('modal-open');
+  }
+
+  document.getElementById('order-close-btn').addEventListener('click', closeOrderModal);
+  orderOverlay.addEventListener('click', e => { if (e.target === orderOverlay) closeOrderModal(); });
+
+  // ── DINO PICKER ──
+  function renderDinoGrid() {
+    const q       = oDinoSearch.value.trim().toLowerCase();
+    const cat     = oCatFilter.value;
+    const slots   = usedSlots();
+    const atLimit = slots >= currentDinoLimit;
+
+    oLimitBanner.style.display = atLimit ? 'block' : 'none';
+    oLimitBanner.textContent   = atLimit
+      ? '✓ Dino limit reached (' + slots + '/' + currentDinoLimit + ') — remove a dino or switch pair→single to free a slot.'
+      : '';
+
+    const filtered = DINOS.filter(d => (!q || d.name.toLowerCase().includes(q)) && (!cat || d.cat === cat));
+
+    if (!filtered.length) {
+      oDinoGrid.innerHTML = '<div class="o-no-results">No dinos match your search.</div>';
+      return;
+    }
+
+    oDinoGrid.innerHTML = filtered.map(d => {
+      const added    = !!selectedDinos[d.name];
+      const disabled = added || atLimit;
+      const icon     = CAT_ICON[d.cat] || '🦕';
+      return '<div class="o-dino-card' + (added ? ' is-added' : '') + '">' +
+        '<div class="o-dino-icon">' + icon + '</div>' +
+        '<div class="o-dino-name">' + esc(d.name) + '</div>' +
+        '<div class="o-dino-cat">' + d.cat + '</div>' +
+        '<button type="button" class="o-add-btn"' + (disabled ? ' disabled' : '') + ' data-dino="' + esc(d.name) + '">' +
+          (added ? '✓ Added' : '+ Add') +
+        '</button>' +
+      '</div>';
+    }).join('');
+
+    oDinoGrid.querySelectorAll('.o-add-btn:not([disabled])').forEach(btn => {
+      btn.addEventListener('click', () => addDino(btn.dataset.dino));
+    });
+  }
+
+  function addDino(name) {
+    if (selectedDinos[name] || usedSlots() >= currentDinoLimit) return;
+    selectedDinos[name] = { type: 'single', colors: ['','','','','',''] };
+    renderSelectedDinos();
+    renderDinoGrid();
+  }
+
+  function removeDino(name) {
+    delete selectedDinos[name];
+    renderSelectedDinos();
+    renderDinoGrid();
+  }
+
+  function setDinoType(name, type) {
+    if (!selectedDinos[name]) return;
+    if (type === 'pair' && selectedDinos[name].type === 'single' && usedSlots() + 1 > currentDinoLimit) return;
+    selectedDinos[name].type = type;
+    renderSelectedDinos();
+    renderDinoGrid();
+  }
+
+  function setColor(name, region, color) {
+    if (!selectedDinos[name]) return;
+    selectedDinos[name].colors[region] = color;
+    updateDinoText();
+    const card = oSelList.querySelector('[data-card="' + name + '"]');
+    if (!card) return;
+    const row = card.querySelector('.o-swatches[data-region="' + region + '"]');
+    if (row) row.querySelectorAll('.o-swatch').forEach(s => s.classList.toggle('active', s.dataset.color === color));
+  }
+
+  function renderSelectedDinos() {
+    const names = Object.keys(selectedDinos);
+    const slots = usedSlots();
+    oSelCount.textContent    = slots + ' / ' + currentDinoLimit;
+    oSelWrap.style.display   = names.length ? 'block' : 'none';
+
+    oSelList.innerHTML = names.map(name => {
+      const d = selectedDinos[name];
+      const canPair = d.type === 'pair' || slots + 1 <= currentDinoLimit;
+      const regs = [0,1,2,3,4,5].map(r => {
+        const sw =
+          '<button type="button" class="o-swatch skip' + (d.colors[r] === '' ? ' active' : '') + '" data-color="" title="Any / Skip">–</button>' +
+          COLORS.map(c =>
+            '<button type="button" class="o-swatch' + (d.colors[r] === c.name ? ' active' : '') + '" style="background:' + c.hex + '" data-color="' + esc(c.name) + '" title="' + esc(c.name) + '"></button>'
+          ).join('');
+        return '<div class="o-reg-row"><span class="o-reg-label">Reg ' + r + '</span><div class="o-swatches" data-region="' + r + '">' + sw + '</div></div>';
+      }).join('');
+
+      return '<div class="o-sel-card" data-card="' + esc(name) + '">' +
+        '<div class="o-sel-top">' +
+          '<span class="o-sel-name">' + esc(name) + '</span>' +
+          '<div style="display:flex;align-items:center;gap:0.5rem;">' +
+            '<div class="o-type-row">' +
+              '<button type="button" class="o-type-btn' + (d.type === 'single' ? ' active' : '') + '" data-type="single" data-dino="' + esc(name) + '">Single</button>' +
+              '<button type="button" class="o-type-btn' + (d.type === 'pair' ? ' active' : '') + '"' + (!canPair ? ' disabled' : '') + ' data-type="pair" data-dino="' + esc(name) + '">Pair</button>' +
+            '</div>' +
+            '<button type="button" class="o-remove-btn" data-dino="' + esc(name) + '" title="Remove">✕</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="o-color-regs">' + regs + '</div>' +
+      '</div>';
+    }).join('');
+
+    oSelList.querySelectorAll('.o-type-btn').forEach(btn => {
+      btn.addEventListener('click', () => setDinoType(btn.dataset.dino, btn.dataset.type));
+    });
+    oSelList.querySelectorAll('.o-remove-btn').forEach(btn => {
+      btn.addEventListener('click', () => removeDino(btn.dataset.dino));
+    });
+    oSelList.querySelectorAll('.o-swatch').forEach(btn => {
+      const card = btn.closest('[data-card]');
+      const row  = btn.closest('.o-swatches');
+      if (!card || !row) return;
+      btn.addEventListener('click', () => setColor(card.dataset.card, +row.dataset.region, btn.dataset.color));
+    });
+
+    updateDinoText();
+  }
+
+  function updateDinoText() {
+    const names = Object.keys(selectedDinos);
+    if (!names.length) { dinoOrderText = '(none selected)'; return; }
+    dinoOrderText = names.map(name => {
+      const d = selectedDinos[name];
+      const cp = d.colors.map((c,i) => c ? 'R'+i+':'+c : null).filter(Boolean);
+      return '• ' + name + ' (' + (d.type === 'pair' ? 'Breeding Pair' : 'Single') + ')' + (cp.length ? ' | Colors: ' + cp.join(', ') : '');
+    }).join('\n');
+  }
+
+  oDinoSearch.addEventListener('input', renderDinoGrid);
+  oCatFilter.addEventListener('change', renderDinoGrid);
+
+  // ── PAY BUTTONS → open order modal ──
   document.querySelectorAll('.pay-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const card = btn.closest('[data-package]');
       const pkg  = card ? card.dataset.package : 'Unknown Package';
       const pay  = btn.dataset.payment;
-      window.location.href = 'ark-order.html?' + new URLSearchParams({ pkg, pay }).toString();
+      openOrderModal(pkg, pay);
     });
   });
+
+  // ── ORDER SUBMIT ──
+  const tcodeOverlay  = document.getElementById('tcode-overlay');
+  const tcodeDigits   = document.getElementById('tcode-digits');
+  const tcodeCopy     = document.getElementById('tcode-copy');
+  const tcodeContinue = document.getElementById('tcode-continue');
+
+  orderSubmit.addEventListener('click', async () => {
+    // Validate
+    if (currentIsServer) {
+      if (!document.getElementById('o-discord-server').value.trim()) { alert('Please enter your Discord username.'); return; }
+    } else if (currentIsPvp) {
+      if (!document.getElementById('o-discord-pvp').value.trim()) { alert('Please enter your Discord player name.'); return; }
+      if (!document.getElementById('o-map').value)                 { alert('Please select a map.');                  return; }
+    } else {
+      if (!document.getElementById('o-ingame').value.trim())     { alert('Please enter your in-game name.');               return; }
+      if (!document.getElementById('o-teleporter').value.trim()) { alert('Please enter your teleporter / delivery location.'); return; }
+    }
+
+    const code = String(Math.floor(1000 + Math.random() * 9000));
+    const pkg  = currentPkg, pay = currentPay;
+
+    const ingame     = (currentIsPvp || currentIsServer) ? '' : document.getElementById('o-ingame').value.trim();
+    const teleporter = currentIsPvp
+      ? document.getElementById('o-map').value
+      : (currentIsServer ? '' : document.getElementById('o-teleporter').value.trim());
+    const discord    = currentIsServer
+      ? document.getElementById('o-discord-server').value.trim()
+      : (currentIsPvp
+          ? document.getElementById('o-discord-pvp').value.trim()
+          : document.getElementById('o-discord-pve').value.trim());
+    const notes      = currentIsServer
+      ? document.getElementById('o-notes-server').value.trim()
+      : (currentIsPvp
+          ? document.getElementById('o-notes-pvp').value.trim()
+          : document.getElementById('o-notes-pve').value.trim());
+    const map        = currentIsPvp ? document.getElementById('o-map').value : '';
+
+    orderSubmit.disabled    = true;
+    orderSubmit.textContent = 'Sending…';
+
+    try {
+      await Promise.all([
+        postToDiscord(ingame, discord, teleporter, notes, map, pkg, pay, code),
+        saveToSupabase(ingame, discord, teleporter, notes, pkg, pay, code),
+      ]);
+
+      closeOrderModal();
+
+      // Show tracking code
+      tcodeDigits.innerHTML = code.split('').map(d => '<div class="tcode-digit">' + d + '</div>').join('');
+      tcodeCopy.textContent = 'Copy Code';
+
+      const amount = (pkg.match(/\$(\d+)/) || [])[1] || '';
+      const cfg    = PAYMENT_CONFIG[pay] || {};
+      tcodeContinue.href = (pay === 'PayPal' && amount) ? cfg.baseUrl + '/' + amount : cfg.baseUrl || 'ark.html';
+
+      tcodeOverlay.hidden = false;
+      document.body.classList.add('modal-open');
+    } catch (err) {
+      console.error('Order failed:', err);
+      alert('Could not send order — check your connection and try again.\n\nError: ' + (err && err.message ? err.message : String(err)));
+    }
+
+    orderSubmit.disabled    = false;
+    orderSubmit.textContent = 'Continue & Get Code →';
+  });
+
+  // ── TRACKING CODE MODAL ──
+  tcodeCopy.addEventListener('click', () => {
+    const code = [...tcodeDigits.querySelectorAll('.tcode-digit')].map(d => d.textContent).join('');
+    navigator.clipboard.writeText(code).catch(() => {});
+    tcodeCopy.textContent = '✓ Copied!';
+    setTimeout(() => { tcodeCopy.textContent = 'Copy Code'; }, 2000);
+  });
+
+  tcodeOverlay.addEventListener('click', e => {
+    if (e.target === tcodeOverlay) {
+      tcodeOverlay.hidden = true;
+      document.body.classList.remove('modal-open');
+    }
+  });
+
+  // ── SAVE TO SUPABASE ──
+  async function saveToSupabase(ingame, discord, teleporter, notes, pkg, pay, code) {
+    if (!_sb) return;
+    const amount = (pkg.match(/\$(\d+)/) || [])[1] || null;
+    const isPvp     = pkg.includes('PvP');
+    const isServer  = pkg.includes('Private Server');
+    const dinos     = (isPvp || isServer) ? null : Object.entries(selectedDinos).map(([name, d]) => ({ name, type: d.type, colors: d.colors }));
+    const { error } = await _sb.from('ark_orders').insert({
+      package: pkg, pay_method: pay, amount, ingame_name: ingame,
+      discord: discord || null, teleporter, is_pvp: isPvp,
+      dinos, notes: notes || null, tracking_code: code,
+    });
+    if (error) throw new Error('Supabase: ' + error.message);
+  }
+
+  // ── POST TO DISCORD ──
+  async function postToDiscord(ingame, discord, teleporter, notes, map, pkg, pay, code) {
+    const isPvp    = pkg.includes('PvP');
+    const isServer = pkg.includes('Private Server');
+    const amount   = (pkg.match(/\$(\d+)/) || [])[1] || '?';
+    let embed;
+
+    if (isServer) {
+      embed = {
+        title: '🌟 Server Starter Membership Pack Order',
+        description: '**$' + amount + '/mo** via **' + pay + '** — awaiting confirmation',
+        color: 52602,
+        fields: [
+          { name: '💬 Discord',  value: discord || '—', inline: true  },
+          { name: '📦 Package',  value: pkg,            inline: false },
+          { name: '🔖 Code',     value: code,           inline: true  },
+          { name: '📝 Notes',    value: notes   || '—', inline: false },
+        ],
+        footer: { text: 'React ✅ when activated  •  React ❌ to cancel' },
+        timestamp: new Date().toISOString(),
+      };
+    } else if (isPvp) {
+      const res  = PVP_RESOURCES[pkg];
+      const list = res ? res.map(r => '▸ ' + r).join('\n') : '—';
+      embed = {
+        title: '⚔️ PvP Resource Pack Order',
+        description: '**$' + amount + '** via **' + pay + '** — awaiting confirmation',
+        color: 16746496,
+        fields: [
+          { name: '💬 Discord',    value: discord || '—', inline: true  },
+          { name: '🗺️ Map',       value: map     || '—', inline: true  },
+          { name: '📦 Package',    value: pkg,            inline: false },
+          { name: '🗃️ Resources', value: list,            inline: false },
+          { name: '🔖 Code',       value: code,           inline: true  },
+          { name: '📝 Notes',      value: notes   || '—', inline: false },
+        ],
+        footer: { text: 'React ✅ when delivered  •  React ❌ to cancel' },
+        timestamp: new Date().toISOString(),
+      };
+    } else {
+      embed = {
+        title: '📋 ARK Dino Donation Order',
+        description: '**$' + amount + '** via **' + pay + '** — awaiting confirmation',
+        color: 16737280,
+        fields: [
+          { name: '👤 In-Game Name', value: ingame    || '—', inline: true  },
+          { name: '💬 Discord',      value: discord   || '—', inline: true  },
+          { name: '📦 Package',      value: pkg,              inline: false },
+          { name: '📍 Delivery',     value: teleporter|| '—', inline: false },
+          { name: '🦕 Dinos',        value: dinoOrderText,    inline: false },
+          { name: '🔖 Code',         value: code,             inline: true  },
+          { name: '📝 Notes',        value: notes     || '—', inline: false },
+        ],
+        footer: { text: 'React ✅ when delivered  •  React ❌ to cancel' },
+        timestamp: new Date().toISOString(),
+      };
+    }
+
+    const res = await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        content: '<@&' + ADMIN_ROLE + '> — new order!',
+        allowed_mentions: { roles: [ADMIN_ROLE] },
+        embeds: [embed],
+      }),
+    });
+    if (!res.ok) throw new Error('Discord webhook failed: HTTP ' + res.status);
+  }
   </script>
 
 </body>

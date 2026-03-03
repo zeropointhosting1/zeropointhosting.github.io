@@ -92,12 +92,14 @@
     .form-group { display: flex; flex-direction: column; gap: 0.38rem; margin-bottom: 0.75rem; }
     .form-group label { font-size: 0.77rem; font-weight: 600; color: var(--text); }
     .form-group input,
+    .form-group select,
     .form-group textarea {
       background: var(--surface2); border: 1px solid var(--border); color: var(--text);
       border-radius: 7px; padding: 0.6rem 0.85rem; font-size: 0.875rem;
       font-family: inherit; outline: none; transition: border-color 0.15s; width: 100%;
     }
-    .form-group input:focus, .form-group textarea:focus { border-color: var(--accent); }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); }
+    .form-group select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%237a7a90' d='M1 1l5 5 5-5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.85rem center; padding-right: 2rem; }
     .form-group textarea { resize: vertical; min-height: 80px; }
 
     /* ── DINO PICKER ── */
@@ -283,17 +285,34 @@
       <!-- YOUR INFO -->
       <div class="form-section">
         <h3 class="section-title">Your Info</h3>
-        <div class="form-group">
+        <div class="form-group" id="f-ingame-group">
           <label for="f-ingame">In-Game Name *</label>
           <input id="f-ingame" type="text" name="ingame_name" required placeholder="Your survivor name">
         </div>
-        <div class="form-group">
+        <div class="form-group" id="f-teleporter-group">
           <label for="f-teleporter">Teleporter Name / Delivery Location *</label>
           <input id="f-teleporter" type="text" name="teleporter" required placeholder="e.g. Bob's TP, Green Obelisk, base coords...">
         </div>
-        <div class="form-group">
-          <label for="f-discord">Discord Username</label>
+        <div class="form-group" id="f-discord-group">
+          <label for="f-discord" id="f-discord-label">Discord Username</label>
           <input id="f-discord" type="text" name="discord" placeholder="e.g. username or username#0000">
+        </div>
+        <div class="form-group" id="f-map-group" style="display:none;">
+          <label for="f-map">Map *</label>
+          <select id="f-map" name="map">
+            <option value="">Select a map…</option>
+            <option value="Ragnarok 2">Ragnarok 2</option>
+            <option value="Fjordur">Fjordur</option>
+            <option value="Ragnarok">Ragnarok</option>
+            <option value="The Island">The Island</option>
+            <option value="Aberration">Aberration</option>
+            <option value="Extinction">Extinction</option>
+            <option value="Genesis 1">Genesis 1</option>
+            <option value="Genesis 2">Genesis 2</option>
+            <option value="Crystal Isles">Crystal Isles</option>
+            <option value="Lost Island">Lost Island</option>
+            <option value="ASA">ASA (Ascended)</option>
+          </select>
         </div>
       </div>
 
@@ -348,7 +367,10 @@
     <div class="form-success" id="form-success" hidden>
       <div class="success-icon">✓</div>
       <h3>Order Logged!</h3>
+      <p style="margin-bottom:0.5rem;">Your vault code — keep it safe.</p>
+      <div id="success-code-row" style="display:flex;justify-content:center;gap:0.5rem;margin-bottom:1.25rem;"></div>
       <p id="success-msg">Redirecting you to complete payment…</p>
+      <a id="success-track-btn" href="track.html" style="display:inline-flex;align-items:center;gap:0.4rem;background:var(--accent);color:#000;border-radius:8px;padding:0.65rem 1.4rem;font-size:0.875rem;font-weight:800;text-decoration:none;margin-top:0.25rem;">Track My Order →</a>
     </div>
 
   </div>
@@ -359,6 +381,25 @@
   </footer>
 
   <script>
+  // ── RETURN FROM PAYMENT: restore vault code screen ──
+  (function () {
+    const raw = localStorage.getItem('zp_order');
+    if (!raw) return;
+    let saved;
+    try { saved = JSON.parse(raw); } catch { return; }
+    if (!saved.code || Date.now() - saved.ts > 48 * 60 * 60 * 1000) {
+      localStorage.removeItem('zp_order'); return;
+    }
+    document.getElementById('order-form').hidden   = true;
+    document.getElementById('form-success').hidden = false;
+    document.getElementById('success-msg').textContent = 'Your payment is being processed. Track your order below.';
+    document.getElementById('success-code-row').innerHTML =
+      saved.code.toString().split('').map(d =>
+        '<div style="width:46px;height:54px;border-radius:9px;background:var(--surface2);border:1px solid rgba(255,77,148,0.3);display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:900;font-family:ui-monospace,monospace;">' + d + '</div>'
+      ).join('');
+    document.getElementById('success-track-btn').href = 'track.html?code=' + encodeURIComponent(saved.code);
+  })();
+
   // ── NAV ACTIVE ──
   (function () {
     const page = location.pathname.split('/').pop() || 'index.html';
@@ -397,6 +438,7 @@
   const params  = new URLSearchParams(location.search);
   const PKG     = params.get('pkg') || 'Unknown Package';
   const PAY     = params.get('pay') || 'Unknown';
+  const CODE    = params.get('code') || '';
   const AMOUNT  = (PKG.match(/\$(\d+)/) || [])[1] || '';
 
   document.getElementById('badge-pkg').textContent = PKG;
@@ -407,8 +449,17 @@
 
   if (IS_PVP) {
     document.body.classList.add('pvp-order');
-    document.getElementById('page-eyebrow').textContent    = 'PvP Resource Pack Order';
+    document.getElementById('page-eyebrow').textContent = 'PvP Resource Pack Order';
     document.getElementById('dino-picker-section').style.display = 'none';
+    // PvP only needs Discord + Map
+    document.getElementById('f-ingame-group').style.display    = 'none';
+    document.getElementById('f-teleporter-group').style.display = 'none';
+    document.getElementById('f-map-group').style.display       = 'flex';
+    document.getElementById('f-ingame').removeAttribute('required');
+    document.getElementById('f-teleporter').removeAttribute('required');
+    document.getElementById('f-discord').setAttribute('required', '');
+    document.getElementById('f-discord-label').textContent = 'Discord Player Name *';
+    document.getElementById('f-map').setAttribute('required', '');
   }
 
   // Update button label and form note with payment method name
@@ -699,7 +750,11 @@
     ],
     'Mega Donation Pack (PvP) — $30': [
       '25,000 Wood', '15,000 Stone', '10,000 Metal Ingots', '3,000 Crystal', '7,000 Fiber',
-      '800 Cementing Paste', '1,500 Rare Mushrooms', '300 Gunpowder', '200 Metal Tools',
+      '800 Cementing Paste', '1,500 Rare Mushrooms', '300 Gunpowder',
+    ],
+    'Elite Donation Pack (PvP) — $50': [
+      '40,000 Wood', '25,000 Stone', '17,000 Metal Ingots', '5,000 Crystal', '12,000 Fiber',
+      '1,300 Cementing Paste', '2,500 Rare Mushrooms', '500 Gunpowder',
     ],
   };
 
@@ -708,20 +763,21 @@
       name, type: d.type, colors: d.colors,
     }));
     const { error } = await _supabase.from('ark_orders').insert({
-      package:    PKG,
-      pay_method: PAY,
-      amount:     AMOUNT || null,
-      ingame_name: ingame,
-      discord:    discord || null,
+      package:       PKG,
+      pay_method:    PAY,
+      amount:        AMOUNT || null,
+      ingame_name:   ingame,
+      discord:       discord || null,
       teleporter,
-      is_pvp:     IS_PVP,
-      dinos:      dinosPayload,
-      notes:      notes || null,
+      is_pvp:        IS_PVP,
+      dinos:         dinosPayload,
+      notes:         notes || null,
+      tracking_code: CODE || null,
     });
     if (error) throw new Error('Order could not be saved: ' + error.message);
   }
 
-  async function postDonationToDiscord(ingame, discord, teleporter, notes) {
+  async function postDonationToDiscord(ingame, discord, teleporter, notes, map) {
     let embed;
 
     if (IS_PVP) {
@@ -735,12 +791,11 @@
         description: '**$' + (AMOUNT || '?') + '** payment via **' + PAY + '** — awaiting confirmation',
         color: 16746496, // orange
         fields: [
-          { name: '👤 Player',           value: ingame     || '—', inline: true  },
-          { name: '💬 Discord',          value: discord    || '—', inline: true  },
-          { name: '📦 Package',          value: PKG        || '—', inline: false },
-          { name: '📍 Delivery Location',value: teleporter || '—', inline: false },
-          { name: '🗃️ Resources to Deliver', value: resourceList,  inline: false },
-          { name: '📝 Notes',            value: notes      || '—', inline: false },
+          { name: '💬 Discord',              value: discord  || '—', inline: true  },
+          { name: '🗺️ Map',                 value: map      || '—', inline: true  },
+          { name: '📦 Package',              value: PKG      || '—', inline: false },
+          { name: '🗃️ Resources to Deliver', value: resourceList,   inline: false },
+          { name: '📝 Notes',                value: notes    || '—', inline: false },
         ],
         footer: { text: 'React ✅ when delivered  •  React ❌ to cancel' },
         timestamp: new Date().toISOString(),
@@ -785,8 +840,9 @@
   orderForm.addEventListener('submit', async e => {
     e.preventDefault();
     updateDinoField();
-    const ingame     = document.getElementById('f-ingame').value;
-    const teleporter = document.getElementById('f-teleporter').value;
+    const ingame     = IS_PVP ? '' : document.getElementById('f-ingame').value;
+    const map        = IS_PVP ? document.getElementById('f-map').value : '';
+    const teleporter = IS_PVP ? map : document.getElementById('f-teleporter').value;
     const discord    = document.getElementById('f-discord').value;
     const notes      = document.getElementById('f-notes').value;
 
@@ -795,11 +851,22 @@
 
     try {
       await Promise.all([
-        postDonationToDiscord(ingame, discord, teleporter, notes),
+        postDonationToDiscord(ingame, discord, teleporter, notes, map),
         saveOrderToSupabase(ingame, discord, teleporter, notes),
       ]);
       orderForm.hidden   = true;
       formSuccess.hidden = false;
+
+      if (CODE) {
+        document.getElementById('success-code-row').innerHTML =
+          CODE.split('').map(d => '<div style="width:46px;height:54px;border-radius:9px;background:var(--surface2);border:1px solid rgba(255,77,148,0.3);display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:900;font-family:ui-monospace,monospace;">' + d + '</div>').join('');
+      }
+
+      // Save vault code so they see it when they return
+      if (CODE) {
+        localStorage.setItem('zp_order', JSON.stringify({ code: CODE, ts: Date.now() }));
+        document.getElementById('success-track-btn').href = 'track.html?code=' + encodeURIComponent(CODE);
+      }
 
       // Build payment redirect URL
       const cfg    = PAYMENT_CONFIG[PAY] || {};
@@ -811,8 +878,9 @@
         'Redirecting you to ' + PAY + ' to send $' + (AMOUNT || '?') + '…';
 
       setTimeout(() => { window.location.href = payUrl; }, 2000);
-    } catch {
-      alert('Could not send order — check your connection and try again.');
+    } catch (err) {
+      console.error('Order submission failed:', err);
+      alert('Could not send order — check your connection and try again.\n\nError: ' + (err && err.message ? err.message : err));
       submitBtn.disabled    = false;
       submitBtn.textContent = 'Submit & Pay with ' + PAY + ' →';
     }

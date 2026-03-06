@@ -22,7 +22,9 @@
 
     body::before {
       content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
-      background: radial-gradient(ellipse 80% 55% at 50% -5%, rgba(255,77,148,0.09) 0%, transparent 65%);
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -5%, rgba(255,77,148,0.13) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 35% at 85% 85%, rgba(100,30,180,0.07) 0%, transparent 60%);
     }
 
     .page {
@@ -33,9 +35,9 @@
 
     /* ── TOP BAR ── */
     .topbar {
-      width: 100%; max-width: 460px;
+      width: 100%; max-width: 480px;
       display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 3.5rem;
+      margin-bottom: 2.75rem;
     }
     .topbar-brand {
       font-size: 1rem; font-weight: 800; color: var(--accent);
@@ -43,160 +45,237 @@
     }
     .topbar-back {
       font-size: 0.78rem; color: var(--muted); text-decoration: none;
-      display: flex; align-items: center; gap: 0.3rem;
-      transition: color 0.15s;
+      display: flex; align-items: center; gap: 0.3rem; transition: color 0.15s;
     }
     .topbar-back:hover { color: var(--text); }
 
     /* ── HEADER ── */
-    .header { text-align: center; margin-bottom: 2rem; width: 100%; max-width: 460px; }
+    .header { text-align: center; margin-bottom: 2rem; width: 100%; max-width: 480px; }
+
+    .header-icon {
+      width: 50px; height: 50px; border-radius: 15px;
+      background: rgba(255,77,148,0.1); border: 1px solid rgba(255,77,148,0.22);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.25rem;
+      box-shadow: 0 0 24px -6px rgba(255,77,148,0.25);
+    }
+
     .header-eyebrow {
       font-size: 0.67rem; letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--accent); margin-bottom: 0.7rem; opacity: 0.9;
+      color: var(--accent); margin-bottom: 0.6rem; opacity: 0.9;
     }
     .header-title {
-      font-size: clamp(2.1rem, 7vw, 2.9rem); font-weight: 900;
+      font-size: clamp(2rem, 7vw, 2.7rem); font-weight: 900;
       letter-spacing: -0.04em; line-height: 1.05;
-      background: linear-gradient(145deg, #ffffff 25%, #8888aa 100%);
+      background: linear-gradient(145deg, #ffffff 30%, #9090b0 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.55rem;
     }
-    .header-sub { font-size: 0.84rem; color: var(--muted); line-height: 1.5; }
+    .header-sub { font-size: 0.84rem; color: var(--muted); line-height: 1.55; max-width: 300px; margin: 0 auto; }
 
     /* ── LOOKUP CARD ── */
     .lookup-card {
-      width: 100%; max-width: 460px;
+      width: 100%; max-width: 480px;
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 18px; padding: 1.75rem;
+      border-radius: 20px; padding: 1.75rem;
       margin-bottom: 1.25rem;
+      position: relative; overflow: hidden;
+      box-shadow: 0 4px 40px -12px rgba(0,0,0,0.6);
     }
+    .lookup-card::before {
+      content: ''; position: absolute; top: 0; left: 15%; right: 15%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,77,148,0.55), transparent);
+    }
+
     .input-label {
       font-size: 0.67rem; font-weight: 700; letter-spacing: 0.15em;
       text-transform: uppercase; color: var(--muted);
-      display: block; margin-bottom: 0.9rem;
+      display: block; margin-bottom: 1rem;
     }
     .code-inputs {
       display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.65rem;
-      margin-bottom: 1.1rem;
+      margin-bottom: 1.2rem;
     }
     .code-input {
-      aspect-ratio: 1; border-radius: 12px; text-align: center;
+      aspect-ratio: 1; border-radius: 14px; text-align: center;
       font-size: 2rem; font-weight: 900; font-family: ui-monospace, monospace;
       background: var(--bg); border: 1.5px solid var(--border); color: var(--text);
       outline: none; width: 100%; caret-color: var(--accent);
-      transition: border-color 0.15s, box-shadow 0.15s;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
     }
+    .code-input::placeholder { color: var(--border); font-size: 1.2rem; }
     .code-input:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(255,77,148,0.13);
+      box-shadow: 0 0 0 3px rgba(255,77,148,0.14), 0 0 16px rgba(255,77,148,0.1);
+      background: rgba(255,77,148,0.03);
     }
+    .code-input:not(:placeholder-shown):not(:focus) {
+      border-color: rgba(255,77,148,0.28);
+      background: rgba(255,77,148,0.04);
+    }
+
     .lookup-btn {
       width: 100%; background: var(--accent); color: #000; border: none;
-      border-radius: 10px; padding: 0.85rem; font-size: 0.9rem;
+      border-radius: 12px; padding: 0.9rem; font-size: 0.9rem;
       font-weight: 800; cursor: pointer; letter-spacing: 0.02em;
-      transition: opacity 0.15s, transform 0.15s;
+      transition: opacity 0.15s, transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 4px 20px -5px rgba(255,77,148,0.4);
     }
-    .lookup-btn:hover:not(:disabled) { opacity: 0.87; transform: translateY(-1px); }
-    .lookup-btn:disabled { opacity: 0.38; cursor: not-allowed; transform: none; }
+    .lookup-btn:hover:not(:disabled) {
+      opacity: 0.88; transform: translateY(-1px);
+      box-shadow: 0 6px 26px -5px rgba(255,77,148,0.5);
+    }
+    .lookup-btn:active:not(:disabled) { transform: translateY(0); }
+    .lookup-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
+
     .lookup-err {
-      margin-top: 0.85rem; font-size: 0.79rem; color: var(--red);
+      margin-top: 0.9rem; font-size: 0.79rem; color: var(--red);
       background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.18);
-      border-radius: 8px; padding: 0.55rem 0.85rem; text-align: center;
+      border-radius: 10px; padding: 0.6rem 0.9rem; text-align: center;
     }
 
     /* ── RESULT CARD ── */
     .order-result {
-      width: 100%; max-width: 460px;
+      width: 100%; max-width: 480px;
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 18px; overflow: hidden;
-      opacity: 0; transform: translateY(10px);
-      transition: opacity 0.35s ease, transform 0.35s ease;
+      border-radius: 20px; overflow: hidden;
+      opacity: 0; transform: translateY(12px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
       pointer-events: none;
+      box-shadow: 0 4px 40px -12px rgba(0,0,0,0.6);
     }
     .order-result.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+    /* Thin status strip at very top */
+    .result-strip { height: 3px; background: var(--border); }
+    .result-strip.pending     { background: var(--yellow); }
+    .result-strip.paid        { background: linear-gradient(90deg, var(--yellow), var(--green)); }
+    .result-strip.in_progress { background: linear-gradient(90deg, var(--green), var(--accent)); }
+    .result-strip.delivered   { background: var(--green); }
+    .result-strip.cancelled   { background: var(--muted); }
 
     /* Banner */
     .result-banner {
       display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-      padding: 1.4rem 1.5rem 1.2rem; border-bottom: 1px solid var(--border);
+      padding: 1.3rem 1.5rem 1.15rem; border-bottom: 1px solid var(--border);
     }
-    .result-banner.pending   { background: linear-gradient(135deg, rgba(245,158,11,0.07) 0%, transparent 60%); }
-    .result-banner.delivered { background: linear-gradient(135deg, rgba(34,197,94,0.07) 0%, transparent 60%); }
-    .result-banner.cancelled { background: linear-gradient(135deg, rgba(107,107,133,0.07) 0%, transparent 60%); }
-    .result-player { font-size: 1.05rem; font-weight: 800; margin-bottom: 0.2rem; }
-    .result-pkg    { font-size: 0.77rem; color: var(--muted); }
+    .result-banner.pending     { background: linear-gradient(135deg, rgba(245,158,11,0.07) 0%, transparent 55%); }
+    .result-banner.paid        { background: linear-gradient(135deg, rgba(34,197,94,0.06) 0%, transparent 55%); }
+    .result-banner.in_progress { background: linear-gradient(135deg, rgba(255,77,148,0.06) 0%, transparent 55%); }
+    .result-banner.delivered   { background: linear-gradient(135deg, rgba(34,197,94,0.09) 0%, transparent 55%); }
+    .result-banner.cancelled   { background: linear-gradient(135deg, rgba(107,107,133,0.07) 0%, transparent 55%); }
+
+    .result-player { font-size: 1.02rem; font-weight: 800; margin-bottom: 0.2rem; }
+    .result-pkg    { font-size: 0.76rem; color: var(--muted); }
 
     .status-pill {
       font-size: 0.58rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-      padding: 0.3rem 0.7rem; border-radius: 6px; white-space: nowrap; flex-shrink: 0;
+      padding: 0.32rem 0.75rem; border-radius: 6px; white-space: nowrap; flex-shrink: 0;
     }
-    .status-pill.pending   { background: rgba(245,158,11,0.1);  color: var(--yellow); border: 1px solid rgba(245,158,11,0.22); }
-    .status-pill.delivered { background: rgba(34,197,94,0.1);   color: var(--green);  border: 1px solid rgba(34,197,94,0.22); }
-    .status-pill.cancelled { background: rgba(107,107,133,0.1); color: var(--muted);  border: 1px solid rgba(107,107,133,0.2); }
+    .status-pill.pending     { background: rgba(245,158,11,0.1);  color: var(--yellow); border: 1px solid rgba(245,158,11,0.22); }
+    .status-pill.paid        { background: rgba(34,197,94,0.1);   color: var(--green);  border: 1px solid rgba(34,197,94,0.22); }
+    .status-pill.in_progress { background: rgba(255,77,148,0.09); color: var(--accent); border: 1px solid rgba(255,77,148,0.22); }
+    .status-pill.delivered   { background: rgba(34,197,94,0.1);   color: var(--green);  border: 1px solid rgba(34,197,94,0.22); }
+    .status-pill.cancelled   { background: rgba(107,107,133,0.1); color: var(--muted);  border: 1px solid rgba(107,107,133,0.2); }
 
     /* ── STEPPER ── */
-    .stepper { padding: 1.5rem 1.75rem 1rem; border-bottom: 1px solid var(--border); }
-    .stepper-track {
-      display: grid;
-      grid-template-columns: 32px 1fr 32px 1fr 32px;
-      align-items: center;
-      margin-bottom: 0.55rem;
+    .stepper { padding: 1.4rem 1.5rem 1.25rem; border-bottom: 1px solid var(--border); }
+
+    .stepper-track { display: flex; align-items: flex-start; }
+
+    .step-col {
+      display: flex; flex-direction: column; align-items: center;
+      flex-shrink: 0;
     }
     .step-dot {
-      width: 32px; height: 32px; border-radius: 50%;
+      width: 28px; height: 28px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      font-size: 0.78rem; font-weight: 800;
+      font-size: 0.68rem; font-weight: 800;
       background: var(--surface2); border: 2px solid var(--border); color: var(--muted);
-      transition: background 0.3s, border-color 0.3s, color 0.3s;
+      transition: background 0.3s, border-color 0.3s, color 0.3s, box-shadow 0.3s;
+      flex-shrink: 0;
     }
-    .step-dot.done   { background: rgba(34,197,94,0.14); border-color: var(--green); color: var(--green); }
-    .step-dot.active { background: rgba(245,158,11,0.1); border-color: var(--yellow); color: var(--yellow); }
-    .step-line { height: 2px; background: var(--border); transition: background 0.3s; }
-    .step-line.done { background: var(--green); }
-    .stepper-labels {
-      display: grid;
-      grid-template-columns: 32px 1fr 32px 1fr 32px;
-    }
+    .step-dot.done   { background: rgba(34,197,94,0.15);   border-color: var(--green);  color: var(--green); }
+    .step-dot.active { background: rgba(245,158,11,0.13);  border-color: var(--yellow); color: var(--yellow); box-shadow: 0 0 14px rgba(245,158,11,0.22); }
+
     .step-label {
-      font-size: 0.57rem; font-weight: 700; letter-spacing: 0.06em;
+      font-size: 0.5rem; font-weight: 700; letter-spacing: 0.04em;
       text-transform: uppercase; color: var(--muted); text-align: center;
+      margin-top: 0.45rem; line-height: 1.35;
       transition: color 0.3s;
+      width: max-content; max-width: 58px;
     }
     .step-label.done   { color: var(--green); }
     .step-label.active { color: var(--yellow); }
-    .step-spacer { /* empty grid cells for lines */ }
+
+    .step-line {
+      flex: 1; height: 2px; background: var(--border);
+      margin-top: 14px; /* vertically center with 28px dot */
+      transition: background 0.4s; min-width: 6px;
+    }
+    .step-line.done { background: var(--green); }
 
     .cancelled-notice {
-      text-align: center; padding: 0.5rem 0;
-      font-size: 0.8rem; color: var(--muted);
+      text-align: center; padding: 0.6rem 0;
+      font-size: 0.82rem; color: var(--muted);
     }
 
     /* ── DETAILS ── */
-    .result-details {
-      padding: 1.1rem 1.5rem 0.4rem;
-      display: flex; flex-direction: column; gap: 0;
-    }
+    .result-details { padding: 0.35rem 1.5rem 0.5rem; }
     .detail-row {
       display: flex; justify-content: space-between; align-items: center;
-      gap: 1rem; padding: 0.55rem 0; border-bottom: 1px solid var(--border);
+      gap: 1rem; padding: 0.65rem 0; border-bottom: 1px solid var(--border);
     }
     .detail-row:last-child { border-bottom: none; }
-    .detail-label { font-size: 0.75rem; color: var(--muted); flex-shrink: 0; }
-    .detail-val   { font-size: 0.83rem; font-weight: 600; text-align: right; }
+    .detail-label { font-size: 0.74rem; color: var(--muted); flex-shrink: 0; }
+    .detail-val   { font-size: 0.83rem; font-weight: 600; text-align: right; word-break: break-word; }
 
     /* ── ADMIN NOTE ── */
     .note-box {
-      margin: 0.75rem 1.25rem 1.25rem;
-      background: rgba(255,77,148,0.05); border: 1px solid rgba(255,77,148,0.2);
-      border-radius: 10px; padding: 0.9rem 1rem;
+      margin: 0 1.25rem 1.25rem;
+      background: rgba(255,77,148,0.05); border: 1px solid rgba(255,77,148,0.18);
+      border-radius: 12px; padding: 0.9rem 1rem;
     }
     .note-label {
       font-size: 0.6rem; font-weight: 700; letter-spacing: 0.14em;
       text-transform: uppercase; color: var(--accent);
-      margin-bottom: 0.45rem; display: flex; align-items: center; gap: 0.45rem;
+      margin-bottom: 0.45rem; display: flex; align-items: center; gap: 0.4rem;
     }
     .note-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
     .note-text { font-size: 0.84rem; color: var(--text); line-height: 1.55; }
+
+    /* ── FOOTER HELP ── */
+    .track-footer {
+      margin-top: 1.5rem; text-align: center;
+      font-size: 0.77rem; color: var(--muted); max-width: 480px;
+    }
+    .track-footer a { color: var(--accent); text-decoration: none; }
+    .track-footer a:hover { text-decoration: underline; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 480px) {
+      .page { padding: 1.5rem 1rem 4rem; }
+      .topbar { margin-bottom: 2rem; }
+      .header { margin-bottom: 1.75rem; }
+      .header-icon { width: 44px; height: 44px; border-radius: 13px; }
+      .lookup-card { padding: 1.4rem 1.25rem; border-radius: 18px; }
+      .code-inputs { gap: 0.5rem; margin-bottom: 1.1rem; }
+      .code-input { font-size: 1.8rem; border-radius: 12px; }
+      .result-banner { padding: 1.1rem 1.25rem 1rem; }
+      .stepper { padding: 1.25rem 1.1rem 1.1rem; }
+      .result-details { padding: 0.3rem 1.25rem 0.4rem; }
+      .note-box { margin: 0 1rem 1rem; }
+      .step-label { font-size: 0.46rem; }
+    }
+
+    @media (max-width: 360px) {
+      .page { padding: 1.25rem 0.85rem 4rem; }
+      .code-input { font-size: 1.55rem; }
+      .step-dot { width: 24px; height: 24px; font-size: 0.6rem; }
+      .step-line { margin-top: 12px; }
+      .step-label { font-size: 0.42rem; max-width: 48px; }
+      .stepper { padding: 1.1rem 0.9rem 1rem; }
+    }
   </style>
 </head>
 <body>
@@ -208,6 +287,12 @@
     </nav>
 
     <div class="header">
+      <div class="header-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </div>
       <p class="header-eyebrow">Order Tracking</p>
       <h1 class="header-title">Track Your Order</h1>
       <p class="header-sub">Enter the 4-digit code you received when placing your order.</p>
@@ -216,16 +301,17 @@
     <div class="lookup-card">
       <label class="input-label">Your tracking code</label>
       <div class="code-inputs">
-        <input class="code-input" id="c0" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off" />
-        <input class="code-input" id="c1" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off" />
-        <input class="code-input" id="c2" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off" />
-        <input class="code-input" id="c3" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off" />
+        <input class="code-input" id="c0" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off" placeholder="0" />
+        <input class="code-input" id="c1" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off" placeholder="0" />
+        <input class="code-input" id="c2" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off" placeholder="0" />
+        <input class="code-input" id="c3" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off" placeholder="0" />
       </div>
       <button class="lookup-btn" id="lookup-btn">Look Up Order</button>
       <p class="lookup-err" id="lookup-err" hidden></p>
     </div>
 
     <div class="order-result" id="order-result">
+      <div class="result-strip" id="r-strip"></div>
       <div class="result-banner" id="r-banner">
         <div>
           <div class="result-player" id="r-player"></div>
@@ -257,12 +343,24 @@
       </div>
     </div>
 
+    <p class="track-footer">
+      Need help? Join our <a href="Discord.html">Discord</a> and open a support ticket.
+    </p>
+
   </div>
 
   <script>
   const SUPABASE_URL  = 'https://cairclbnutqouejtlhks.supabase.co';
   const SUPABASE_ANON = 'sb_publishable_25_ecIfEwCQ1BdXof_ZonQ_Bi2x1CDU';
   const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  const STATUS_LABELS = {
+    pending:     'Pending Payment',
+    paid:        'Payment Received',
+    in_progress: 'In Progress',
+    delivered:   'Completed',
+    cancelled:   'Cancelled'
+  };
 
   // ── Auto-advance between digit inputs ──
   const inputs = [0,1,2,3].map(i => document.getElementById('c' + i));
@@ -281,6 +379,7 @@
         inputs.forEach((inp2, j) => { inp2.value = text[j] || ''; });
         inputs[3].focus();
         e.preventDefault();
+        setTimeout(doLookup, 80);
       }
     });
   });
@@ -300,7 +399,7 @@
     return new Date(s).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   }
 
-  function renderStepper(status) {
+  function renderStepper(status, paymentConfirmed) {
     const el = document.getElementById('r-stepper');
 
     if (status === 'cancelled') {
@@ -308,25 +407,38 @@
       return;
     }
 
-    const isDelivered = status === 'delivered';
-    // 0=Received always done, 1=In Progress done only if delivered, 2=Delivered done only if delivered
-    const doneCount = isDelivered ? 3 : 1;
+    // Derive step index from status + payment_confirmed flag
+    // 0 = Pending Payment, 1 = Payment Received, 2 = In Progress, 3 = Completed
+    let activeIdx;
+    if (status === 'delivered')         { activeIdx = 4; } // all done
+    else if (status === 'in_progress')  { activeIdx = 2; }
+    else if (paymentConfirmed)          { activeIdx = 2; } // payment confirmed → steps 1&2 done, In Progress active
+    else                                { activeIdx = 0; }
+    const isAllDone = activeIdx === 4;
 
-    const steps  = ['Received', 'In Progress', 'Delivered'];
-    const dotCls = steps.map((_, i) => i < doneCount ? 'done' : i === doneCount ? 'active' : '');
-    const lineCls = [dotCls[0] === 'done' && dotCls[1] !== '' ? 'done' : '', dotCls[1] === 'done' ? 'done' : ''];
+    const steps = ['Pending\nPayment', 'Payment\nReceived', 'In Progress', 'Completed'];
 
-    el.innerHTML =
-      '<div class="stepper-track">' +
-        '<div class="step-dot ' + dotCls[0] + '">' + (dotCls[0] === 'done' ? '✓' : '1') + '</div>' +
-        '<div class="step-line ' + lineCls[0] + '"></div>' +
-        '<div class="step-dot ' + dotCls[1] + '">' + (dotCls[1] === 'done' ? '✓' : '2') + '</div>' +
-        '<div class="step-line ' + lineCls[1] + '"></div>' +
-        '<div class="step-dot ' + dotCls[2] + '">' + (dotCls[2] === 'done' ? '✓' : '3') + '</div>' +
-      '</div>' +
-      '<div class="stepper-labels">' +
-        steps.map((s, i) => '<span class="step-label ' + dotCls[i] + '">' + s + '</span><span class="step-spacer"></span>').join('').slice(0, -'<span class="step-spacer"></span>'.length) +
-      '</div>';
+    const dotState = (i) => {
+      if (isAllDone || i < activeIdx) return 'done';
+      if (i === activeIdx) return 'active';
+      return '';
+    };
+
+    let html = '<div class="stepper-track">';
+    steps.forEach((label, i) => {
+      const ds   = dotState(i);
+      const icon = ds === 'done' ? '&#10003;' : (i + 1);
+      html += `<div class="step-col">
+        <div class="step-dot ${ds}">${icon}</div>
+        <span class="step-label ${ds}">${label.replace('\n', '<br>')}</span>
+      </div>`;
+      if (i < steps.length - 1) {
+        html += `<div class="step-line ${dotState(i) === 'done' ? 'done' : ''}"></div>`;
+      }
+    });
+    html += '</div>';
+
+    el.innerHTML = html;
   }
 
   async function doLookup() {
@@ -345,11 +457,11 @@
     }
 
     btn.disabled = true;
-    btn.textContent = 'Looking up…';
+    btn.textContent = 'Looking up\u2026';
 
     const { data, error } = await _sb
       .from('ark_orders')
-      .select('ingame_name, package, status, pay_method, amount, teleporter, created_at, admin_note')
+      .select('ingame_name, package, status, payment_confirmed, pay_method, amount, teleporter, created_at, admin_note')
       .eq('tracking_code', code)
       .maybeSingle();
 
@@ -367,21 +479,30 @@
       return;
     }
 
+    const status           = data.status || 'pending';
+    const paymentConfirmed = !!data.payment_confirmed;
+
+    // Resolve display status (payment_confirmed overrides label when still "pending")
+    const displayStatus = (status === 'pending' && paymentConfirmed) ? 'paid' : status;
+
+    // Status strip
+    document.getElementById('r-strip').className = 'result-strip ' + displayStatus;
+
     // Banner
     const banner = document.getElementById('r-banner');
-    banner.className = 'result-banner ' + data.status;
-    document.getElementById('r-player').textContent  = data.ingame_name || '—';
-    document.getElementById('r-package').textContent = data.package || '—';
+    banner.className = 'result-banner ' + displayStatus;
+    document.getElementById('r-player').textContent  = data.ingame_name || '\u2014';
+    document.getElementById('r-package').textContent = data.package || '\u2014';
     const pill = document.getElementById('r-status');
-    pill.textContent = data.status;
-    pill.className   = 'status-pill ' + data.status;
+    pill.textContent = STATUS_LABELS[displayStatus] || displayStatus;
+    pill.className   = 'status-pill ' + displayStatus;
 
     // Stepper
-    renderStepper(data.status);
+    renderStepper(status, paymentConfirmed);
 
     // Details
-    document.getElementById('r-pay').textContent      = (data.pay_method || '—') + (data.amount ? ' — $' + data.amount : '');
-    document.getElementById('r-teleport').textContent = data.teleporter || '—';
+    document.getElementById('r-pay').textContent      = (data.pay_method || '\u2014') + (data.amount ? ' \u2014 $' + data.amount : '');
+    document.getElementById('r-teleport').textContent = data.teleporter || '\u2014';
     document.getElementById('r-date').textContent     = fmtDate(data.created_at);
 
     // Admin note
